@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.scss";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { useEffect, useState } from "react";
+import { triviaQuery } from "./services/triviaHttp";
+import type { Question } from "./types/types";
+import NavBar from "./components/NavBar/NavBar";
+import HomePage from "./pages/HomePage";
+import GamePage from "./pages/GamePage";
+import ReviewPage from "./pages/ReviewPage";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadQuestions = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await triviaQuery(2, "easy", 9);
+      setQuestions(data);
+    } catch {
+      setError("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  // useEffect(() => {
+  //   loadQuestions();
+  // }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage loadQuestions={loadQuestions} />}
+          />
+          <Route
+            path="/game"
+            element={
+              <GamePage questions={questions} loading={loading} error={error} />
+            }
+          />
+          <Route path="/review" element={<ReviewPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
