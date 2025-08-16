@@ -1,8 +1,8 @@
-import "./App.scss";
+import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { triviaQuery } from "./services/triviaHttp";
-import type { Question } from "./types/types";
+import type { Difficulty, Question } from "./types/types";
 import NavBar from "./components/NavBar/NavBar";
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
@@ -13,11 +13,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadQuestions = async () => {
+  const loadQuestions = async (
+    amount: number,
+    difficulty: Difficulty,
+    category: number
+  ) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(2, "easy", 9);
+      const data = await triviaQuery(amount, difficulty, category);
       setQuestions(data);
     } catch {
       setError("Something went wrong.");
@@ -34,15 +38,10 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route
-            path="/"
-            element={<HomePage loadQuestions={loadQuestions} />}
-          />
+          <Route path="/" element={<HomePage loadQuestions={loadQuestions} />} />
           <Route
             path="/game"
-            element={
-              <GamePage questions={questions} loading={loading} error={error} />
-            }
+            element={<GamePage questions={questions} loading={loading} error={error} />}
           />
           <Route path="/review" element={<ReviewPage />} />
         </Routes>

@@ -5,7 +5,7 @@ import type {
   TriviaAPIResponseQuestion,
 } from "../types/types";
 
-// decode HTML entities like &rsquo; → ’
+// decode HTML entities like &rsquo; -> ’
 function decodeHtml(s: string): string {
   const el = document.createElement("textarea");
   el.innerHTML = s;
