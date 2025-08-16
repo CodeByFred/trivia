@@ -19,8 +19,8 @@
 
 ## MVP
 
-- [ ] Create an interface that allows a user to choose the level of difficulty and start a new game
-- [ ] When the game starts, display a question card with 4 possible answers
+- [ ] Create an interface that allows a user to choose the level of difficulty and start a new game (Fred)
+- [ ] When the game starts, display a question card with 4 possible answers (Carrie)
 - [ ] If the user answers the question correctly, show a new question
 - [ ] If the answer is incorrect, end the game
 - [ ] Display the score (number of questions answered correctly) at the end of each game

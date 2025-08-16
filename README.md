@@ -23,3 +23,7 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
 - [ ] On the frontend, the user should be able to view questions that they answered wrong
 - [ ] They should be able to attempt those questions again
 - [ ] If they answer the question correctly, it should get archived in the database
+
+## Changelog (Dev use only)
+
+- Put a summary of the changes made whenever you make a big commit here if you want to keep track of the project's history.
