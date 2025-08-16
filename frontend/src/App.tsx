@@ -38,10 +38,15 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<HomePage loadQuestions={loadQuestions} />} />
+          <Route
+            path="/"
+            element={<HomePage loadQuestions={loadQuestions} />}
+          />
           <Route
             path="/game"
-            element={<GamePage questions={questions} loading={loading} error={error} />}
+            element={
+              <GamePage questions={questions} loading={loading} error={error} />
+            }
           />
           <Route path="/review" element={<ReviewPage />} />
         </Routes>
