@@ -20,46 +20,47 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
   };
 
   return (
-    <>
-      <div>
-        <h1>Welcome to the Trivia Game</h1>
-        <p>Test your knowledge with our trivia questions!</p>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "200px",
-            gap: "0.5rem",
-          }}
+    <div className="mx-auto items-center justify-center flex flex-col gap-4">
+      <h1>Welcome to the Trivia Game</h1>
+      <p>Test your knowledge with our trivia questions!</p>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "200px",
+          gap: "0.5rem",
+        }}
+      >
+        <select
+          value={difficulty}
+          onChange={(e) => setDifficulty(e.target.value as Difficulty)}
         >
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-          >
-            <option>Difficulty</option>
-            {DIFFICULTIES.map((d, index) => (
-              <option key={index} value={d}>
-                {d.charAt(0).toUpperCase() + d.slice(1)}
-              </option>
-            ))}
-          </select>
-          <select
-            value={categoryID}
-            onChange={(e) => setCategoryID(Number(e.target.value))}
-          >
-            <option>Category</option>
-            {TRIVIA_CATEGORIES.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button onClick={newGame} style={{ marginTop: "0.5rem" }}>
-          New Game
-        </button>
+          <option>Difficulty</option>
+          {DIFFICULTIES.map((d, index) => (
+            <option key={index} value={d}>
+              {d.charAt(0).toUpperCase() + d.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={categoryID}
+          onChange={(e) => setCategoryID(Number(e.target.value))}
+        >
+          <option>Category</option>
+          {TRIVIA_CATEGORIES.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
       </div>
-    </>
+      <button
+        onClick={newGame}
+        className="text-white bg-blue-700 hover:bg-blue-500 focus:ring-4 rounded-sm px-3 py-1"
+      >
+        New Game
+      </button>
+    </div>
   );
 };
 

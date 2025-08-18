@@ -28,9 +28,10 @@ function mapTriviaAPIResponseQuestion(apiResponse: TriviaAPIResponseQuestion): Q
 export async function triviaQuery(
   amount: number,
   difficulty: Difficulty,
-  category: number
+  category: number,
+  token: string
 ): Promise<Question[]> {
-  const url = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&category=${category}&type=multiple`;
+  const url = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&category=${category}&type=multiple&token=${token}`;
 
   const res = await fetch(url);
   const json: TriviaAPIResponse = await res.json();
