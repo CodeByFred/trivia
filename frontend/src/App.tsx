@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { useEffect, useState } from "react";
 import { triviaQuery } from "./services/triviaHttp";
 import type { Difficulty, Question } from "./types/types";
-import NavBar from "./components/NavBar/NavBar";
+import NavBar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
 import ReviewPage from "./pages/ReviewPage";
@@ -64,10 +64,15 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<HomePage loadQuestions={loadQuestions} />} />
+          <Route
+            path="/"
+            element={<HomePage loadQuestions={loadQuestions} />}
+          />
           <Route
             path="/game"
-            element={<GamePage questions={questions} loading={loading} error={error} />}
+            element={
+              <GamePage questions={questions} loading={loading} error={error} />
+            }
           />
           <Route path="/review" element={<ReviewPage />} />
         </Routes>

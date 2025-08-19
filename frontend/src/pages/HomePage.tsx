@@ -1,9 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { DIFFICULTIES, TRIVIA_CATEGORIES, type Difficulty } from "../types/types";
+import {
+  DIFFICULTIES,
+  TRIVIA_CATEGORIES,
+  type Difficulty,
+} from "../types/types";
+import Button from "../components/Button";
 
 interface HomePageProps {
-  loadQuestions: (amount: number, difficult: Difficulty, category: number) => void;
+  loadQuestions: (
+    amount: number,
+    difficult: Difficulty,
+    category: number
+  ) => void;
 }
 
 const HomePage = ({ loadQuestions }: HomePageProps) => {
@@ -54,12 +63,7 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
           ))}
         </select>
       </div>
-      <button
-        onClick={newGame}
-        className="text-white bg-blue-700 hover:bg-blue-500 focus:ring-4 rounded-sm px-3 py-1"
-      >
-        New Game
-      </button>
+      <Button onClick={newGame}>New Game</Button>
     </div>
   );
 };
