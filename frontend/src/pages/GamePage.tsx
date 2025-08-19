@@ -1,4 +1,4 @@
-import TriviaQuestion from "../components/TriviaQuestion/TriviaQuestion";
+import TriviaQuestion from "../components/TriviaQuestion";
 import type { Question } from "../types/types";
 
 interface GameProps {
@@ -24,7 +24,7 @@ const Game = ({ questions, loading, error }: GameProps) => {
 
       {questions?.map((q, i) => (
         <div key={i}>
-          <TriviaQuestion question={q} count={i} />
+          <TriviaQuestion question={q} count={i + 1} />
         </div>
       ))}
     </>
