@@ -2,25 +2,36 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 
 interface TriviaFormProps {
-  answers: string[];
+  answers: string[] | null;
   correctAnswer: string | null;
+  setUserScore: React.Dispatch<React.SetStateAction<number>>;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
+const TriviaForm = ({
+  answers,
+  correctAnswer,
+  setUserScore,
+  setIndex,
+}: TriviaFormProps) => {
   const [chosenAnswer, setChosenAnswer] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //validate data
-    console.log(
-      `Submitted Answer: ${!chosenAnswer ? "Not found" : chosenAnswer}`
-    );
+    if (!chosenAnswer) {
+      console.error("No answer selected");
+      return;
+    }
     //check result
     if (chosenAnswer === correctAnswer) {
       //fetch and display next question
+      setUserScore((prev) => prev + 1);
+      setIndex((prev) => prev + 1);
     } else {
-      //nav to game over screen
+      //do this if you want to end game immediately on incorrect answer:
+      // setGameOver(true);
     }
     setIsSubmitted(true);
   };
@@ -32,7 +43,7 @@ const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
       className="flex flex-col items-center"
     >
       <fieldset
-        aria-valuemax={answers.length}
+        aria-valuemax={answers?.length}
         className="grid grid-cols-2 gap-4 my-4 border border-gray-300 p-4 rounded bg-gray-100"
       >
         <legend>Please select your answer:</legend>
