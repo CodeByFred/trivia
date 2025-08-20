@@ -21,6 +21,18 @@ export type Question = {
   incorrectAnswers: string[];
 };
 
+export type AnsweredQuestion = {
+  question: Question;
+  userAnswer: string | null;
+  wasCorrect: boolean;
+};
+
+export type GameResultDto = {
+  score: number;
+  datePlayed: string; //iso
+  submittedAnswers: AnsweredQuestion[];
+};
+
 export type Difficulty = "easy" | "medium" | "hard";
 
 export const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
