@@ -23,7 +23,7 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
 
   const newGame = () => {
     if (difficulty && categoryID) {
-      loadQuestions(1, difficulty, categoryID);
+      loadQuestions(10, difficulty, categoryID);
       navigate("/game");
     }
   };
