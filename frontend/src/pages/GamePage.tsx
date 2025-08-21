@@ -1,15 +1,23 @@
-import TriviaQuestion from "../components/TriviaQuestion";
+import { useContext, useEffect, useState } from "react";
 import type { Question } from "../types/types";
+import { shuffle } from "../utils/utils";
+import TriviaForm from "../containers/TriviaForm";
+import { GameContext } from "../context/GameContext";
+import Button from "../components/Button";
 
-interface GameProps {
-  questions: Question[];
+type GamePageProps = {
   loading: boolean;
   error: string | null;
 }
 
-const Game = ({ questions, loading, error }: GameProps) => {
-  if (loading) return <p>Loading questions...</p>;
-  if (error) return <p>{error}</p>;
+const GamePage = ({ loading, error }: GamePageProps) => {
+  const gameContext = useContext(GameContext);
+  const {
+    questions,
+    currentQuestion,
+    score,
+    questionCount = 0,
+  } = gameContext || {};
 
   return (
     <>

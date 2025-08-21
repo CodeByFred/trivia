@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../components/Button";
+import { GameContext } from "../context/GameContext";
 
-interface TriviaFormProps {
-  answers: string[];
-  correctAnswer: string | null;
-}
-
-const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
-  const [chosenAnswer, setChosenAnswer] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+const TriviaForm = () => {
+  const [selected, setSelected] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState<string | null>(null);
+  const gameContext = useContext(GameContext);
+  if (!gameContext) {
+    // You can render an error, throw, or return null here
+    return <div>Game context not available.</div>;
+  }
+  const {
+    currentQuestion,
+    incrementScore,
+    saveAnswer,
+    loadNextQuestion,
+    shuffledAnswers,
+  } = gameContext;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

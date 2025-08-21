@@ -7,15 +7,7 @@ import {
 } from "../types/types";
 import Button from "../components/Button";
 
-interface HomePageProps {
-  loadQuestions: (
-    amount: number,
-    difficult: Difficulty,
-    category: number
-  ) => void;
-}
-
-const HomePage = ({ loadQuestions }: HomePageProps) => {
+const HomePage = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>();
   const [categoryID, setCategoryID] = useState<number>();
 

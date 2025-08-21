@@ -1,4 +1,10 @@
+import { useContext } from "react";
+import { GameContext } from "../context/GameContext"; // Adjust the import path as needed
+
 const ReviewPage = () => {
+  const gameContext = useContext(GameContext);
+  const { answeredQuestions } = gameContext || { answeredQuestions: [] };
+
   return (
     <div>
       <h1>Review Your Answers</h1>
