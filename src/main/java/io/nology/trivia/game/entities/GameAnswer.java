@@ -20,8 +20,6 @@ public class GameAnswer {
 
     private boolean correct;
 
-    private boolean archived = false;
-
     public GameAnswer() {
     }
 
@@ -63,13 +61,5 @@ public class GameAnswer {
 
     public void setCorrect(boolean wasCorrect) {
         this.correct = wasCorrect;
-    }
-
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public void setArchived(boolean archived) {
-        this.archived = archived;
     }
 }

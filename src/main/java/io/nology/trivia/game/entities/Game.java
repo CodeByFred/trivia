@@ -1,8 +1,9 @@
 package io.nology.trivia.game.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class Game {
 
     private int score;
 
-    private LocalDate datePlayed;
+    @CreationTimestamp
+    private LocalDateTime datePlayed;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GameAnswer> answers = new ArrayList<>();
@@ -40,13 +42,10 @@ public class Game {
         this.score = score;
     }
 
-    public LocalDate getDatePlayed() {
+    public LocalDateTime getDatePlayed() {
         return datePlayed;
     }
 
-    public void setDatePlayed(LocalDate datePlayed) {
-        this.datePlayed = datePlayed;
-    }
 
     public List<GameAnswer> getAnswers() {
         return answers;
