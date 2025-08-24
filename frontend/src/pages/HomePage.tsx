@@ -1,31 +1,16 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import {
-  DIFFICULTIES,
-  TRIVIA_CATEGORIES,
-  type Difficulty,
-} from "../types/types";
+import { DIFFICULTIES, TRIVIA_CATEGORIES, type Difficulty } from "../types/types";
 import Button from "../components/Button";
+import { useGameContext } from "../context/useGameContext";
+import { useNavigate } from "react-router-dom";
 
-interface HomePageProps {
-  loadQuestions: (
-    amount: number,
-    difficult: Difficulty,
-    category: number
-  ) => void;
-}
-
-const HomePage = ({ loadQuestions }: HomePageProps) => {
-  const [difficulty, setDifficulty] = useState<Difficulty>();
-  const [categoryID, setCategoryID] = useState<number>();
-
+const HomePage = () => {
   const navigate = useNavigate();
+  const { difficulty, updateDifficulty, categoryID, updateCategoryID, startGame } =
+    useGameContext();
 
-  const newGame = () => {
-    if (difficulty && categoryID) {
-      loadQuestions(10, difficulty, categoryID);
-      navigate("/game");
-    }
+  const handleStart = () => {
+    startGame();
+    navigate("/game");
   };
 
   return (
@@ -42,7 +27,7 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
       >
         <select
           value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+          onChange={(e) => updateDifficulty(e.target.value as Difficulty)}
         >
           <option>Difficulty</option>
           {DIFFICULTIES.map((d, index) => (
@@ -53,7 +38,7 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
         </select>
         <select
           value={categoryID}
-          onChange={(e) => setCategoryID(Number(e.target.value))}
+          onChange={(e) => updateCategoryID(Number(e.target.value))}
         >
           <option>Category</option>
           {TRIVIA_CATEGORIES.map((cat) => (
@@ -63,7 +48,7 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
           ))}
         </select>
       </div>
-      <Button onClick={newGame}>New Game</Button>
+      <Button onClick={handleStart}>New Game</Button>
     </div>
   );
 };
