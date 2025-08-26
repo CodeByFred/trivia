@@ -29,17 +29,10 @@ const HomePage = ({ loadQuestions }: HomePageProps) => {
   };
 
   return (
-    <div className="mx-auto items-center justify-center flex flex-col gap-4">
+    <div className="mx-auto items-center justify-center flex flex-col gap-4   px-4 h-full">
       <h1>Welcome to the Trivia Game</h1>
       <p>Test your knowledge with our trivia questions!</p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "200px",
-          gap: "0.5rem",
-        }}
-      >
+      <div className="flex flex-col w-52 gap-2">
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value as Difficulty)}
