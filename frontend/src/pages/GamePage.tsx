@@ -2,57 +2,54 @@ import TriviaQuestion from "../components/TriviaQuestion";
 import ScoreBoard from "../components/ScoreBoard";
 import GameOverModal from "../components/GameOverModal";
 import { useGameContext } from "../context/useGameContext";
+import { useEffect } from "react";
 
-const Game = () => {
-  // const [totalQuestions, setTotalQuestions] = useState(questions.length);
-  // const [userScore, setUserScore] = useState(0);
-  // const [index, setIndex] = useState(0);
-  // const [gameOver, setGameOver] = useState(false);
-
-  // useEffect(() => {
-  //   if (index > totalQuestions) {
-  //     setGameOver(true);
-  //   }
-  // }, [index, totalQuestions]);
-
-  // const resetGame = () => {
-  //   setUserScore(0);
-  //   setIndex(0);
-  //   setGameOver(false);
-  // };
-
-  // if (loading) return <p>Loading questions...</p>;
-  // if (error) return <p>{error}</p>;
-
+const GamePage = () => {
   const { questions, currentIndex, gameState, resetGame, loadNextQuestion } =
     useGameContext();
 
-  const currentQuestion = questions[currentIndex];
+  useEffect(() => {
+    if (gameState === "finished") {
+      console.log(
+        `Game state: '${gameState}'. Game Over! Displaying results...`
+      );
+    }
+    if (gameState === "playing") {
+      console.log(`Game state: '${gameState}'. Game in progress...`);
+    }
+    if (gameState === "idle") {
+      console.log(
+        `Game state: '${gameState}'. Game is idle. Please start a new game.`
+      );
+    }
+  }, [gameState]);
 
   return (
     <>
-      {gameState !== "finished" && <ScoreBoard />}
+      {}
+      {gameState === "playing" && <ScoreBoard />}
+      <div className="flex flex-col items-center justify-center text-center px-4 h-full">
+        {questions.length == 0 && gameState !== "finished" && (
+          <p>
+            No questions loaded yet. <br />
+            Please start a new game on Home Page.
+          </p>
+        )}
 
-      {questions.length == 0 && gameState !== "finished" && (
-        <p>
-          No questions loaded yet. <br />
-          Please start a new game on Home Page.
-        </p>
-      )}
-
-      {gameState !== "finished" && (
-        <TriviaQuestion
-          question={currentQuestion}
-          index={currentIndex}
-          totalQuestions={questions.length}
-          onNext={loadNextQuestion}
-        />
-      )}
-      {gameState === "finished" && questions.length > 0 && (
-        <GameOverModal resetGame={resetGame} />
-      )}
+        {gameState === "playing" && (
+          <TriviaQuestion
+            question={questions[currentIndex]}
+            index={currentIndex}
+            totalQuestions={questions.length}
+            onNext={loadNextQuestion}
+          />
+        )}
+        {gameState === "finished" && questions.length > 0 && (
+          <GameOverModal resetGame={resetGame} />
+        )}
+      </div>
     </>
   );
 };
 
-export default Game;
+export default GamePage;

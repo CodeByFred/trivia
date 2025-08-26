@@ -9,7 +9,11 @@ interface TriviaQuestionProps {
   onNext: () => void;
 }
 
-const TriviaQuestion = ({ question, index, totalQuestions }: TriviaQuestionProps) => {
+const TriviaQuestion = ({
+  question,
+  index,
+  totalQuestions,
+}: TriviaQuestionProps) => {
   //gather answers to display
   const orderedAnswers = [
     question?.correctAnswer,
@@ -19,9 +23,8 @@ const TriviaQuestion = ({ question, index, totalQuestions }: TriviaQuestionProps
   ].filter((a): a is string => typeof a === "string");
 
   return (
-    <div className="flex flex-col items-center  px-4">
-      <br />
-      <h2>{`Question ${index || ""}/${totalQuestions || ""}`}</h2>
+    <>
+      <h3>{`Question ${index + 1 || ""}/${totalQuestions || ""}`}</h3>
       <p>{question?.question}</p>
       {question && (
         <TriviaForm
@@ -29,7 +32,7 @@ const TriviaQuestion = ({ question, index, totalQuestions }: TriviaQuestionProps
           correctAnswer={question.correctAnswer}
         />
       )}
-    </div>
+    </>
   );
 };
 

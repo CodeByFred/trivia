@@ -8,31 +8,38 @@ interface TriviaFormProps {
 }
 
 const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
-  const [chosenAnswer, setChosenAnswer] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const { incrementScore } = useGameContext();
+  const [submitted, setSubmitted] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const { saveAnswer, scoreAnswer, loadNextQuestion } = useGameContext();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //validate data
-    if (!chosenAnswer) {
-      console.error("No answer selected");
-      return;
+
+    try {
+      // todo : check user selected correct answer
+      const result = scoreAnswer(submitted);
+
+      //todo : save answer in logs
+      if (!result) throw new Error("No result from scoring answer");
+      saveAnswer(result);
+
+      // reset form for next question
+      setSubmitted(null);
+      setSelected(null);
+
+      //todo: load next question
+      loadNextQuestion();
+    } catch (error) {
+      console.error("Error submitting answer:", error);
     }
-    //check result
-    if (chosenAnswer === correctAnswer) {
-      //fetch and display next question
-      incrementScore(1);
-    } else {
-      //do this if you want to end game immediately on incorrect answer:
-      // setGameOver(true);
-    }
-    setIsSubmitted(true);
   };
 
   return (
-    <form action="submit" onSubmit={handleSubmit} className="flex flex-col items-center">
+    <form
+      action="submit"
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center"
+    >
       <fieldset
         aria-valuemax={answers?.length}
         className="grid grid-cols-2 gap-4 my-4 border border-gray-300 p-4 rounded bg-gray-100"
@@ -46,8 +53,8 @@ const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
                 id={`choice${i}`}
                 name="trivia-choice"
                 value={answer}
-                checked={chosenAnswer === answer}
-                onChange={(e) => setChosenAnswer(e.target.value)}
+                checked={selected === answer}
+                onChange={(e) => setSelected(e.target.value)}
               />
               <label htmlFor={`choice${i}`} className="ml-2">
                 {answer}
@@ -58,10 +65,12 @@ const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
           <p>Something went wrong: Couldn't find answers</p>
         )}
       </fieldset>
-      <Button type="submit">Submit</Button>
-      {isSubmitted && (
+      <Button type="submit" onClick={() => setSubmitted(selected)}>
+        Submit
+      </Button>
+      {submitted && (
         <span className="mt-4">
-          Result: {chosenAnswer === correctAnswer ? "Correct!" : "Incorrect!"}
+          Result: {submitted === correctAnswer ? "Correct!" : "Incorrect!"}
         </span>
       )}
     </form>
