@@ -3,20 +3,13 @@ import TriviaForm from "../containers/TriviaForm";
 import { shuffle } from "../utils/utils";
 
 interface TriviaQuestionProps {
-  question?: Question;
-  index: number | null;
-  totalQuestions: number | null;
-  setUserScore: React.Dispatch<React.SetStateAction<number>>;
-  setIndex: React.Dispatch<React.SetStateAction<number>>;
+  question: Question;
+  index: number;
+  totalQuestions: number;
+  onNext: () => void;
 }
 
-const TriviaQuestion = ({
-  question,
-  index,
-  totalQuestions,
-  setUserScore,
-  setIndex,
-}: TriviaQuestionProps) => {
+const TriviaQuestion = ({ question, index, totalQuestions }: TriviaQuestionProps) => {
   //gather answers to display
   const orderedAnswers = [
     question?.correctAnswer,
@@ -34,8 +27,6 @@ const TriviaQuestion = ({
         <TriviaForm
           answers={shuffle(orderedAnswers)}
           correctAnswer={question.correctAnswer}
-          setUserScore={setUserScore}
-          setIndex={setIndex}
         />
       )}
     </div>

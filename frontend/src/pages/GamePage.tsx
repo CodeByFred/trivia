@@ -1,65 +1,55 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { Question } from "../types/types";
 import TriviaQuestion from "../components/TriviaQuestion";
 import ScoreBoard from "../components/ScoreBoard";
 import GameOverModal from "../components/GameOverModal";
+import { useGameContext } from "../context/useGameContext";
 
-interface GameProps {
-  questions: Question[];
-  loading: boolean;
-  error: string | null;
-}
+const Game = () => {
+  // const [totalQuestions, setTotalQuestions] = useState(questions.length);
+  // const [userScore, setUserScore] = useState(0);
+  // const [index, setIndex] = useState(0);
+  // const [gameOver, setGameOver] = useState(false);
 
-const Game = ({ questions, loading, error }: GameProps) => {
-  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (index > totalQuestions) {
+  //     setGameOver(true);
+  //   }
+  // }, [index, totalQuestions]);
 
-  const [totalQuestions, setTotalQuestions] = useState(questions.length);
-  const [userScore, setUserScore] = useState(0);
+  // const resetGame = () => {
+  //   setUserScore(0);
+  //   setIndex(0);
+  //   setGameOver(false);
+  // };
 
-  const [index, setIndex] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
+  // if (loading) return <p>Loading questions...</p>;
+  // if (error) return <p>{error}</p>;
 
-  useEffect(() => {
-    if (index > totalQuestions) {
-      setGameOver(true);
-    }
-  }, [index, totalQuestions]);
+  const { questions, currentIndex, gameState, resetGame, loadNextQuestion } =
+    useGameContext();
 
-  const resetGame = () => {
-    setUserScore(0);
-    setIndex(0);
-    setGameOver(false);
-  };
-
-  if (loading) return <p>Loading questions...</p>;
-  if (error) return <p>{error}</p>;
+  const currentQuestion = questions[currentIndex];
 
   return (
     <>
-      {!gameOver && <ScoreBoard userScore={userScore} />}
+      {gameState !== "finished" && <ScoreBoard />}
 
-      {!loading && questions.length == 0 && (
+      {questions.length == 0 && gameState !== "finished" && (
         <p>
           No questions loaded yet. <br />
           Please start a new game on Home Page.
         </p>
       )}
 
-      {loading && <p>{loading}</p>}
-      {error && <p>{error}</p>}
-
-      {!gameOver && (
+      {gameState !== "finished" && (
         <TriviaQuestion
-          question={questions[index]}
-          index={index + 1}
-          setIndex={setIndex}
-          totalQuestions={totalQuestions}
-          setUserScore={setUserScore}
+          question={currentQuestion}
+          index={currentIndex}
+          totalQuestions={questions.length}
+          onNext={loadNextQuestion}
         />
       )}
-      {gameOver && totalQuestions > 0 && (
-        <GameOverModal resetGame={resetGame} navigate={navigate} />
+      {gameState === "finished" && questions.length > 0 && (
+        <GameOverModal resetGame={resetGame} />
       )}
     </>
   );
