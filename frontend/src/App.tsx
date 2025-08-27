@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
 import ReviewPage from "./pages/ReviewPage";
 import GameProvider from "./context/GameProvider";
+import UserSession from "./components/UserSession";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/game" element={<GamePage />} />
             <Route path="/review" element={<ReviewPage />} />
           </Routes>
+          <UserSession />
         </GameProvider>
       </BrowserRouter>
     </>

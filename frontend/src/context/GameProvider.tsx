@@ -28,11 +28,21 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [gameHistory, setGameHistory] = useState<GameHistory>([]);
 
   const initToken = async (): Promise<string> => {
+    // token
     const token = await getNewToken();
-    const expiry = Date.now() + 1000 * 60 * 60;
     setToken(token);
+    console.log(`Token key: ${token}`);
+
+    // expiry
+    const expiry = Date.now() + 1000 * 60 * 60;
     setTokenExpiry(expiry);
-    console.log(token, expiry);
+
+    // Log expiry date/time
+    // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
+    const expiryDate = new Date(expiry).toLocaleDateString();
+    const expiryTime = new Date(expiry).toLocaleTimeString();
+    console.log(`Expiry: ${expiryDate} at ${expiryTime} (${expiry})`);
+
     return token;
   };
 
@@ -65,7 +75,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
   const startGame = () => {
     getQuestions(difficulty, categoryID);
-    console.log(token);
     setCurrentIndex(0);
     setGameState("playing");
     setScore(0);
