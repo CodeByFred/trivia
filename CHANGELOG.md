@@ -58,3 +58,4 @@ Changes:
 
 PR #2: Game UI/Flow
 Mainly front-end features including UI game flow and styling improvements, user session management, and game state encapsulation with GameContext.
+
