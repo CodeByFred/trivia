@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type {
-  AnsweredQuestion,
+  Answer,
   Difficulty,
+  GameResult,
   GameState,
+  GameHistory,
   Question,
   TriviaCategoryID,
 } from "../types/types";
@@ -21,8 +23,9 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [gameState, setGameState] = useState<GameState>("idle");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>([]);
+  const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
+  const [gameHistory, setGameHistory] = useState<GameHistory>([]);
 
   const initToken = async (): Promise<string> => {
     const token = await getNewToken();
@@ -66,16 +69,100 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     setCurrentIndex(0);
     setGameState("playing");
     setScore(0);
-    setAnsweredQuestions([]);
+    console.log(`New Game Started!`);
   };
 
-  const saveAnswer = () => {};
+  const scoreAnswer = (submitted: string | null) => {
+    //check empty submission
+    if (!submitted) {
+      alert("Please select an answer before submitting.");
+      throw new Error("No answer submitted");
+    }
+    //build answer format
+    const answer: Answer = {
+      questionIndex: currentIndex,
+      submitted: submitted,
+      wasCorrect: false,
+    };
+    // check if answer was correct
+    if (answer.submitted === questions[currentIndex].correctAnswer) {
+      console.info(`"${answer.submitted}" is correct`);
+      setScore((prev) => prev + 1);
+      answer.wasCorrect = true;
+    } else {
+      console.info(
+        `"${answer.submitted}" is incorrect. The correct answer was "${questions[currentIndex].correctAnswer}".`
+      );
+      answer.wasCorrect = false;
+    }
+    console.log(`Current score: ${score}`);
+    return answer; // returns to TriviaForm
+  };
 
-  const loadNextQuestion = () => {};
+  const saveAnswer = (answer: Answer | null) => {
+    if (!answer) {
+      throw new Error(`Submitted answer could not be found.`);
+    }
+    setSavedAnswers((prev) => [...prev, answer]);
+  };
 
-  const incrementScore = () => {};
+  const loadNextQuestion = () => {
+    setCurrentIndex((prev) => prev + 1);
+    // end game if all questions have been answered
+    if (!loading && currentIndex + 1 >= questions.length) {
+      console.log("End of quiz! There are no more questions :)");
 
-  const resetGame = () => {};
+      endGame();
+      return;
+    }
+    console.log(
+      `Loading next question: ${currentIndex + 1} of ${questions.length}`
+    );
+    if (!questions[currentIndex]) {
+      throw new Error(`Question at index ${currentIndex} not found`);
+    }
+  };
+
+  const endGame = () => {
+    console.log("");
+    console.log(`Game Over!`);
+    setGameState("finished");
+
+    console.log(
+      `Your answers:\n${savedAnswers
+        .map(
+          (a) =>
+            `Q${a.questionIndex + 1}: ${a.submitted} (${
+              a.wasCorrect ? "correct" : "incorrect"
+            })`
+        )
+        .join("\n")}`
+    );
+    console.log(`Final score: ${score}/${questions.length}`);
+    saveGame();
+  };
+
+  const saveGame = () => {
+    console.log("Saving game to history... ");
+    const newGameResult: GameResult = {
+      score,
+      datePlayed: new Date().toISOString(),
+      questions,
+      answers: savedAnswers,
+    };
+    setGameHistory((prev) => [...prev, newGameResult]);
+    console.log("Game saved! You can review your answers in the Review page.");
+  };
+
+  const resetGame = () => {
+    console.log("Resetting game... ");
+    setScore(0);
+    setCurrentIndex(0);
+    setSavedAnswers([]);
+    console.log(`Score Reset! Resetting game state to 'playing'`);
+    setGameState("playing");
+    console.log(`Game state Reset!`);
+  };
 
   return (
     <GameContext.Provider
@@ -89,15 +176,18 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         categoryID,
         questions,
         currentIndex,
-        answeredQuestions,
         score,
         updateDifficulty,
         updateCategoryID,
         startGame,
+        scoreAnswer,
         saveAnswer,
         loadNextQuestion,
-        incrementScore,
+        endGame,
         resetGame,
+        saveGame,
+        savedAnswers,
+        gameHistory,
       }}
     >
       {children}

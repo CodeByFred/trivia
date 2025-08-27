@@ -21,17 +21,25 @@ export type Question = {
   incorrectAnswers: string[];
 };
 
-export type AnsweredQuestion = {
-  question: Question;
-  submittedAnswer: string | null;
+export type Answer = {
+  questionIndex: number;
+  submitted: string | null;
   wasCorrect: boolean;
 };
 
-export type GameResultDto = {
+//NOTE - This is the result of a completed game
+// -> send to backend as dto later on whenever user finishes a game
+export type GameResult = {
   score: number;
   datePlayed: string; //iso
-  submittedAnswers: AnsweredQuestion[];
+  questions: Question[];
+  answers: Answer[];
 };
+
+//NOTE - This is the logs of all previously completed games
+// -> this should be fetched from backend later on (in context for now)
+// we need to decide which games to fetch (e.g. last 5, all, last session etc.)
+export type GameHistory = GameResult[];
 
 export type Difficulty = "any" | "easy" | "medium" | "hard";
 
