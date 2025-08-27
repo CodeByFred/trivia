@@ -29,12 +29,31 @@ export async function triviaQuery(
   amount: number,
   difficulty: Difficulty,
   category: number,
-  token: string
+  token?: string
 ): Promise<Question[]> {
-  const url = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&category=${category}&type=multiple&token=${token}`;
+  const safeAmount = Math.max(1, Math.min(50, amount));
+  const params = new URLSearchParams({ amount: String(safeAmount), type: "multiple" });
 
-  const res = await fetch(url);
-  const json: TriviaAPIResponse = await res.json();
+  if (difficulty !== "any") params.set("difficulty", difficulty);
+  if (category !== 0) params.set("category", String(category));
+  if (token) params.set("token", token);
+
+  const url = `https://opentdb.com/api.php?${params.toString()}`;
+
+  console.log(url);
+
+  let response: Response;
+  try {
+    response = await fetch(url);
+  } catch {
+    throw new Error("Problem with fetch function");
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  const json: TriviaAPIResponse = await response.json();
 
   switch (json.response_code) {
     case 0:

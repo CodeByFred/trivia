@@ -1,12 +1,6 @@
 import Button from "./Button";
 
-const GameOverModal = ({
-  resetGame,
-  navigate,
-}: {
-  resetGame: () => void;
-  navigate: (path: string) => void;
-}) => {
+const GameOverModal = ({ resetGame }: { resetGame: () => void }) => {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-4 rounded shadow-md">
