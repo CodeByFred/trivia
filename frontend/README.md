@@ -19,14 +19,15 @@
 
 ## MVP
 
-- [ ] Create an interface that allows a user to choose the level of difficulty and start a new game (Fred)
-- [ ] When the game starts, display a question card with 4 possible answers (Carrie)
-- [ ] If the user answers the question correctly, show a new question
-- [ ] If the answer is incorrect, end the game
+- [x] Create an interface that allows a user to choose the level of difficulty and start a new game (Fred)
+- [x] When the game starts, display a question card with 4 possible answers (Carrie)
+- [x] ~~If the user answers the question correctly,~~ Show a next question when user submits answer
+- [x] ~~If the answer is incorrect, end the game~~ If last question is answered, end the game
+- [x] Add a "Review Answers" button at the end of the game that shows the user all the questions, their answers, and the correct answers
 - [ ] Display the score (number of questions answered correctly) at the end of each game
-- [ ] Add a "Play Again" button under the score
+- [ ] Add a "Play Again" button under the score, that lets you reattempt the game's incorrect questions
 
 ## Bonus
 
-- [ ] Allow the user to select a category of questions
-- [ ] Add a time countdown to each question; if a question is not answered before time is up, end the game
+- [x] Allow the user to select a category of questions
+- [ ] Add a time countdown to each question; if a question is not answered before time is up, ~~end the game~~ mark submitted answer as null and show the next question
