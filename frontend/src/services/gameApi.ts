@@ -1,23 +1,25 @@
-import type { GameData } from "../types/types";
+import type { GameResult } from "../types/types";
 import { API, GAME_ENDPOINT } from "./urls";
 
-export async function submitGameData(gameData: GameData) {
+export async function submitGameResult(gameResultDto: GameResult) {
   try {
     const response = await fetch(`${API}${GAME_ENDPOINT}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(gameData),
+      body: JSON.stringify(gameResultDto),
     });
 
     if (!response.ok) {
-      console.log(response);
+      console.error(response);
+      throw new Error("Failed to submit game result");
     }
 
-    const result = response.text;
+    const result = await response.text();
     return result;
-  } catch (reponse) {
-    console.log(reponse);
+    //return the confirmation message from backend
+  } catch (error) {
+    console.error(error);
   }
 }
