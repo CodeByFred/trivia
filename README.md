@@ -10,6 +10,21 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
 - [Group Trello Board](https://trello.com/b/14XGoYKh/trivia-full-stack-project-fred-carrie)
 - [Figma Board](https://www.figma.com/board/p0I0y8Sr4brnA6b1FiPCDy/trivia?node-id=0-1&t=a3gPBNrj4if6PYC4-1)
 
+## Technologies
+
+- Java
+- Spring Boot
+- Hibernate
+- JPA
+
+## Entity Relationship Diagram
+
+![Trivia ERD](assets/trivia-erd.png)
+
+## Spring Framework Diagram
+
+![Spring Framework](assets/Spring.png)
+
 ## MVP
 
 - [ ] When the user completes a quiz, it gets submitted to the API that keeps track of all game details:
