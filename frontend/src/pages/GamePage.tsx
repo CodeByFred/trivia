@@ -10,17 +10,13 @@ const GamePage = () => {
 
   useEffect(() => {
     if (gameState === "finished") {
-      console.log(
-        `Game state: '${gameState}'. Game Over! Displaying results...`
-      );
+      console.log(`Game state: '${gameState}'. Game Over! Displaying results...`);
     }
     if (gameState === "playing") {
       console.log(`Game state: '${gameState}'. Game in progress...`);
     }
     if (gameState === "idle") {
-      console.log(
-        `Game state: '${gameState}'. Game is idle. Please start a new game.`
-      );
+      console.log(`Game state: '${gameState}'. Game is idle. Please start a new game.`);
     }
   }, [gameState]);
 
@@ -28,7 +24,7 @@ const GamePage = () => {
     <>
       {}
       {gameState === "playing" && <ScoreBoard />}
-      <div className="flex flex-col items-center justify-center text-center px-4 h-full">
+      <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
         {questions.length == 0 && gameState !== "finished" && (
           <p>
             No questions loaded yet. <br />

@@ -9,11 +9,7 @@ interface TriviaQuestionProps {
   onNext: () => void;
 }
 
-const TriviaQuestion = ({
-  question,
-  index,
-  totalQuestions,
-}: TriviaQuestionProps) => {
+const TriviaQuestion = ({ question, index, totalQuestions }: TriviaQuestionProps) => {
   //gather answers to display
   const orderedAnswers = [
     question?.correctAnswer,
@@ -24,8 +20,8 @@ const TriviaQuestion = ({
 
   return (
     <>
-      <h3>{`Question ${index + 1 || ""}/${totalQuestions || ""}`}</h3>
-      <p>{question?.question}</p>
+      <h3 className="text-xl">{`Question ${index + 1 || ""}/${totalQuestions || ""}`}</h3>
+      <p className="text-4xl">{question?.question}</p>
       {question && (
         <TriviaForm
           answers={shuffle(orderedAnswers)}

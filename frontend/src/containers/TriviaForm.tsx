@@ -35,45 +35,74 @@ const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
   };
 
   return (
-    <form
-      action="submit"
-      onSubmit={handleSubmit}
-      className="flex flex-col items-center"
-    >
-      <fieldset
-        aria-valuemax={answers?.length}
-        className="grid grid-cols-2 gap-4 my-4 border border-gray-300 p-4 rounded bg-gray-100"
+    // <>
+    //   <form
+    //     action="submit"
+    //     onSubmit={handleSubmit}
+    //     className="flex flex-col items-center"
+    //   >
+    //     <fieldset
+    //       aria-valuemax={answers?.length}
+    //       className="grid grid-cols-2 gap-4 my-4 border border-gray-300 p-4 rounded bg-gray-100"
+    //     >
+    //       <legend>Please select your answer:</legend>
+    //       {answers ? (
+    //         answers.map((answer: string, i: number) => (
+    //           <span key={i} className="flex items-center">
+    //             <input
+    //               type="radio"
+    //               id={`choice${i}`}
+    //               name="trivia-choice"
+    //               value={answer}
+    //               checked={selected === answer}
+    //               onChange={(e) => setSelected(e.target.value)}
+    //             />
+    //             <label htmlFor={`choice${i}`} className="ml-2">
+    //               {answer}
+    //             </label>
+    //           </span>
+    //         ))
+    //       ) : (
+    //         <p>Something went wrong: Couldn't find answers</p>
+    //       )}
+    //     </fieldset>
+    //   </form>
+
+    <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit} action="submit">
+      {answers ? (
+        answers.map((answer: string, i: number) => (
+          <label key={i} className="cursor-pointer">
+            <input
+              id={`choice${i}`}
+              type="radio"
+              name="trivia-choice"
+              value={answer}
+              checked={selected === answer}
+              onChange={(e) => setSelected(e.target.value)}
+              className="peer hidden"
+            />
+            <div className="w-100 h-60 flex items-center justify-center rounded-lg bg-gray-200 peer-checked:bg-primary peer-checked:text-white transition">
+              <p className="text-2xl">{answer}</p>
+            </div>
+          </label>
+        ))
+      ) : (
+        <p>Something went wrong: Couldn't find answers</p>
+      )}
+      <Button
+        className="btn btn-primary btn-xl btn-wide col-span-2 mx-auto"
+        type="submit"
+        onClick={() => setSubmitted(selected)}
       >
-        <legend>Please select your answer:</legend>
-        {answers ? (
-          answers.map((answer: string, i: number) => (
-            <span key={i} className="flex items-center">
-              <input
-                type="radio"
-                id={`choice${i}`}
-                name="trivia-choice"
-                value={answer}
-                checked={selected === answer}
-                onChange={(e) => setSelected(e.target.value)}
-              />
-              <label htmlFor={`choice${i}`} className="ml-2">
-                {answer}
-              </label>
-            </span>
-          ))
-        ) : (
-          <p>Something went wrong: Couldn't find answers</p>
-        )}
-      </fieldset>
-      <Button type="submit" onClick={() => setSubmitted(selected)}>
         Submit
       </Button>
       {submitted && (
         <span className="mt-4">
           Result: {submitted === correctAnswer ? "Correct!" : "Incorrect!"}
         </span>
-      )}
+      )}{" "}
     </form>
+    // </>
   );
 };
 
