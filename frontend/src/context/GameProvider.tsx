@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   Answer,
   Difficulty,
@@ -34,8 +34,11 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     console.log(`Token key: ${token}`);
 
     // expiry
-    const expiry = Date.now() + 1000 * 60 * 60;
+    const expiry = Date.now() + 1000 * 60 * 60 * 6;
     setTokenExpiry(expiry);
+
+    localStorage.setItem("triviaToken", token);
+    localStorage.setItem("triviaTokenExpiry", expiry.toString());
 
     // Log expiry date/time
     // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
@@ -45,6 +48,22 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
     return token;
   };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("triviaToken");
+    const storedExpiry = localStorage.getItem("triviaTokenExpiry");
+
+    if (storedToken && storedExpiry) {
+      if (Date.now() < Number(storedExpiry)) {
+        setToken(storedToken);
+        setTokenExpiry(Number(storedExpiry));
+      } else {
+        initToken();
+      }
+    } else {
+      initToken();
+    }
+  }, []);
 
   const updateDifficulty = (d: Difficulty) => {
     setDifficulty(d);
@@ -64,7 +83,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(10, difficulty, id, token!);
+      const data = await triviaQuery(10, difficulty, id, activeToken);
       setQuestions(data);
     } catch (error) {
       console.log(error, categoryID, difficulty);
@@ -124,9 +143,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       endGame();
       return;
     }
-    console.log(
-      `Loading next question: ${currentIndex + 1} of ${questions.length}`
-    );
+    console.log(`Loading next question: ${currentIndex + 1} of ${questions.length}`);
     if (!questions[currentIndex]) {
       throw new Error(`Question at index ${currentIndex} not found`);
     }
