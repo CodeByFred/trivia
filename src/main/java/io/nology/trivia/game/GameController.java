@@ -22,7 +22,7 @@ public class GameController {
 
     @PostMapping("/save")
     public ResponseEntity<Game> saveGame(@RequestBody Game game) {
-        Game newGame = gameService.saveGame(game);
+        Game newGame = gameService.save(game);
         return ResponseEntity.ok(newGame);
     }
 

@@ -13,7 +13,7 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game saveGame(Game game) {
+    public Game save(Game game) {
         return gameRepository.save(game);
     }
 

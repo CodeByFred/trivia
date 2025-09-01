@@ -18,7 +18,7 @@ public class GameAnswer {
 
     private String submittedAnswer;
 
-    private boolean correct;
+    private boolean wasCorrect;
 
     public GameAnswer() {
     }
@@ -55,11 +55,11 @@ public class GameAnswer {
         this.submittedAnswer = submittedAnswer;
     }
 
-    public boolean isCorrect() {
-        return correct;
+    public boolean wasCorrect() {
+        return wasCorrect;
     }
 
-    public void setCorrect(boolean wasCorrect) {
-        this.correct = wasCorrect;
+    public void setWasCorrect(boolean wasCorrect) {
+        this.wasCorrect = wasCorrect;
     }
 }
