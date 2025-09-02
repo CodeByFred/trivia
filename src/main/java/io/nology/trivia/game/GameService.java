@@ -1,7 +1,10 @@
 package io.nology.trivia.game;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
+import io.nology.trivia.dtos.GameResultDto;
 import io.nology.trivia.game.entities.Game;
 
 @Service
@@ -13,8 +16,17 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game save(Game game) {
+    public Game save(GameResultDto gameDto) {
+        Game game = convertToEntity(gameDto);
         return gameRepository.save(game);
+    }
+
+    public Game convertToEntity(GameResultDto gameDto) {
+        Game game = new Game();
+        game.setScore(gameDto.getScore());
+        // not done
+        //
+        return game;
     }
 
 }

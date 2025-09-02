@@ -10,10 +10,12 @@ public class GameAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // games table
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
+    // questions table
     private Long questionId;
 
     private String submittedAnswer;
@@ -22,6 +24,8 @@ public class GameAnswer {
 
     public GameAnswer() {
     }
+
+    // getters, setters
 
     public Long getId() {
         return id;

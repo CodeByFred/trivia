@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "games")
 public class Game {
 
+    // properties
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +25,12 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GameAnswer> answers = new ArrayList<>();
 
+    // constructor
+
     public Game() {
     }
+
+    // getters/setters
 
     public Long getId() {
         return id;
@@ -45,7 +51,6 @@ public class Game {
     public LocalDateTime getDatePlayed() {
         return datePlayed;
     }
-
 
     public List<GameAnswer> getAnswers() {
         return answers;
