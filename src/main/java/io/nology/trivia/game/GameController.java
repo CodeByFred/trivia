@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import io.nology.trivia.dtos.GameResultDto;
+import io.nology.trivia.game.dtos.GameResultDto;
 import io.nology.trivia.game.entities.Game;
+import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/game")
+@RequestMapping("/games")
 public class GameController {
 
     private final GameService gameService;
@@ -22,9 +23,9 @@ public class GameController {
     // Add endpoints for game-related actions
 
     @PostMapping
-    public ResponseEntity<Game> saveGame(@RequestBody GameResultDto gameDto) {
-        Game newGame = gameService.save(gameDto);
-        return ResponseEntity.ok(newGame);
+    public ResponseEntity<Game> saveGame(@Valid @RequestBody GameResultDto gameDto) {
+        Game savedGame = gameService.saveGame(gameDto);
+        return ResponseEntity.ok(savedGame);
     }
 
 }

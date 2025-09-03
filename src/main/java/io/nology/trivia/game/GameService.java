@@ -4,8 +4,10 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
-import io.nology.trivia.dtos.GameResultDto;
+import io.nology.trivia.game.dtos.GameAnswerDto;
+import io.nology.trivia.game.dtos.GameResultDto;
 import io.nology.trivia.game.entities.Game;
+import io.nology.trivia.game.entities.GameAnswer;
 
 @Service
 public class GameService {
@@ -16,17 +18,33 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game save(GameResultDto gameDto) {
-        Game game = convertToEntity(gameDto);
+    public Game saveGame(GameResultDto gameDto) {
+        Game game = convertToGameEntity(gameDto);
+        System.out.println("Saving game results to DB: " + game);
         return gameRepository.save(game);
     }
 
-    public Game convertToEntity(GameResultDto gameDto) {
-        Game game = new Game();
-        game.setScore(gameDto.getScore());
-        // not done
-        //
-        return game;
+    // helper methods
+
+    public Game convertToGameEntity(GameResultDto gameDto) {
+        Game g = new Game();
+        g.setScore(gameDto.getScore());
+        GameAnswer[] answers = convertToGameAnswerEntity(gameDto.getAnswers(), g);
+        g.setAnswers(answers != null ? Arrays.asList(answers) : null);
+        return g;
+    }
+
+    public GameAnswer[] convertToGameAnswerEntity(GameAnswerDto[] dto, Game game) {
+        return Arrays.stream(dto)
+                .map(answerDto -> {
+                    GameAnswer ga = new GameAnswer();
+                    ga.setGame(game);
+                    // todo : how to fetch questionId from DB?
+                    ga.setSubmittedAnswer(answerDto.getSubmittedAnswer());
+                    ga.setWasCorrect(answerDto.wasCorrect());
+                    return ga;
+                })
+                .toArray(GameAnswer[]::new);
     }
 
 }
