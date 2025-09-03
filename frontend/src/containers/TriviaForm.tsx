@@ -10,24 +10,22 @@ interface TriviaFormProps {
 const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
   const [submitted, setSubmitted] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const { saveAnswer, scoreAnswer, loadNextQuestion } = useGameContext();
+  const { submitAnswer, loadNextQuestion } = useGameContext();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      // todo : check user selected correct answer
-      const result = scoreAnswer(submitted);
+      const result = submitAnswer(submitted);
 
-      //todo : save answer in logs
-      if (!result) throw new Error("No result from scoring answer");
-      saveAnswer(result);
+      if (!result) {
+        throw new Error("No answer was submitted.");
+      }
 
       // reset form for next question
       setSubmitted(null);
       setSelected(null);
 
-      //todo: load next question
       loadNextQuestion();
     } catch (error) {
       console.error("Error submitting answer:", error);

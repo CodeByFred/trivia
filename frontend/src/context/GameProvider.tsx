@@ -91,7 +91,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(10, difficulty, id, activeToken!);
+      const data = await triviaQuery(2, difficulty, id, activeToken!);
       setQuestions(data);
     } catch (error) {
       console.log(error, categoryID, difficulty);
@@ -100,71 +100,71 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  useEffect(() => {
+    console.log(`Game state: '${gameState}'`);
+  }, [gameState]);
+
   const startGame = () => {
     getQuestions(difficulty, categoryID);
     setCurrentIndex(0);
     setGameState("playing");
     setScore(0);
-    console.log(`New Game Started!`);
   };
 
-  const scoreAnswer = (submitted: string | null) => {
-    //check empty submission
-    // if (!submitted) {
-    //   alert("Please select an answer before submitting.");
-    //   throw new Error("No answer submitted");
-    // }
-    //build answer format
+  const resetGame = () => {
+    console.log("Resetting game state... ");
+    setGameState("idle");
+    setScore(0);
+    setCurrentIndex(0);
+    setSavedAnswers([]);
+  };
+
+  const submitAnswer = (submitted: string | null) => {
+    if (!submitted && submitted !== null) {
+      throw new Error(`Submitted answer could not be found.`);
+    }
+    //build answer formats
     const answer: Answer = {
       questionIndex: currentIndex,
       submitted: submitted,
       wasCorrect: false,
     };
-    // check if answer was correct
+    if (!submitted && submitted !== null) scoreAnswer(answer); // check if legit answer was correct
+    setSavedAnswers((prev) => [...prev, answer]);
+    return answer; // returns to TriviaForm
+  };
+
+  const scoreAnswer = (answer: Answer) => {
     if (answer.submitted === questions[currentIndex].correctAnswer) {
       console.info(`"${answer.submitted}" is correct`);
       setScore((prev) => prev + 1);
       answer.wasCorrect = true;
     } else {
-      console.info(
-        `"${answer.submitted}" is incorrect. The correct answer was "${questions[currentIndex].correctAnswer}".`
-      );
-      answer.wasCorrect = false;
+      console.info(`"${answer.submitted}" is incorrect.`);
     }
-    console.log(`Current score: ${score}`);
-    return answer; // returns to TriviaForm
-  };
-
-  const saveAnswer = (answer: Answer | null) => {
-    if (!answer) {
-      throw new Error(`Submitted answer could not be found.`);
-    }
-    setSavedAnswers((prev) => [...prev, answer]);
   };
 
   const loadNextQuestion = () => {
-    setCurrentIndex((prev) => prev + 1);
     // end game if all questions have been answered
-    if (!loading && currentIndex + 1 >= questions.length) {
+    if (questions && currentIndex + 1 == questions.length) {
       console.log("End of quiz! There are no more questions :)");
       endGame();
       return;
     }
-    console.log(
-      `Loading next question: ${currentIndex + 1} of ${questions.length}`
-    );
-    if (!questions[currentIndex]) {
-      throw new Error(`Question at index ${currentIndex} not found`);
-    }
+    console.log("Loading next question...");
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const endGame = () => {
-    console.log("");
-    console.log(`Game Over!`);
     setGameState("finished");
-
-    // testing logs -> TODO - turn into api logs
-    console.log(
+    // testing logs
+    console.info(`Final score: ${score}/${questions.length}`);
+    console.info(
+      `Game questions:\n${questions
+        .map((q, i) => `Q${i + 1}: ${q.question}`)
+        .join("\n")}`
+    );
+    console.info(
       `Your answers:\n${savedAnswers
         .map(
           (a) =>
@@ -174,12 +174,26 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         )
         .join("\n")}`
     );
-    console.log(`Final score: ${score}/${questions.length}`);
     saveGame();
+    resetGame();
   };
 
-  const saveGame = () => {
-    console.log("Saving game questions to DB... ");
+  const saveGame = async () => {
+    console.log("Saving game to DB... ");
+    const qSaved = await saveGameQuestions();
+    if (!qSaved) {
+      console.error("Error: Game questions were not saved to DB");
+      return;
+    }
+    const rSaved = await saveGameResult();
+    if (!rSaved) {
+      console.error("Error: Game results were not saved to DB");
+      return;
+    }
+    console.log("Game saved to DB! View all past games in the Review page.");
+  };
+
+  const saveGameQuestions = async () => {
     const gameQuestionsDto: GameQuestionsDto = {
       questions: questions.map((q) => ({
         type: q.type,
@@ -190,28 +204,19 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         incorrectAnswers: q.incorrectAnswers,
       })),
     };
-    postGameData(gameQuestionsDto);
+    console.log("Saving game questions: " + JSON.stringify(gameQuestionsDto));
+    const result = await postGameData(gameQuestionsDto);
+    return result;
+  };
 
-    console.log("Saving game results to DB... ");
+  const saveGameResult = async () => {
     const gameResultDto: GameResultDto = {
       score,
       answers: savedAnswers,
     };
-    postGameData(gameResultDto);
-
-    console.log(
-      "Game saved to DB! You can review all past games in the Review page."
-    );
-  };
-
-  const resetGame = () => {
-    console.log("Resetting game... ");
-    setScore(0);
-    setCurrentIndex(0);
-    setSavedAnswers([]);
-    console.log(`Score Reset! Resetting game state to 'playing'`);
-    setGameState("playing");
-    console.log(`Game state Reset!`);
+    console.log("Saving game results: " + JSON.stringify(gameResultDto));
+    const result = await postGameData(gameResultDto);
+    return result;
   };
 
   return (
@@ -230,8 +235,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         updateDifficulty,
         updateCategoryID,
         startGame,
-        scoreAnswer,
-        saveAnswer,
+        submitAnswer,
         loadNextQuestion,
         endGame,
         resetGame,
