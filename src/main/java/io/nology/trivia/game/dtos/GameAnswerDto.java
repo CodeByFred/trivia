@@ -1,4 +1,4 @@
-package io.nology.trivia.dtos;
+package io.nology.trivia.game.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ public class GameAnswerDto {
 
     @NotBlank
     // Can be null (timer ran out)
-    private String submitted;
+    private String submittedAnswer;
 
     @NotNull
     private boolean wasCorrect;
@@ -19,8 +19,8 @@ public class GameAnswerDto {
         return questionIndex;
     }
 
-    public String getSubmitted() {
-        return submitted;
+    public String getSubmittedAnswer() {
+        return submittedAnswer;
     }
 
     public boolean wasCorrect() {

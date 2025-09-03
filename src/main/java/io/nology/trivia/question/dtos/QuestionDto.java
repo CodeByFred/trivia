@@ -1,8 +1,9 @@
-package io.nology.trivia.dtos;
+package io.nology.trivia.question.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class QuestionDto {
 
@@ -12,10 +13,12 @@ public class QuestionDto {
 
     @NotBlank
     @NotNull
+    @Pattern(regexp = "any|easy|medium|hard", message = "Difficulty must be 'any','easy', 'medium', or 'hard'")
     private String difficulty;
 
     @NotBlank
     @NotNull
+    // enum for trivia categories needed?
     private String category;
 
     @NotBlank
@@ -27,6 +30,7 @@ public class QuestionDto {
     private String correctAnswer;
 
     @NotEmpty
+    @NotNull
     private String[] incorrectAnswers;
 
     public String getType() {

@@ -12,6 +12,8 @@ public class Question {
 
     private String question;
 
+    private String type;
+
     private String category;
 
     private String difficulty;
@@ -41,6 +43,14 @@ public class Question {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCategory() {
