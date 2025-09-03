@@ -108,10 +108,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
   const scoreAnswer = (submitted: string | null) => {
     //check empty submission
-    if (!submitted) {
-      alert("Please select an answer before submitting.");
-      throw new Error("No answer submitted");
-    }
+    // if (!submitted) {
+    //   alert("Please select an answer before submitting.");
+    //   throw new Error("No answer submitted");
+    // }
     //build answer format
     const answer: Answer = {
       questionIndex: currentIndex,
