@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import type {
   Answer,
   Difficulty,
-  GameResult,
   GameState,
   GameHistory,
   Question,
   TriviaCategoryID,
+  GameResultDto,
+  GameQuestionsDto,
 } from "../types/types";
 import { GameContext } from "./GameContext";
 import type { PropsWithChildren } from "react";
 import { getNewToken } from "../services/sessionToken";
 import { triviaQuery } from "../services/triviaHttp";
+import { postGameData } from "../services/gameApi";
 
 const GameProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
-  const [gameHistory, setGameHistory] = useState<GameHistory>([]);
+  const [gameHistory] = useState<GameHistory>([]);
 
   const initToken = async (): Promise<string | null> => {
     try {
@@ -145,11 +147,12 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     // end game if all questions have been answered
     if (!loading && currentIndex + 1 >= questions.length) {
       console.log("End of quiz! There are no more questions :)");
-
       endGame();
       return;
     }
-    console.log(`Loading next question: ${currentIndex + 1} of ${questions.length}`);
+    console.log(
+      `Loading next question: ${currentIndex + 1} of ${questions.length}`
+    );
     if (!questions[currentIndex]) {
       throw new Error(`Question at index ${currentIndex} not found`);
     }
@@ -160,6 +163,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     console.log(`Game Over!`);
     setGameState("finished");
 
+    // testing logs -> TODO - turn into api logs
     console.log(
       `Your answers:\n${savedAnswers
         .map(
@@ -175,15 +179,29 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const saveGame = () => {
-    console.log("Saving game to history... ");
-    const newGameResult: GameResult = {
+    console.log("Saving game questions to DB... ");
+    const gameQuestionsDto: GameQuestionsDto = {
+      questions: questions.map((q) => ({
+        type: q.type,
+        question: q.question,
+        difficulty: q.difficulty,
+        category: q.category,
+        correctAnswer: q.correctAnswer,
+        incorrectAnswers: q.incorrectAnswers,
+      })),
+    };
+    postGameData(gameQuestionsDto);
+
+    console.log("Saving game results to DB... ");
+    const gameResultDto: GameResultDto = {
       score,
-      datePlayed: new Date().toISOString(),
-      questions,
       answers: savedAnswers,
     };
-    setGameHistory((prev) => [...prev, newGameResult]);
-    console.log("Game saved! You can review your answers in the Review page.");
+    postGameData(gameResultDto);
+
+    console.log(
+      "Game saved to DB! You can review all past games in the Review page."
+    );
   };
 
   const resetGame = () => {
