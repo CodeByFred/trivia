@@ -2,11 +2,40 @@ import TriviaQuestion from "../components/TriviaQuestion";
 import ScoreBoard from "../components/ScoreBoard";
 import GameOverModal from "../components/GameOverModal";
 import { useGameContext } from "../context/useGameContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const GamePage = () => {
-  const { questions, currentIndex, gameState, resetGame, loadNextQuestion } =
-    useGameContext();
+  const {
+    questions,
+    currentIndex,
+    gameState,
+    resetGame,
+    loadNextQuestion,
+    scoreAnswer,
+    saveAnswer,
+  } = useGameContext();
+
+  const [timeLeft, setTimeLeft] = useState(15);
+
+  useEffect(() => {
+    if (gameState !== "playing") return;
+
+    setTimeLeft(15);
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          const result = scoreAnswer(null);
+          if (result) saveAnswer(result);
+          loadNextQuestion();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [gameState, currentIndex, scoreAnswer, saveAnswer, loadNextQuestion]);
 
   useEffect(() => {
     if (gameState === "finished") {
@@ -23,8 +52,8 @@ const GamePage = () => {
   return (
     <>
       {}
-      {gameState === "playing" && <ScoreBoard />}
-      <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
+      {gameState === "playing" && <ScoreBoard timeLeft={timeLeft} />}
+      <div className="flex flex-col items-center justify-center text-center px-4 h-full">
         {questions.length == 0 && gameState !== "finished" && (
           <p>
             No questions loaded yet. <br />
