@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   Answer,
   Difficulty,
@@ -27,24 +27,49 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [score, setScore] = useState(0);
   const [gameHistory, setGameHistory] = useState<GameHistory>([]);
 
-  const initToken = async (): Promise<string> => {
-    // token
-    const token = await getNewToken();
-    setToken(token);
-    console.log(`Token key: ${token}`);
+  const initToken = async (): Promise<string | null> => {
+    try {
+      // token
+      const token = await getNewToken();
+      setToken(token);
+      console.log(`Token key: ${token}`);
 
-    // expiry
-    const expiry = Date.now() + 1000 * 60 * 60;
-    setTokenExpiry(expiry);
+      // expiry
+      const expiry = Date.now() + 1000 * 60 * 60 * 6;
+      setTokenExpiry(expiry);
 
-    // Log expiry date/time
-    // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
-    const expiryDate = new Date(expiry).toLocaleDateString();
-    const expiryTime = new Date(expiry).toLocaleTimeString();
-    console.log(`Expiry: ${expiryDate} at ${expiryTime} (${expiry})`);
+      localStorage.setItem("triviaToken", token);
+      localStorage.setItem("triviaTokenExpiry", expiry.toString());
 
-    return token;
+      // Log expiry date/time
+      // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
+      const expiryDate = new Date(expiry).toLocaleDateString();
+      const expiryTime = new Date(expiry).toLocaleTimeString();
+      console.log(`Expiry: ${expiryDate} at ${expiryTime} (${expiry})`);
+
+      return token;
+    } catch (e) {
+      console.log(`Failed to retrieve token: ${e}`);
+      setError("Could not get a new session token, try refreshing the page");
+      return null;
+    }
   };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("triviaToken");
+    const storedExpiry = localStorage.getItem("triviaTokenExpiry");
+
+    if (storedToken && storedExpiry) {
+      if (Date.now() < Number(storedExpiry)) {
+        setToken(storedToken);
+        setTokenExpiry(Number(storedExpiry));
+      } else {
+        initToken();
+      }
+    } else {
+      initToken();
+    }
+  }, []);
 
   const updateDifficulty = (d: Difficulty) => {
     setDifficulty(d);
@@ -64,7 +89,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(10, difficulty, id, token!);
+      const data = await triviaQuery(10, difficulty, id, activeToken!);
       setQuestions(data);
     } catch (error) {
       console.log(error, categoryID, difficulty);
@@ -124,9 +149,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       endGame();
       return;
     }
-    console.log(
-      `Loading next question: ${currentIndex + 1} of ${questions.length}`
-    );
+    console.log(`Loading next question: ${currentIndex + 1} of ${questions.length}`);
     if (!questions[currentIndex]) {
       throw new Error(`Question at index ${currentIndex} not found`);
     }
