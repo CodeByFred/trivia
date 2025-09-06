@@ -74,16 +74,15 @@ export type Answer = {
 
 //SECTION : dto types for game data transferral
 
-export type FinalGameData = {
+export type FinalGameDto = {
   //Game Entity
-  score: number;
+  savedScore: number;
 
   //GameAnswer Entity
-  submittedAnswer: string;
-  wasCorrect: boolean;
+  savedAnswers: Answer[];
 
   //Questions Entity -- questions that were wrong
-  questions: Question[];
+  savedQuestions: Question[];
 };
 
 // // this should be sent first

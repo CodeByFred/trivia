@@ -1,7 +1,7 @@
-import type { GameResultDto, GameQuestionsDto } from "../types/types";
+import type { FinalGameDto } from "../types/types";
 import { API, GAME_ENDPOINT } from "./urls";
 
-export async function postGameData(dto: GameResultDto | GameQuestionsDto) {
+export async function postGameData(dto: FinalGameDto) {
   try {
     const response = await fetch(`${API}${GAME_ENDPOINT}`, {
       method: "POST",

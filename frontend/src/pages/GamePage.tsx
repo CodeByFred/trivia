@@ -54,12 +54,7 @@ const GamePage = () => {
         )}
 
         {gameState === "playing" && (
-          <TriviaQuestion
-            question={questions[currentIndex]}
-            index={currentIndex}
-            // totalQuestions={questions.length}
-            // onNext={loadNextQuestion}
-          />
+          <TriviaQuestion question={questions[currentIndex]} index={currentIndex} />
         )}
         {gameState === "finished" && questions.length > 0 && (
           <GameOverModal resetGame={resetGame} />
