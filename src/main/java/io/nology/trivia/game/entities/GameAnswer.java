@@ -10,18 +10,22 @@ public class GameAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // games table
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
+    // questions table
     private Long questionId;
 
     private String submittedAnswer;
 
-    private boolean correct;
+    private boolean wasCorrect;
 
     public GameAnswer() {
     }
+
+    // getters, setters
 
     public Long getId() {
         return id;
@@ -55,11 +59,11 @@ public class GameAnswer {
         this.submittedAnswer = submittedAnswer;
     }
 
-    public boolean isCorrect() {
-        return correct;
+    public boolean wasCorrect() {
+        return wasCorrect;
     }
 
-    public void setCorrect(boolean wasCorrect) {
-        this.correct = wasCorrect;
+    public void setWasCorrect(boolean wasCorrect) {
+        this.wasCorrect = wasCorrect;
     }
 }

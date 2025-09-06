@@ -1,18 +1,20 @@
-import type { GameResult } from "../types/types";
+import type { GameQuestionsDto, GameResultDto } from "../types/types";
 
 const GameLog = ({
   game,
+  questions,
   showingAnswers,
 }: {
-  game: GameResult;
+  game: GameResultDto;
+  questions: GameQuestionsDto;
   showingAnswers: boolean;
 }) => {
   return (
     <div className="border p-4 m-4 rounded-md shadow-md ">
-      <h2 className="p-2 bg-black text-white text-center">
+      {/* <h2 className="p-2 bg-black text-white text-center">
         Game played on: {new Date(game.datePlayed).toLocaleString()}
-      </h2>
-      {game.answers.map((entry, i) => (
+      </h2> */}
+      {/* {game.answers.map((entry, i) => (
         <div key={i} className="border-t py-2">
           <p className="font-bold ">{game.questions[i].question}</p>
           <div className=" flex flex-row gap-4">
@@ -25,7 +27,7 @@ const GameLog = ({
             <p>Correct answer: {game.questions[i].correctAnswer}</p>
           )}
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };

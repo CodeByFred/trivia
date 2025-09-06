@@ -2,7 +2,7 @@ import { createContext } from "react";
 import type {
   Answer,
   Difficulty,
-  GameResult,
+  GameHistory,
   GameState,
   Question,
   TriviaCategoryID,
@@ -19,15 +19,14 @@ export type GameContextType = {
   questions: Question[];
   currentIndex: number;
   savedAnswers: Answer[];
-  gameHistory: GameResult[];
+  gameHistory: GameHistory;
   score: number;
 
   updateDifficulty: (difficulty: Difficulty) => void;
   updateCategoryID: (id: number) => void;
   startGame: () => void;
   endGame: () => void;
-  scoreAnswer: (submitted: string | null) => Answer;
-  saveAnswer: (answer: Answer | null) => void;
+  submitAnswer: (submitted: string | null) => void;
   loadNextQuestion: () => void;
   resetGame: () => void;
   saveGame: () => void;
