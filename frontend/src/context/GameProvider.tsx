@@ -101,8 +101,26 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    console.log(`Game state: '${gameState}'`);
-  }, [gameState]);
+    if (gameState === "finished") {
+      console.info(`Final score: ${score}/${questions.length}`);
+      console.info(
+        `Game questions:\n${questions
+          .map((q, i) => `Q${i + 1}: ${q.question}`)
+          .join("\n")}`
+      );
+      console.info(
+        `Your answers:\n${savedAnswers
+          .map(
+            (a) =>
+              `Q${a.questionIndex + 1}: ${a.submitted} (${
+                a.wasCorrect ? "correct" : "incorrect"
+              })`
+          )
+          .join("\n")}`
+      );
+      resetGame();
+    }
+  }, [gameState, savedAnswers, questions, score]);
 
   const startGame = () => {
     getQuestions(difficulty, categoryID);
@@ -120,104 +138,110 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const submitAnswer = (submitted: string | null) => {
-    if (!submitted && submitted !== null) {
-      throw new Error(`Submitted answer could not be found.`);
-    }
-    //build answer formats
+    const wasCorrect = submitted === questions[currentIndex].correctAnswer;
+
     const answer: Answer = {
       questionIndex: currentIndex,
       submitted: submitted,
-      wasCorrect: false,
+      wasCorrect: wasCorrect,
     };
-    if (!submitted && submitted !== null) scoreAnswer(answer); // check if legit answer was correct
-    setSavedAnswers((prev) => [...prev, answer]);
-    return answer; // returns to TriviaForm
-  };
 
-  const scoreAnswer = (answer: Answer) => {
-    if (answer.submitted === questions[currentIndex].correctAnswer) {
-      console.info(`"${answer.submitted}" is correct`);
-      setScore((prev) => prev + 1);
-      answer.wasCorrect = true;
+    setSavedAnswers((prev) => [...prev, answer]);
+    // scoreAnswer(answer); // check if legit answer was correct
+
+    if (currentIndex + 1 >= questions.length) {
+      endGame(); // all questions done
     } else {
-      console.info(`"${answer.submitted}" is incorrect.`);
+      loadNextQuestion(); // safe to move on
     }
   };
+
+  // const scoreAnswer = (answer: Answer) => {
+  //   if (answer.submitted === questions[currentIndex].correctAnswer) {
+  //     console.info(`"${answer.submitted}" is correct`);
+  //     setScore((prev) => prev + 1);
+  //     answer.wasCorrect = true;
+  //   } else {
+  //     console.info(`"${answer.submitted}" is incorrect.`);
+  //   }
+  // };
 
   const loadNextQuestion = () => {
-    // end game if all questions have been answered
-    if (questions && currentIndex + 1 == questions.length) {
-      console.log("End of quiz! There are no more questions :)");
-      endGame();
-      return;
-    }
-    console.log("Loading next question...");
-    setCurrentIndex((prev) => prev + 1);
+    const nextIndex = currentIndex + 1;
+
+    // if (nextIndex >= questions.length) {
+    //   console.log("End of quiz! There are no more questions :)");
+    //   endGame();
+    // } else {
+    //   console.log(`Loading next question: ${nextIndex + 1} of ${questions.length}`);
+    // }
+
+    setCurrentIndex(nextIndex);
   };
 
   const endGame = () => {
     setGameState("finished");
-    // testing logs
-    console.info(`Final score: ${score}/${questions.length}`);
-    console.info(
-      `Game questions:\n${questions
-        .map((q, i) => `Q${i + 1}: ${q.question}`)
-        .join("\n")}`
-    );
-    console.info(
-      `Your answers:\n${savedAnswers
-        .map(
-          (a) =>
-            `Q${a.questionIndex + 1}: ${a.submitted} (${
-              a.wasCorrect ? "correct" : "incorrect"
-            })`
-        )
-        .join("\n")}`
-    );
-    saveGame();
-    resetGame();
+    // // testing logs
+    // console.info(`Final score: ${score}/${questions.length}`);
+    // console.info(
+    //   `Game questions:\n${questions.map((q, i) => `Q${i + 1}: ${q.question}`).join("\n")}`
+    // );
+    // console.info(
+    //   `Your answers:\n${savedAnswers
+    //     .map(
+    //       (a) =>
+    //         `Q${a.questionIndex + 1}: ${a.submitted} (${
+    //           a.wasCorrect ? "correct" : "incorrect"
+    //         })`
+    //     )
+    //     .join("\n")}`
+    // );
+    // // saveGame();
+    // resetGame();
   };
 
-  const saveGame = async () => {
-    console.log("Saving game to DB... ");
-    const qSaved = await saveGameQuestions();
-    if (!qSaved) {
-      console.error("Error: Game questions were not saved to DB");
-      return;
-    }
-    const rSaved = await saveGameResult();
-    if (!rSaved) {
-      console.error("Error: Game results were not saved to DB");
-      return;
-    }
-    console.log("Game saved to DB! View all past games in the Review page.");
-  };
+  const saveGame = () => {};
 
-  const saveGameQuestions = async () => {
-    const gameQuestionsDto: GameQuestionsDto = {
-      questions: questions.map((q) => ({
-        type: q.type,
-        question: q.question,
-        difficulty: q.difficulty,
-        category: q.category,
-        correctAnswer: q.correctAnswer,
-        incorrectAnswers: q.incorrectAnswers,
-      })),
-    };
-    console.log("Saving game questions: " + JSON.stringify(gameQuestionsDto));
-    const result = await postGameData(gameQuestionsDto);
-    return result;
-  };
+  // const saveGame = async () => {
+  //   console.log("Saving game to DB... ");
+  //   const qSaved = await saveGameQuestions();
+  //   if (!qSaved) {
+  //     console.error("Error: Game questions were not saved to DB");
+  //     return;
+  //   }
+  //   const rSaved = await saveGameResult();
+  //   if (!rSaved) {
+  //     console.error("Error: Game results were not saved to DB");
+  //     return;
+  //   }
+  //   console.log("Game saved to DB! View all past games in the Review page.");
+  // };
 
-  const saveGameResult = async () => {
-    const gameResultDto: GameResultDto = {
-      score,
-      answers: savedAnswers,
-    };
-    console.log("Saving game results: " + JSON.stringify(gameResultDto));
-    const result = await postGameData(gameResultDto);
-    return result;
-  };
+  // const saveGameQuestions = async () => {
+  //   const gameQuestionsDto: GameQuestionsDto = {
+  //     questions: questions.map((q) => ({
+  //       type: q.type,
+  //       question: q.question,
+  //       difficulty: q.difficulty,
+  //       category: q.category,
+  //       correctAnswer: q.correctAnswer,
+  //       incorrectAnswers: q.incorrectAnswers,
+  //     })),
+  //   };
+  //   console.log("Saving game questions: " + JSON.stringify(gameQuestionsDto));
+  //   const result = await postGameData(gameQuestionsDto);
+  //   return result;
+  // };
+
+  // const saveGameResult = async () => {
+  //   const gameResultDto: GameResultDto = {
+  //     score,
+  //     answers: savedAnswers,
+  //   };
+  //   console.log("Saving game results: " + JSON.stringify(gameResultDto));
+  //   const result = await postGameData(gameResultDto);
+  //   return result;
+  // };
 
   return (
     <GameContext.Provider

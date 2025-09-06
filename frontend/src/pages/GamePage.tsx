@@ -57,8 +57,8 @@ const GamePage = () => {
           <TriviaQuestion
             question={questions[currentIndex]}
             index={currentIndex}
-            totalQuestions={questions.length}
-            onNext={loadNextQuestion}
+            // totalQuestions={questions.length}
+            // onNext={loadNextQuestion}
           />
         )}
         {gameState === "finished" && questions.length > 0 && (
