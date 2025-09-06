@@ -10,6 +10,22 @@
   flex-direction: column;
   justify-content: center;
   align-content: center;
+
+  :root {
+    /* Brand colors */
+    --primary: 94 23 235; /*#BD00ff*/
+    --secondary: 189 0 255; /*#5E17EB*/
+    --accent: 255 216 21; /*#FFD815*/
+
+    --bg: 255 255 255;
+    --fg: 17 24 39;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --bg: 17 24 39;
+    --fg: 241 245 249;
+  }
 }
 
 /* IMPORTED GOOGLE API FONTS */
