@@ -214,7 +214,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         resetGame,
         saveGame,
         savedAnswers,
-        gameHistory,
+        // gameHistory,
       }}
     >
       {children}
