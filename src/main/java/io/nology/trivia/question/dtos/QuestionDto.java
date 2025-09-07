@@ -1,5 +1,7 @@
 package io.nology.trivia.question.dtos;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +15,7 @@ public class QuestionDto {
 
     @NotBlank
     @NotNull
-    @Pattern(regexp = "any|easy|medium|hard", message = "Difficulty must be 'any','easy', 'medium', or 'hard'")
+    @Pattern(regexp = "easy|medium|hard", message = "Difficulty must be 'easy', 'medium', or 'hard'")
     private String difficulty;
 
     @NotBlank
@@ -31,7 +33,7 @@ public class QuestionDto {
 
     @NotEmpty
     @NotNull
-    private String[] incorrectAnswers;
+    private List<String> incorrectAnswers;
 
     public String getType() {
         return type;
@@ -53,7 +55,7 @@ public class QuestionDto {
         return correctAnswer;
     }
 
-    public String[] getIncorrectAnswers() {
+    public List<String> getIncorrectAnswers() {
         return incorrectAnswers;
     }
 

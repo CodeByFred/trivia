@@ -23,7 +23,7 @@ public class GameAnswerDto {
         return submittedAnswer;
     }
 
-    public boolean wasCorrect() {
+    public boolean getWasCorrect() {
         return wasCorrect;
     }
 }
