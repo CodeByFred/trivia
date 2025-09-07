@@ -1,5 +1,6 @@
 package io.nology.trivia.game.entities;
 
+import io.nology.trivia.question.Question;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,29 +11,29 @@ public class GameAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // games table
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
-
-    // questions table
-    private Long questionId;
-
     private String submittedAnswer;
 
     private boolean wasCorrect;
+
+    @ManyToOne // Each GameAnswer belongs to one Game.
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+    @ManyToOne // Each GameAnswer links to exactly one Question.
+    @JoinColumn(name = "question_id")
+    private Question question;
 
     public GameAnswer() {
     }
 
     // getters, setters
 
-    public Long getId() {
-        return id;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     public Game getGame() {
@@ -41,14 +42,6 @@ public class GameAnswer {
 
     public void setGame(Game game) {
         this.game = game;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
     }
 
     public String getSubmittedAnswer() {
@@ -66,4 +59,5 @@ public class GameAnswer {
     public void setWasCorrect(boolean wasCorrect) {
         this.wasCorrect = wasCorrect;
     }
+
 }

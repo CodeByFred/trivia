@@ -33,6 +33,23 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
 
 ![Trivia ERD](assets/trivia-erd.png)
 
+From the diagram:
+
+1. games ↔ game_answers:
+
+- One Game has many GameAnswers.
+- Each GameAnswer belongs to one Game.
+
+2. questions ↔ game_answers:
+
+- One Question can appear in many GameAnswers.
+- Each GameAnswer links to exactly one Question.
+
+That gives us:
+
+- Game ↔ GameAnswer: One-to-Many
+- Question ↔ GameAnswer: One-to-Many
+
 ## Links
 
 - [nology project brief](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api "‌")
