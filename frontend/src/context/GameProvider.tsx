@@ -189,6 +189,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     };
 
     console.log(finalGameDto);
+    console.log(JSON.stringify(finalGameDto));
     postGameData(finalGameDto);
   };
 
