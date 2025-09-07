@@ -1,5 +1,7 @@
 package io.nology.trivia.game.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.nology.trivia.question.Question;
 import jakarta.persistence.*;
 
@@ -17,10 +19,12 @@ public class GameAnswer {
 
     @ManyToOne // Each GameAnswer belongs to one Game.
     @JoinColumn(name = "game_id")
+    @JsonBackReference
     private Game game;
 
     @ManyToOne // Each GameAnswer links to exactly one Question.
     @JoinColumn(name = "question_id")
+    @JsonBackReference
     private Question question;
 
     public GameAnswer() {
