@@ -109,7 +109,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         `Your answers:\n${savedAnswers
           .map(
             (a) =>
-              `Q${a.questionIndex + 1}: ${a.submitted} (${
+              `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
                 a.wasCorrect ? "correct" : "incorrect"
               })`
           )
@@ -140,14 +140,14 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
     const answer: Answer = {
       questionIndex: currentIndex,
-      submitted: submitted,
+      submittedAnswer: submitted,
       wasCorrect: wasCorrect,
     };
 
     console.info(answer);
 
-    if (wasCorrect) console.info(`"${answer.submitted}" is correct`);
-    else console.info(`"${answer.submitted}" is incorrect.`);
+    if (wasCorrect) console.info(`"${answer.submittedAnswer}" is correct`);
+    else console.info(`"${answer.submittedAnswer}" is incorrect.`);
 
     setSavedAnswers((prev) => [...prev, answer]);
 
@@ -188,7 +188,9 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       savedQuestions: questions,
     };
 
+    console.log("finalGameDto: ");
     console.log(finalGameDto);
+
     postGameData(finalGameDto);
   };
 

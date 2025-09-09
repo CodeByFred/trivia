@@ -3,6 +3,8 @@ package io.nology.trivia.game.entities;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "games")
 public class Game {
-
-    // properties
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,15 +22,14 @@ public class Game {
     @CreationTimestamp
     private LocalDateTime datePlayed;
 
+    // One Game has many GameAnswers.
+    // cascading means children also get updated/create via parent
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<GameAnswer> answers = new ArrayList<>();
-
-    // constructor
 
     public Game() {
     }
-
-    // getters/setters
 
     public Long getId() {
         return id;

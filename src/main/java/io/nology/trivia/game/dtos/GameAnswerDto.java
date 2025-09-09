@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotNull;
 public class GameAnswerDto {
 
     @NotNull
-    private int questionIndex;
+    private int questionIndex; // of the game
 
     @NotBlank
-    // Can be null (timer ran out)
+    // Can be null (signals timer ran out)
     private String submittedAnswer;
 
     @NotNull
-    private boolean wasCorrect;
+    private boolean wasCorrect; // updates on retrys
 
     public int getQuestionIndex() {
         return questionIndex;
@@ -23,7 +23,7 @@ public class GameAnswerDto {
         return submittedAnswer;
     }
 
-    public boolean wasCorrect() {
+    public boolean getWasCorrect() {
         return wasCorrect;
     }
 }

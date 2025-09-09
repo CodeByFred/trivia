@@ -1,5 +1,11 @@
 package io.nology.trivia.question;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import io.nology.trivia.game.entities.GameAnswer;
 import jakarta.persistence.*;
 
 @Entity
@@ -25,6 +31,11 @@ public class Question {
     private String incorrectAnswer2;
 
     private String incorrectAnswer3;
+
+    // One Question can appear in many GameAnswers.
+    @OneToMany(mappedBy = "question")
+    @JsonManagedReference
+    private List<GameAnswer> answers = new ArrayList<>();
 
     public Question() {
     }
@@ -99,5 +110,13 @@ public class Question {
 
     public void setIncorrectAnswer3(String incorrectAnswer3) {
         this.incorrectAnswer3 = incorrectAnswer3;
+    }
+
+    public List<GameAnswer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<GameAnswer> answers) {
+        this.answers = answers;
     }
 }

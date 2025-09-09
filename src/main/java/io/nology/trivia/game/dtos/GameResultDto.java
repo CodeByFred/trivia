@@ -1,22 +1,32 @@
 package io.nology.trivia.game.dtos;
 
+import java.util.List;
+
+import io.nology.trivia.question.dtos.QuestionDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class GameResultDto {
 
     @NotNull
-    private Integer score;
+    private Integer savedScore;
 
     @NotEmpty
-    private GameAnswerDto[] answers;
+    private List<GameAnswerDto> savedAnswers;
 
-    public int getScore() {
-        return score;
+    @NotEmpty
+    private List<QuestionDto> savedQuestions;
+
+    public Integer getSavedScore() {
+        return savedScore;
     }
 
-    public GameAnswerDto[] getAnswers() {
-        return answers;
+    public List<GameAnswerDto> getSavedAnswers() {
+        return savedAnswers;
+    }
+
+    public List<QuestionDto> getSavedQuestions() {
+        return savedQuestions;
     }
 
 }

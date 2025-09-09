@@ -68,7 +68,7 @@ export type Question = {
 
 export type Answer = {
   questionIndex: number;
-  submitted: string | null;
+  submittedAnswer: string | null;
   wasCorrect: boolean;
 };
 
