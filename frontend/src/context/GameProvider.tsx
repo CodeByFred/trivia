@@ -99,7 +99,8 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (gameState === "finished") {
-      console.info(`Final score: ${score}/${questions.length}`);
+      console.log("");
+      console.log("Game Summary:");
       console.info(
         `Game questions:\n${questions
           .map((q, i) => `Q${i + 1}: ${q.question}`)
@@ -115,6 +116,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
           )
           .join("\n")}`
       );
+      console.info(`Final score: ${score}/${questions.length}`);
       saveGame();
       resetGame();
     }
@@ -143,8 +145,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       submittedAnswer: submitted,
       wasCorrect: wasCorrect,
     };
-
-    console.info(answer);
 
     if (wasCorrect) console.info(`"${answer.submittedAnswer}" is correct`);
     else console.info(`"${answer.submittedAnswer}" is incorrect.`);
@@ -175,6 +175,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const saveGame = async () => {
+    console.log("");
     console.log("Saving game to DB... ");
 
     const finalGameDto = {
@@ -188,10 +189,21 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       savedQuestions: questions,
     };
 
-    console.log("finalGameDto: ");
+    console.log("Posting finalGameDto: ");
     console.log(finalGameDto);
+    console.log("");
 
-    postGameData(finalGameDto);
+    const response = await postGameData(finalGameDto);
+    if (response) {
+      console.log("Response: ");
+      console.log(response);
+      console.log("");
+
+      const body = await response.text();
+      console.log("Game answers saved: ");
+      console.log(JSON.parse(body));
+      console.log("");
+    }
   };
 
   return (

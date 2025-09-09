@@ -3,7 +3,7 @@ import { API, GAME_ENDPOINT } from "./urls";
 
 export async function postGameData(dto: FinalGameDto) {
   try {
-    console.log("Sending over game results...");
+    console.log("Sending over game results to: " + `${API}${GAME_ENDPOINT}`);
     const response = await fetch(`${API}${GAME_ENDPOINT}`, {
       method: "POST",
       headers: {
@@ -16,15 +16,8 @@ export async function postGameData(dto: FinalGameDto) {
       console.error(response);
       throw new Error("Failed to post completed game data to database.");
     }
-
     console.log("Response Status: " + response.status);
-    console.log(response);
-
-    const result = await response.text();
-    console.log("Game answers saved: ");
-    console.log(result);
-
-    return result; //return the confirmation message from backend
+    return response;
   } catch (error) {
     console.error(error);
   }
