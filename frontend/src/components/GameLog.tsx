@@ -9,9 +9,9 @@ const GameLog = ({
 }) => {
   return (
     <div className="border p-4 m-4 rounded-md shadow-md ">
-      <h2 className="p-2 bg-black text-white text-center">
+      {/* <h2 className="p-2 bg-black text-white text-center">
         Game played on: {new Date(game.datePlayed).toLocaleString()}
-      </h2>
+      </h2> */}
       {game.answers.map((entry, i) => (
         <div key={i} className="border-t py-2">
           <p className="font-bold ">{game.questions[i].question}</p>
