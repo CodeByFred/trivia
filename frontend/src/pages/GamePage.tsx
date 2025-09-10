@@ -11,8 +11,7 @@ const GamePage = () => {
     gameState,
     resetGame,
     loadNextQuestion,
-    scoreAnswer,
-    saveAnswer,
+    submitAnswer,
   } = useGameContext();
 
   const [timeLeft, setTimeLeft] = useState(15);
@@ -25,8 +24,7 @@ const GamePage = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          const result = scoreAnswer(null);
-          if (result) saveAnswer(result);
+          submitAnswer(null);
           loadNextQuestion();
           return 0;
         }
@@ -35,19 +33,13 @@ const GamePage = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameState, currentIndex, scoreAnswer, saveAnswer, loadNextQuestion]);
+  }, [gameState, currentIndex, submitAnswer, loadNextQuestion]);
 
   useEffect(() => {
-    if (gameState === "finished") {
-      console.log(`Game state: '${gameState}'. Game Over! Displaying results...`);
-    }
     if (gameState === "playing") {
-      console.log(`Game state: '${gameState}'. Game in progress...`);
+      console.log(`Question number: ${currentIndex + 1}`);
     }
-    if (gameState === "idle") {
-      console.log(`Game state: '${gameState}'. Game is idle. Please start a new game.`);
-    }
-  }, [gameState]);
+  }, [gameState, currentIndex]);
 
   return (
     <>
@@ -62,12 +54,7 @@ const GamePage = () => {
         )}
 
         {gameState === "playing" && (
-          <TriviaQuestion
-            question={questions[currentIndex]}
-            index={currentIndex}
-            totalQuestions={questions.length}
-            onNext={loadNextQuestion}
-          />
+          <TriviaQuestion question={questions[currentIndex]} index={currentIndex} />
         )}
         {gameState === "finished" && questions.length > 0 && (
           <GameOverModal resetGame={resetGame} />

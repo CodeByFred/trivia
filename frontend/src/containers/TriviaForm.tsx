@@ -1,44 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../components/Button";
 import { useGameContext } from "../context/useGameContext";
 
-interface TriviaFormProps {
-  answers: string[] | null;
-  correctAnswer: string | null;
-}
+type FormProps = {
+  answers: string[];
+};
 
-const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
-  const [submitted, setSubmitted] = useState<string | null>(null);
+const TriviaForm = ({ answers }: FormProps) => {
   const [selected, setSelected] = useState<string | null>(null);
-  const { saveAnswer, scoreAnswer, loadNextQuestion } = useGameContext();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      // todo : check user selected correct answer
-      const result = scoreAnswer(submitted);
-
-      //todo : save answer in logs
-      if (!result) throw new Error("No result from scoring answer");
-      saveAnswer(result);
-
-      // reset form for next question
-      setSubmitted(null);
-      setSelected(null);
-
-      //todo: load next question
-      loadNextQuestion();
-    } catch (error) {
-      console.error("Error submitting answer:", error);
-    }
-  };
+  const { submitAnswer } = useGameContext();
 
   return (
     <form
       className="grid grid-cols-2 gap-4"
-      onSubmit={handleSubmit}
-      action="submit"
+      onSubmit={(e) => {
+        e.preventDefault();
+        submitAnswer(selected);
+      }}
     >
       {answers ? (
         answers.map((answer: string, i: number) => (
@@ -63,15 +41,9 @@ const TriviaForm = ({ answers, correctAnswer }: TriviaFormProps) => {
       <Button
         className="btn btn-primary btn-xl btn-wide col-span-2 mx-auto"
         type="submit"
-        onClick={() => setSubmitted(selected)}
       >
         Submit
       </Button>
-      {submitted && (
-        <span className="mt-4">
-          Result: {submitted === correctAnswer ? "Correct!" : "Incorrect!"}
-        </span>
-      )}{" "}
     </form>
   );
 };
