@@ -1,12 +1,22 @@
-import { DIFFICULTIES, TRIVIA_CATEGORIES, type Difficulty } from "../types/types";
+import {
+  DIFFICULTIES,
+  TRIVIA_CATEGORIES,
+  type Difficulty,
+} from "../types/types";
 import Button from "../components/Button";
 import { useGameContext } from "../context/useGameContext";
 import { useNavigate } from "react-router-dom";
+import Logo from "../components/Logo";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { difficulty, updateDifficulty, categoryID, updateCategoryID, startGame } =
-    useGameContext();
+  const {
+    difficulty,
+    updateDifficulty,
+    categoryID,
+    updateCategoryID,
+    startGame,
+  } = useGameContext();
 
   const handleStart = () => {
     startGame();
@@ -15,6 +25,7 @@ const HomePage = () => {
 
   return (
     <div className="items-center justify-center flex flex-col gap-4 px-4 h-full">
+      <Logo />
       <h1 className="text-5xl">Welcome to the Trivia Game</h1>
       <p className="text-xl">Test your knowledge with our trivia questions!</p>
       <div className="flex flex-col items-center justify-center gap-4">
