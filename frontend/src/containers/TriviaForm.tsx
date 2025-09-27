@@ -9,7 +9,7 @@ const TriviaForm = ({ answers }: { answers: string[] }) => {
 
   return (
     <form
-      className="grid grid-cols-2 gap-4"
+      className="flex flex-col gap-8 w-full max-w-4xl px-8"
       onSubmit={(e) => {
         e.preventDefault();
         submitAnswer(selected);

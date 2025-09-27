@@ -1,3 +1,5 @@
+import GameAnswer from "./GameAnswer";
+
 type GameAnswersProps = {
   answers: string[];
   selected: string | null;
@@ -6,7 +8,7 @@ type GameAnswersProps = {
 
 const GameAnswers = ({ answers, selected, setSelected }: GameAnswersProps) => {
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
       {answers.map((answer: string, i: number) => (
         <label key={i} className="cursor-pointer">
           <input
@@ -18,12 +20,10 @@ const GameAnswers = ({ answers, selected, setSelected }: GameAnswersProps) => {
             onChange={(e) => setSelected(e.target.value)}
             className="peer hidden"
           />
-          <div className="w-100 h-60 flex items-center justify-center rounded-lg bg-gray-200 peer-checked:bg-primary peer-checked:text-white transition">
-            <p className="text-2xl">{answer}</p>
-          </div>
+          <GameAnswer answer={answer} />
         </label>
       ))}
-    </>
+    </div>
   );
 };
 

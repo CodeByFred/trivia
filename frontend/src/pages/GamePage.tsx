@@ -17,14 +17,14 @@ const GamePage = () => {
     score,
   } = useGameContext();
 
-  const [timeLeft, setTimeLeft] = useState(1500);
+  const [timeLeft, setTimeLeft] = useState(15);
   const currentQuestion = questions[currentIndex] || null;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (gameState !== "playing") return;
 
-    setTimeLeft(1500);
+    setTimeLeft(15);
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -64,7 +64,7 @@ const GamePage = () => {
 
   return (
     <>
-      {gameState === "playing" && (
+      {questions.length != 0 && gameState === "playing" && (
         <GameStatBar timeLeft={timeLeft} score={score} />
       )}
 
@@ -76,10 +76,10 @@ const GamePage = () => {
       )}
 
       {gameState === "playing" && currentQuestion && (
-        <>
+        <div className="game-container flex flex-col items-center">
           <TriviaQuestion currentIndex={currentIndex} />
           <TriviaForm answers={shuffledAnswers} />
-        </>
+        </div>
       )}
     </>
   );
