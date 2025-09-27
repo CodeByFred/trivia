@@ -7,8 +7,6 @@ import { useGameContext } from "../context/useGameContext";
 interface TriviaQuestionProps {
   question: Question;
   index: number;
-  // totalQuestions: number;
-  // onNext: () => void;
 }
 
 const TriviaQuestion = ({ question, index }: TriviaQuestionProps) => {
