@@ -25,7 +25,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="items-center justify-center flex flex-col gap-4 px-4 h-full">
+    <>
       <Logo />
       <p className="text-xl">Test your knowledge with our trivia questions!</p>
       <section className="flex flex-col items-center justify-center gap-4">
@@ -60,7 +60,7 @@ const HomePage = () => {
       <div className="mt-8">
         <Button onClick={handleStart}>New Game</Button>
       </div>
-    </div>
+    </>
   );
 };
 

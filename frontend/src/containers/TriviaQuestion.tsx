@@ -10,6 +10,7 @@ const TriviaQuestion = ({ currentIndex }: TriviaQuestionProps) => {
 
   return (
     <>
+      {/* questionInfo */}
       <h3 className="text-xl">{`Question ${currentIndex + 1 || ""}/${
         questions.length || ""
       }`}</h3>
