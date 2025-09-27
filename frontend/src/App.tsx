@@ -1,24 +1,24 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import NavBar from "./components/NavBar";
+// import NavBar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
-import ReviewPage from "./pages/ReviewPage";
+// import ReviewPage from "./pages/ReviewPage";
 import GameProvider from "./context/GameProvider";
-import UserSession from "./components/UserSession";
+// import UserSession from "./components/UserSession";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <GameProvider>
-          <NavBar />
+          {/* <NavBar /> */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/game" element={<GamePage />} />
-            <Route path="/review" element={<ReviewPage />} />
+            {/* <Route path="/review" element={<ReviewPage />} /> */}
           </Routes>
-          <UserSession />
+          {/* <UserSession /> */}
         </GameProvider>
       </BrowserRouter>
     </>
