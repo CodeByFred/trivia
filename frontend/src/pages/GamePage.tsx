@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const GamePage = () => {
   const {
     questions,
+    incorrectQuestions,
     currentIndex,
     gameState,
     resetGame,
@@ -43,19 +44,26 @@ const GamePage = () => {
 
   return (
     <>
-      {}
       {gameState === "playing" && <ScoreBoard timeLeft={timeLeft} />}
       <div className="flex flex-col items-center justify-center text-center px-4 h-full">
-        {questions.length == 0 && gameState !== "finished" && (
+        {gameState !== "finished" && (
           <p>
             No questions loaded yet. <br />
             Please start a new game on Home Page.
           </p>
         )}
 
-        {gameState === "playing" && (
+        {gameState === "playing" && questions.length > 0 && (
           <TriviaQuestion question={questions[currentIndex]} index={currentIndex} />
         )}
+
+        {gameState === "playing" && incorrectQuestions.length > 0 && (
+          <TriviaQuestion
+            question={incorrectQuestions[currentIndex].question}
+            index={currentIndex}
+          />
+        )}
+
         {gameState === "finished" && questions.length > 0 && (
           <GameOverModal resetGame={resetGame} />
         )}

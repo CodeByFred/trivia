@@ -5,6 +5,7 @@ import type {
   // GameHistory,
   GameState,
   Question,
+  RetryQuestion,
   TriviaCategoryID,
 } from "../types/types";
 
@@ -20,11 +21,15 @@ export type GameContextType = {
   currentIndex: number;
   savedAnswers: Answer[];
   // gameHistory: GameHistory;
+  quantity: number;
   score: number;
+  incorrectQuestions: RetryQuestion[];
 
   updateDifficulty: (difficulty: Difficulty) => void;
   updateCategoryID: (id: number) => void;
+  updateQuantity: (quantity: number) => void;
   startGame: () => void;
+  retryGame: () => void;
   endGame: () => void;
   submitAnswer: (submitted: string | null) => void;
   loadNextQuestion: () => void;
