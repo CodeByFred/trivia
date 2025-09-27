@@ -3,12 +3,16 @@ import ScoreBoard from "../components/ScoreBoard";
 import GameOverPage from "./GameOverPage";
 import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
+import { shuffle } from "../utils/utils";
+import TriviaForm from "../containers/TriviaForm";
 
 const GamePage = () => {
   const { questions, currentIndex, gameState, loadNextQuestion, submitAnswer } =
     useGameContext();
 
   const [timeLeft, setTimeLeft] = useState(15);
+  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
+  const currentQuestion = questions[currentIndex] || null;
 
   useEffect(() => {
     if (gameState !== "playing") return;
@@ -29,6 +33,19 @@ const GamePage = () => {
     return () => clearInterval(interval);
   }, [gameState, currentIndex, submitAnswer, loadNextQuestion]);
 
+  useEffect(() => {
+    if (!currentQuestion) return;
+
+    const orderedAnswers = [
+      currentQuestion?.correctAnswer,
+      currentQuestion?.incorrectAnswers[0],
+      currentQuestion?.incorrectAnswers[1],
+      currentQuestion?.incorrectAnswers[2],
+    ].filter((a): a is string => typeof a === "string");
+
+    setShuffledAnswers(shuffle(orderedAnswers));
+  }, [currentQuestion]);
+
   return (
     <>
       {gameState === "playing" && <ScoreBoard timeLeft={timeLeft} />}
@@ -40,11 +57,11 @@ const GamePage = () => {
           </p>
         )}
 
-        {gameState === "playing" && (
-          <TriviaQuestion
-            question={questions[currentIndex]}
-            index={currentIndex}
-          />
+        {gameState === "playing" && currentQuestion && (
+          <>
+            <TriviaQuestion currentIndex={currentIndex} />
+            <TriviaForm answers={shuffledAnswers} />
+          </>
         )}
         {gameState === "finished" && questions.length > 0 && <GameOverPage />}
       </div>
