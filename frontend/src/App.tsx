@@ -1,27 +1,32 @@
 import "./App.css";
+
+import GameProvider from "./context/GameProvider";
 import { BrowserRouter, Route, Routes } from "react-router";
-// import NavBar from "./components/NavBar";
+
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
+import GameOverPage from "./pages/GameOverPage";
 // import ReviewPage from "./pages/ReviewPage";
-import GameProvider from "./context/GameProvider";
+
+// import NavBar from "./components/NavBar";
 // import UserSession from "./components/UserSession";
 
 function App() {
   return (
-    <>
+    <div className="flex flex-col items-center justify-center text-center px-4 h-full">
       <BrowserRouter>
         <GameProvider>
           {/* <NavBar /> */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/game" element={<GamePage />} />
+            <Route path="/gameover" element={<GameOverPage />} />
             {/* <Route path="/review" element={<ReviewPage />} /> */}
           </Routes>
           {/* <UserSession /> */}
         </GameProvider>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 
