@@ -1,15 +1,14 @@
 package io.nology.trivia.gameAnswer.dtos;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jdk.jfr.BooleanFlag;
-
 public class GameAnswerResponseDto {
 
-    @NotNull
-    @Min(1)
-    Long id;
+    private boolean archived;
 
-    @BooleanFlag
-    boolean archived;
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 }

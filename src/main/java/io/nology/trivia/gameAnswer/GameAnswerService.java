@@ -7,13 +7,12 @@ import io.nology.trivia.question.Question;
 import io.nology.trivia.question.QuestionRepository;
 import io.nology.trivia.question.dtos.RetryQuestionDto;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -103,20 +102,29 @@ public class GameAnswerService {
                 })
                 .collect(Collectors.toList());    }
 
-    public GameAnswer updateArchivedById(Long id, @Valid GameAnswerResponseDto data) throws Exception {
+    public GameAnswer updateArchivedById(Long id, @Valid GameAnswerResponseDto data){
 
         Optional<GameAnswer> optionalGameAnswer = gameAnswerRepository.findById(id);
 
         if(optionalGameAnswer.isEmpty()) {
-            throw new Exception();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GameAnswer not found");
         }
 
         GameAnswer gameAnswer = optionalGameAnswer.get();
 
-        if(gameAnswer.isArchived()) {
-            gameAnswer.setArchived(true);
-        }
+        gameAnswer.setArchived(data.isArchived());
+
         gameAnswerRepository.save(gameAnswer);
         return gameAnswer;
+    }
+
+    public Map<String, Long> getRetryCountsByDifficulty() {
+        Map<String, Long> result = new HashMap<>();
+
+        result.put("easy", gameAnswerRepository.countByDifficultyAndWasCorrectFalseAndArchivedFalse("easy"));
+        result.put("medium", gameAnswerRepository.countByDifficultyAndWasCorrectFalseAndArchivedFalse("medium"));
+        result.put("hard", gameAnswerRepository.countByDifficultyAndWasCorrectFalseAndArchivedFalse("hard"));
+
+        return result;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/game-answers")
@@ -34,8 +35,14 @@ public class GameAnswerController {
     }
 
     @PatchMapping("/{id}")
-        public ResponseEntity<GameAnswer> updateArchived(@PathVariable Long id, @Valid @RequestBody GameAnswerResponseDto data) throws Exception {
+        public ResponseEntity<GameAnswer> updateArchived(@PathVariable Long id, @Valid @RequestBody GameAnswerResponseDto data) {
         GameAnswer reply = this.gameAnswerService.updateArchivedById(id, data);
         return ResponseEntity.ok(reply);
+    }
+
+    @GetMapping("/retry-counts")
+    public ResponseEntity<Map<String, Long>> getRetryCounts() {
+        Map<String, Long> counts = gameAnswerService.getRetryCountsByDifficulty();
+        return ResponseEntity.ok(counts);
     }
 }
