@@ -1,18 +1,12 @@
 import TriviaQuestion from "../components/TriviaQuestion";
 import ScoreBoard from "../components/ScoreBoard";
-import GameOverModal from "../components/GameOverModal";
+import GameOverPage from "./GameOverPage";
 import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
 
 const GamePage = () => {
-  const {
-    questions,
-    currentIndex,
-    gameState,
-    resetGame,
-    loadNextQuestion,
-    submitAnswer,
-  } = useGameContext();
+  const { questions, currentIndex, gameState, loadNextQuestion, submitAnswer } =
+    useGameContext();
 
   const [timeLeft, setTimeLeft] = useState(15);
 
@@ -35,15 +29,8 @@ const GamePage = () => {
     return () => clearInterval(interval);
   }, [gameState, currentIndex, submitAnswer, loadNextQuestion]);
 
-  useEffect(() => {
-    if (gameState === "playing") {
-      console.log(`Question number: ${currentIndex + 1}`);
-    }
-  }, [gameState, currentIndex]);
-
   return (
     <>
-      {}
       {gameState === "playing" && <ScoreBoard timeLeft={timeLeft} />}
       <div className="flex flex-col items-center justify-center text-center px-4 h-full">
         {questions.length == 0 && gameState !== "finished" && (
@@ -54,11 +41,12 @@ const GamePage = () => {
         )}
 
         {gameState === "playing" && (
-          <TriviaQuestion question={questions[currentIndex]} index={currentIndex} />
+          <TriviaQuestion
+            question={questions[currentIndex]}
+            index={currentIndex}
+          />
         )}
-        {gameState === "finished" && questions.length > 0 && (
-          <GameOverModal resetGame={resetGame} />
-        )}
+        {gameState === "finished" && questions.length > 0 && <GameOverPage />}
       </div>
     </>
   );
