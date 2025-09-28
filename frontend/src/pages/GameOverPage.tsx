@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import Button from "./Button";
+import Button from "../components/Button";
 import { useGameContext } from "../context/useGameContext";
 
-const GameOverModal = ({ resetGame }: { resetGame: () => void }) => {
+const GameOverPage = () => {
   const navigate = useNavigate();
 
   const { score, questions } = useGameContext();
@@ -18,13 +18,13 @@ const GameOverModal = ({ resetGame }: { resetGame: () => void }) => {
           <p>Thank you for playing!</p>
         </span>
         <span className="flex flex-col space-y-4 my-4">
-          <Button onClick={resetGame}>Try Again</Button>
+          <Button>Try Again</Button>
           <Button onClick={() => navigate("/")}>New Game</Button>
-          <Button onClick={() => navigate("/review")}>Review Answers</Button>
+          {/* <Button onClick={() => navigate("/review")}>Review Answers</Button> */}
         </span>
       </div>
     </div>
   );
 };
 
-export default GameOverModal;
+export default GameOverPage;

@@ -123,8 +123,14 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
+    if (gameState === "idle") {
+      console.log(`Game idle. Ready to start a new game.`);
+    }
+    if (gameState === "playing") {
+      console.log(`Game in progress. Question number: ${currentIndex + 1}`);
+    }
     if (gameState === "finished") {
-      console.info(`Final score: ${score}/${questions.length}`);
+      console.info(`Game finished. Final score: ${score}/${questions.length}`);
       console.info(
         `Game questions:\n${questions
           .map((q, i) => `Q${i + 1}: ${q.question}`)
@@ -141,17 +147,21 @@ const GameProvider = ({ children }: PropsWithChildren) => {
           .join("\n")}`
       );
       saveGame();
-      resetGame();
     }
   }, [gameState, savedAnswers]);
 
   const startGame = () => {
-    getQuestions(difficulty, categoryID);
+    console.log(`Resetting game state...`);
+    setSavedAnswers([]);
+    setQuestions([]);
     setCurrentIndex(0);
-    setGameState("playing");
     setScore(0);
-  };
 
+    console.log(`Loading new questions...`);
+    getQuestions(difficulty, categoryID);
+
+    console.log(`Starting new game...`);
+    setGameState("playing");
   const retryGame = () => {
     getIncorrectQuestions(difficulty, quantity);
     setCurrentIndex(0);
@@ -263,7 +273,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         submitAnswer,
         loadNextQuestion,
         endGame,
-        resetGame,
         saveGame,
         savedAnswers,
         // gameHistory,
