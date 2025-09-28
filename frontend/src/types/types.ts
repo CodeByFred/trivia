@@ -111,3 +111,9 @@ export type RetryQuestionResponse = {
   id: number;
   archived: boolean;
 };
+
+export type RetryCounts = {
+  easy: number;
+  medium: number;
+  hard: number;
+};

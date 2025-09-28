@@ -1,6 +1,7 @@
 import type {
   Difficulty,
   FinalGameDto,
+  RetryCounts,
   RetryQuestion,
   RetryQuestionResponse,
 } from "../types/types";
@@ -70,29 +71,43 @@ export async function requestRetryQuestions(
 
 export async function updateRetryGameAnswer(dto: RetryQuestionResponse) {
   try {
-    console.log("Sending over game results...");
-    const response = await fetch(`${API}${GAME_ENDPOINT}`, {
+    console.log("Sending over question outcome", dto);
+
+    const url = `${API}${GAMEANSWER_ENDPOINT}/${dto.id}`;
+
+    console.log(url);
+
+    const body = JSON.stringify({ archived: dto.archived });
+
+    const response = await fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(dto),
+      body,
     });
 
     if (!response.ok) {
-      console.error(response);
+      console.error("Failed PATCH:", response.status, response.statusText);
       throw new Error("Failed to PATCH retry question.");
     }
 
-    console.log("Response Status: " + response.status);
-    console.log(response);
-
     const result = await response.text();
-    console.log("Retry Question GameAnswer saved: ");
-    console.log(result);
-
+    console.log("Retry Question GameAnswer saved:", result);
     return result;
   } catch (error) {
-    console.error(error);
+    console.error("Error updating retry question:", error);
+  }
+}
+
+export async function fetchRetryCounts(): Promise<RetryCounts> {
+  try {
+    const response = await fetch(`${API}${GAMEANSWER_ENDPOINT}/retry-counts`);
+    if (!response.ok) throw new Error("Failed to fetch retry counts");
+    return await response.json();
+  } catch (err) {
+    console.error("Failed to fetch retry counts", err);
+    // default in case of error
+    return { easy: 0, medium: 0, hard: 0 };
   }
 }

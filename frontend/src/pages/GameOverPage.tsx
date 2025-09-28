@@ -18,8 +18,9 @@ const GameOverPage = () => {
           <p>Thank you for playing!</p>
         </span>
         <span className="flex flex-col space-y-4 my-4">
-          <Button>Try Again</Button>
+          {/* <Button>Try Again</Button> */}
           <Button onClick={() => navigate("/")}>New Game</Button>
+          <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
           {/* <Button onClick={() => navigate("/review")}>Review Answers</Button> */}
         </span>
       </div>

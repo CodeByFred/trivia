@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { DIFFICULTIES, type Difficulty } from "../types/types";
 import { useGameContext } from "../context/useGameContext";
 import Button from "../components/Button";
+import RetryOverview from "../components/RetryOverview";
 
 const RetryPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,9 @@ const RetryPage = () => {
   return (
     <div className="items-center justify-center flex flex-col gap-4 px-4 h-full">
       <h1 className="text-5xl">Retry Incorrect Questions</h1>
-      <p className="text-xl">Re-attempt up to 10 missed previously incorrect questions</p>
+
+      <RetryOverview />
+
       <label className="select select-xl min-w-[565px] select-primary">
         <span className="label">Difficulty</span>
         <select

@@ -125,28 +125,42 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (gameState === "idle") {
       console.log(`Game idle. Ready to start a new game.`);
+      return;
     }
+
     if (gameState === "playing") {
       console.log(`Game in progress. Question number: ${currentIndex + 1}`);
+      return;
     }
+
     if (gameState === "finished") {
-      console.info(`Game finished. Final score: ${score}/${questions.length}`);
-      console.info(
-        `Game questions:\n${questions
-          .map((q, i) => `Q${i + 1}: ${q.question}`)
-          .join("\n")}`
-      );
-      console.info(
-        `Your answers:\n${savedAnswers
-          .map(
-            (a) =>
-              `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
-                a.wasCorrect ? "correct" : "incorrect"
-              })`
-          )
-          .join("\n")}`
-      );
-      saveGame();
+      const isRetryMode = incorrectQuestions.length > 0;
+
+      if (isRetryMode) {
+        console.log(`Retry session complete.`);
+      } else {
+        console.log(`Game finished. Final score: ${score}/${questions.length}`);
+
+        console.log(
+          `Game questions:\n${questions
+            .map((q, i) => `Q${i + 1}: ${q.question}`)
+            .join("\n")}`
+        );
+
+        console.log(
+          `Your answers:\n${savedAnswers
+            .map(
+              (a) =>
+                `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
+                  a.wasCorrect ? "correct" : "incorrect"
+                })`
+            )
+            .join("\n")}`
+        );
+
+        // only call in normal mode
+        saveGame();
+      }
     }
   }, [gameState, savedAnswers]);
 
@@ -162,21 +176,26 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
     console.log(`Starting new game...`);
     setGameState("playing");
-  const retryGame = () => {
-    getIncorrectQuestions(difficulty, quantity);
-    setCurrentIndex(0);
-    setGameState("playing");
+    setScore(0);
   };
 
-  const resetGame = () => {
-    console.log("Resetting game state... ");
-    setGameState("idle");
-    setScore(0);
-    setCurrentIndex(0);
+  const retryGame = () => {
+    console.log(`Resetting game state...`);
     setSavedAnswers([]);
+    setQuestions([]);
+    setCurrentIndex(0);
+    setScore(0);
+
+    console.log(`Loading new questions...`);
+    getIncorrectQuestions(difficulty, quantity);
+
+    console.log(`Starting new game...`);
+    setGameState("playing");
+    setScore(0);
   };
 
   const submitAnswer = (submitted: string | null) => {
+    // NORMAL MODE
     if (incorrectQuestions.length === 0) {
       const wasCorrect = submitted === questions[currentIndex].correctAnswer;
 
@@ -185,11 +204,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         submittedAnswer: submitted,
         wasCorrect: wasCorrect,
       };
-
-      console.info(answer);
-
-      if (wasCorrect) console.info(`"${answer.submittedAnswer}" is correct`);
-      else console.info(`"${answer.submittedAnswer}" is incorrect.`);
 
       setSavedAnswers((prev) => [...prev, answer]);
 
@@ -200,21 +214,27 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       } else {
         loadNextQuestion();
       }
-    } else if (incorrectQuestions.length > 0) {
-      console.log(incorrectQuestions);
-      const archived =
-        submitted === incorrectQuestions[currentIndex].question.correctAnswer;
 
+      // RETRY MODE
+    } else if (incorrectQuestions.length > 0) {
+      const currentRetryQuestion = incorrectQuestions[currentIndex];
+
+      const wasCorrect = submitted === currentRetryQuestion.question.correctAnswer;
+
+      // update DB archive status
       const archiveOption: RetryQuestionResponse = {
-        id: incorrectQuestions[currentIndex].id,
-        archived: archived,
+        id: currentRetryQuestion.id,
+        archived: wasCorrect,
       };
 
-      console.log(archiveOption);
-
-      console.log("Sending retried question status to API");
-
       updateRetryGameAnswer(archiveOption);
+
+      // Move on to next or finish
+      if (currentIndex + 1 >= incorrectQuestions.length) {
+        endGame();
+      } else {
+        loadNextQuestion();
+      }
     }
   };
 
