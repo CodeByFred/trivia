@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
@@ -24,18 +23,6 @@ const GamePage = () => {
   const [timeLeft, setTimeLeft] = useState(15);
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
   const navigate = useNavigate();
-
-  const isRetryMode = incorrectQuestions.length > 0;
-
-  const activeQuestion = isRetryMode
-    ? incorrectQuestions[currentIndex]?.question
-    : questions[currentIndex];
-
-  const handleTimeout = () => {
-    if (gameState !== "playing") return;
-    submitAnswer(null);
-    loadNextQuestion();
-  };
 
   const isRetryMode = incorrectQuestions.length > 0;
   const activeQuestion = isRetryMode
@@ -113,10 +100,7 @@ const GamePage = () => {
       {gameState === "playing" && activeQuestion && (
         <div className="game-container flex flex-col items-center">
           <GameStatBar timeLeft={timeLeft} score={score} />
-          <TriviaQuestion
-            question={activeQuestion}
-            currentIndex={currentIndex}
-          />
+          <TriviaQuestion question={activeQuestion} currentIndex={currentIndex} />
           <TriviaForm answers={shuffledAnswers} />
         </div>
       )}
