@@ -13,7 +13,12 @@ const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   return (
-    <button type={type} onClick={onClick} className={className} {...rest}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={"btn btn-lg btn-primary btn-wide " + className}
+      {...rest}
+    >
       {children}
     </button>
   );

@@ -1,41 +1,17 @@
 import type { Question } from "../types/types";
-import TriviaForm from "../containers/TriviaForm";
-import { shuffle } from "../utils/utils";
-import { useEffect, useState } from "react";
-import { useGameContext } from "../context/useGameContext";
 
 interface TriviaQuestionProps {
   question: Question;
-  index: number;
-  // totalQuestions: number;
-  // onNext: () => void;
+  currentIndex: number;
 }
 
-const TriviaQuestion = ({ question, index }: TriviaQuestionProps) => {
-  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
-  const { questions } = useGameContext();
-
-  useEffect(() => {
-    if (!question) return;
-
-    const orderedAnswers = [
-      question?.correctAnswer,
-      question?.incorrectAnswers[0],
-      question?.incorrectAnswers[1],
-      question?.incorrectAnswers[2],
-    ].filter((a): a is string => typeof a === "string");
-
-    setShuffledAnswers(shuffle(orderedAnswers));
-  }, [question]);
-
+const TriviaQuestion = ({ question, currentIndex }: TriviaQuestionProps) => {
   return (
-    <>
-      <h3 className="text-xl">{`Question ${index + 1 || ""}/${
-        questions.length || ""
-      }`}</h3>
-      <p className="text-4xl">{question?.question}</p>
-      {question && <TriviaForm answers={shuffledAnswers} />}
-    </>
+    <div className="trivia-question flex flex-col items-center gap-8 m-8">
+      {/* questionInfo */}
+      <h3 className="text-xl p-2">{`Question ${currentIndex + 1}`}</h3>
+      <h2 className="text-4xl p-8">{question?.question}</h2>
+    </div>
   );
 };
 

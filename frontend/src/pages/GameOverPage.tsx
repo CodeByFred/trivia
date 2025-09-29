@@ -8,21 +8,17 @@ const GameOverPage = () => {
   const { score, questions } = useGameContext();
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-4 rounded shadow-md">
-        <span className="flex flex-col text-center  ">
-          <h1>Game Over</h1>
-          <p>
-            Final score: {score}/{questions.length}
-          </p>
-          <p>Thank you for playing!</p>
-        </span>
-        <span className="flex flex-col space-y-4 my-4">
-          {/* <Button>Try Again</Button> */}
-          <Button onClick={() => navigate("/")}>New Game</Button>
-          <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
-          {/* <Button onClick={() => navigate("/review")}>Review Answers</Button> */}
-        </span>
+    <div className="flex flex-col items-center ">
+      <span className="flex justify-center m-8">
+        <h1 className="text-4xl font-bold">Game Over</h1>
+      </span>
+      <h2 className="text-2xl m-4">Final score</h2>
+      <p>
+        {score}/{questions.length}
+      </p>
+      <div className="flex flex-wrap justify-center space-y-4 m-8">
+        <Button onClick={() => navigate("/")}>New Game</Button>
+        <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
       </div>
     </div>
   );

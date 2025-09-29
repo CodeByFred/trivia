@@ -15,7 +15,7 @@ const NavBar = () => {
             <NavLink to="/game">Game</NavLink>
           </li>
           <li className="text-xl">
-            <NavLink to="/review">Review</NavLink>
+            <NavLink to="/retry">Retry</NavLink>
           </li>
           <li className="text-xl">
             <NavLink to="/retry">Retry</NavLink>
