@@ -32,11 +32,6 @@ public class Question {
 
     private String incorrectAnswer3;
 
-    // One Question can appear in many GameAnswers.
-    @OneToMany(mappedBy = "question")
-    @JsonManagedReference
-    private List<GameAnswer> answers = new ArrayList<>();
-
     public Question() {
     }
 
@@ -112,11 +107,4 @@ public class Question {
         this.incorrectAnswer3 = incorrectAnswer3;
     }
 
-    public List<GameAnswer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<GameAnswer> answers) {
-        this.answers = answers;
-    }
 }

@@ -10,6 +10,7 @@ import GameStatBar from "../components/GameStatBar";
 const GamePage = () => {
   const {
     questions,
+    incorrectQuestions,
     currentIndex,
     gameState,
     loadNextQuestion,
@@ -21,6 +22,17 @@ const GamePage = () => {
   const currentQuestion = questions[currentIndex] || null;
   const navigate = useNavigate();
 
+  const isRetryMode = incorrectQuestions.length > 0;
+  const activeQuestion = isRetryMode
+    ? incorrectQuestions[currentIndex]?.question
+    : questions[currentIndex];
+
+  const handleTimeout = () => {
+    if (gameState !== "playing") return;
+    submitAnswer(null);
+    loadNextQuestion();
+  };
+
   useEffect(() => {
     if (gameState !== "playing") return;
 
@@ -29,8 +41,8 @@ const GamePage = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          submitAnswer(null);
-          loadNextQuestion();
+          // wait til next tick so render isn't disrupted
+          setTimeout(() => handleTimeout(), 0);
           return 0;
         }
         return prev - 1;
@@ -38,7 +50,7 @@ const GamePage = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameState, currentIndex, submitAnswer, loadNextQuestion]);
+  }, [gameState, currentIndex]);
 
   useEffect(() => {
     if (gameState === "finished" && questions.length > 0) {
@@ -75,7 +87,7 @@ const GamePage = () => {
         </p>
       )}
 
-      {gameState === "playing" && currentQuestion && (
+      {gameState === "playing" && (currentQuestion || activeQuestion) && (
         <div className="game-container flex flex-col items-center">
           <TriviaQuestion currentIndex={currentIndex} />
           <TriviaForm answers={shuffledAnswers} />
@@ -86,3 +98,16 @@ const GamePage = () => {
 };
 
 export default GamePage;
+
+// <div className="flex flex-col items-center justify-center text-center px-4 h-full">
+//   {gameState !== "finished" && !activeQuestion && (
+//     <p>
+//       No questions loaded yet. <br />
+//       Please start a new game on Home Page.
+//     </p>
+//   )}
+// </div>
+
+// {gameState === "playing" && activeQuestion && (
+//   <TriviaQuestion question={activeQuestion} index={currentIndex} />
+// )}

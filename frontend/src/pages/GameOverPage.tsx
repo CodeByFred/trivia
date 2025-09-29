@@ -17,8 +17,8 @@ const GameOverPage = () => {
         {score}/{questions.length}
       </p>
       <div className="flex flex-wrap justify-center space-y-4 m-8">
-        <Button>Retry Questions</Button>
         <Button onClick={() => navigate("/")}>New Game</Button>
+        <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
       </div>
     </div>
   );

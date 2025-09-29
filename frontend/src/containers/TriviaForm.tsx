@@ -24,7 +24,11 @@ const TriviaForm = ({ answers }: { answers: string[] }) => {
       ) : (
         <p>Something went wrong: Couldn't find answers</p>
       )}
-      <Button className="btn-xl col-span-2 mx-auto" type="submit">
+      <Button
+        disabled={!selected}
+        className="btn-xl col-span-2 mx-auto"
+        type="submit"
+      >
         Submit
       </Button>
     </form>

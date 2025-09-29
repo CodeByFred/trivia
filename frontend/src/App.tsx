@@ -10,6 +10,7 @@ import GameOverPage from "./pages/GameOverPage";
 
 // import NavBar from "./components/NavBar";
 // import UserSession from "./components/UserSession";
+import RetryPage from "./pages/RetryPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/game" element={<GamePage />} />
             <Route path="/gameover" element={<GameOverPage />} />
             {/* <Route path="/review" element={<ReviewPage />} /> */}
+            <Route path="/retry" element={<RetryPage />} />
           </Routes>
           {/* <UserSession /> */}
         </GameProvider>

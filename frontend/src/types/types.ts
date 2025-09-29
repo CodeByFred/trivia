@@ -100,3 +100,20 @@ export type FinalGameDto = {
 // // NOTE: A log from all previously completed games -> this should be fetched from backend later on (in context for now)
 // // Biz logic: we need to decide WHICH and HOW MANY games to fetch (e.g. last 5, all, last session etc.)
 // export type GameHistory = GameResultDto[]; // TODO - update to GameHistoryDto to be fetched from DB once saving is implemented
+
+export type RetryQuestion = {
+  id: number;
+  wasCorrect: boolean;
+  question: Question;
+};
+
+export type RetryQuestionResponse = {
+  id: number;
+  archived: boolean;
+};
+
+export type RetryCounts = {
+  easy: number;
+  medium: number;
+  hard: number;
+};
