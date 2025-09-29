@@ -35,6 +35,8 @@ public class QuestionDto {
     @NotNull
     private List<String> incorrectAnswers;
 
+    public QuestionDto() {}
+
     public String getType() {
         return type;
     }

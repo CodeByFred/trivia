@@ -6,6 +6,7 @@ import GamePage from "./pages/GamePage";
 import ReviewPage from "./pages/ReviewPage";
 import GameProvider from "./context/GameProvider";
 import UserSession from "./components/UserSession";
+import RetryPage from "./pages/RetryPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/game" element={<GamePage />} />
             <Route path="/review" element={<ReviewPage />} />
+            <Route path="/retry" element={<RetryPage />} />
           </Routes>
           <UserSession />
         </GameProvider>

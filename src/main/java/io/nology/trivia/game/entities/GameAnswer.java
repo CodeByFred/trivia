@@ -17,12 +17,14 @@ public class GameAnswer {
 
     private boolean wasCorrect;
 
+    private boolean archived = false;
+
     @ManyToOne // Each GameAnswer belongs to one Game.
     @JoinColumn(name = "game_id")
     @JsonBackReference
     private Game game;
 
-    @ManyToOne // Each GameAnswer links to exactly one Question.
+    @ManyToOne // Each GameAnswer links to exactly one Question.????
     @JoinColumn(name = "question_id")
     @JsonBackReference
     private Question question;
@@ -30,7 +32,13 @@ public class GameAnswer {
     public GameAnswer() {
     }
 
-    // getters, setters
+    public Long getId() {
+        return id;
+    }
+
+    public boolean isWasCorrect() {
+        return wasCorrect;
+    }
 
     public Question getQuestion() {
         return question;
@@ -63,5 +71,14 @@ public class GameAnswer {
     public void setWasCorrect(boolean wasCorrect) {
         this.wasCorrect = wasCorrect;
     }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+
 
 }

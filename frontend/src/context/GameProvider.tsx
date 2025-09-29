@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
-import type {
-  Answer,
-  Difficulty,
-  GameState,
-  Question,
-  TriviaCategoryID,
+import {
+  type Answer,
+  type Difficulty,
+  type GameState,
+  type Question,
+  type RetryQuestion,
+  type RetryQuestionResponse,
+  type TriviaCategoryID,
 } from "../types/types";
 import { GameContext } from "./GameContext";
 import type { PropsWithChildren } from "react";
 import { getNewToken } from "../services/sessionToken";
 import { triviaQuery } from "../services/triviaHttp";
-import { postGameData } from "../services/gameApi";
+import {
+  postGameData,
+  requestRetryQuestions,
+  updateRetryGameAnswer,
+} from "../services/gameApi";
 
 const GameProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false);
@@ -25,6 +31,8 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
   // const [gameHistory] = useState<GameHistory>([]);
+  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>([]);
+  const [quantity, setQuantity] = useState<number>(0);
 
   const initToken = async (): Promise<string | null> => {
     try {
@@ -78,6 +86,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     setCategoryID(id);
   };
 
+  const updateQuantity = (quantity: number) => {
+    setQuantity(quantity);
+  };
+
   const getQuestions = async (difficulty: Difficulty, id: TriviaCategoryID) => {
     let activeToken = token;
 
@@ -97,66 +109,132 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  const getIncorrectQuestions = async (difficulty: Difficulty, quantity: number) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await requestRetryQuestions(difficulty, quantity);
+      setIncorrectQuestions(data);
+    } catch (error) {
+      console.log(error, difficulty, quantity);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    if (gameState === "idle") {
+      console.log(`Game idle. Ready to start a new game.`);
+      return;
+    }
+
+    if (gameState === "playing") {
+      console.log(`Game in progress. Question number: ${currentIndex + 1}`);
+      return;
+    }
+
     if (gameState === "finished") {
-      console.info(`Final score: ${score}/${questions.length}`);
-      console.info(
-        `Game questions:\n${questions
-          .map((q, i) => `Q${i + 1}: ${q.question}`)
-          .join("\n")}`
-      );
-      console.info(
-        `Your answers:\n${savedAnswers
-          .map(
-            (a) =>
-              `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
-                a.wasCorrect ? "correct" : "incorrect"
-              })`
-          )
-          .join("\n")}`
-      );
-      saveGame();
-      resetGame();
+      const isRetryMode = incorrectQuestions.length > 0;
+
+      if (isRetryMode) {
+        console.log(`Retry session complete.`);
+      } else {
+        console.log(`Game finished. Final score: ${score}/${questions.length}`);
+
+        console.log(
+          `Game questions:\n${questions
+            .map((q, i) => `Q${i + 1}: ${q.question}`)
+            .join("\n")}`
+        );
+
+        console.log(
+          `Your answers:\n${savedAnswers
+            .map(
+              (a) =>
+                `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
+                  a.wasCorrect ? "correct" : "incorrect"
+                })`
+            )
+            .join("\n")}`
+        );
+
+        // only call in normal mode
+        saveGame();
+      }
     }
   }, [gameState, savedAnswers]);
 
   const startGame = () => {
-    getQuestions(difficulty, categoryID);
+    console.log(`Resetting game state...`);
+    setSavedAnswers([]);
+    setQuestions([]);
     setCurrentIndex(0);
+    setScore(0);
+
+    console.log(`Loading new questions...`);
+    getQuestions(difficulty, categoryID);
+
+    console.log(`Starting new game...`);
     setGameState("playing");
     setScore(0);
   };
 
-  const resetGame = () => {
-    console.log("Resetting game state... ");
-    setGameState("idle");
-    setScore(0);
-    setCurrentIndex(0);
+  const retryGame = () => {
+    console.log(`Resetting game state...`);
     setSavedAnswers([]);
+    setQuestions([]);
+    setCurrentIndex(0);
+    setScore(0);
+
+    console.log(`Loading new questions...`);
+    getIncorrectQuestions(difficulty, quantity);
+
+    console.log(`Starting new game...`);
+    setGameState("playing");
+    setScore(0);
   };
 
   const submitAnswer = (submitted: string | null) => {
-    const wasCorrect = submitted === questions[currentIndex].correctAnswer;
+    // NORMAL MODE
+    if (incorrectQuestions.length === 0) {
+      const wasCorrect = submitted === questions[currentIndex].correctAnswer;
 
-    const answer: Answer = {
-      questionIndex: currentIndex,
-      submittedAnswer: submitted,
-      wasCorrect: wasCorrect,
-    };
+      const answer: Answer = {
+        questionIndex: currentIndex,
+        submittedAnswer: submitted,
+        wasCorrect: wasCorrect,
+      };
 
-    console.info(answer);
+      setSavedAnswers((prev) => [...prev, answer]);
 
-    if (wasCorrect) console.info(`"${answer.submittedAnswer}" is correct`);
-    else console.info(`"${answer.submittedAnswer}" is incorrect.`);
+      if (wasCorrect) incrementScore();
 
-    setSavedAnswers((prev) => [...prev, answer]);
+      if (currentIndex + 1 >= questions.length) {
+        endGame();
+      } else {
+        loadNextQuestion();
+      }
 
-    if (wasCorrect) incrementScore();
+      // RETRY MODE
+    } else if (incorrectQuestions.length > 0) {
+      const currentRetryQuestion = incorrectQuestions[currentIndex];
 
-    if (currentIndex + 1 >= questions.length) {
-      endGame();
-    } else {
-      loadNextQuestion();
+      const wasCorrect = submitted === currentRetryQuestion.question.correctAnswer;
+
+      // update DB archive status
+      const archiveOption: RetryQuestionResponse = {
+        id: currentRetryQuestion.id,
+        archived: wasCorrect,
+      };
+
+      updateRetryGameAnswer(archiveOption);
+
+      // Move on to next or finish
+      if (currentIndex + 1 >= incorrectQuestions.length) {
+        endGame();
+      } else {
+        loadNextQuestion();
+      }
     }
   };
 
@@ -207,16 +285,19 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         questions,
         currentIndex,
         score,
+        quantity,
         updateDifficulty,
         updateCategoryID,
         startGame,
+        retryGame,
         submitAnswer,
         loadNextQuestion,
         endGame,
-        resetGame,
         saveGame,
         savedAnswers,
         // gameHistory,
+        updateQuantity,
+        incorrectQuestions,
       }}
     >
       {children}
