@@ -31,7 +31,9 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
   // const [gameHistory] = useState<GameHistory>([]);
-  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>([]);
+  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>(
+    []
+  );
   const [quantity, setQuantity] = useState<number>(0);
 
   const initToken = async (): Promise<string | null> => {
@@ -109,7 +111,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const getIncorrectQuestions = async (difficulty: Difficulty, quantity: number) => {
+  const getIncorrectQuestions = async (
+    difficulty: Difficulty,
+    quantity: number
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -125,6 +130,11 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (gameState === "idle") {
       console.log(`Game idle. Ready to start a new game.`);
+      return;
+    }
+
+    if (gameState === "loading") {
+      console.log(`Game loading. Please wait...`);
       return;
     }
 
@@ -164,15 +174,23 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   }, [gameState, savedAnswers]);
 
-  const startGame = () => {
-    console.log(`Resetting game state...`);
+  const resetGame = () => {
+    console.log(`Resetting game...`);
     setSavedAnswers([]);
     setQuestions([]);
     setCurrentIndex(0);
     setScore(0);
+    setGameState("idle");
+  };
+
+  const startGame = () => {
+    if (gameState === "finished") {
+      resetGame();
+    }
 
     console.log(`Loading new questions...`);
     getQuestions(difficulty, categoryID);
+    setGameState("loading");
 
     console.log(`Starting new game...`);
     setGameState("playing");
@@ -180,14 +198,13 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const retryGame = () => {
-    console.log(`Resetting game state...`);
-    setSavedAnswers([]);
-    setQuestions([]);
-    setCurrentIndex(0);
-    setScore(0);
+    if (gameState === "finished") {
+      resetGame();
+    }
 
     console.log(`Loading new questions...`);
     getIncorrectQuestions(difficulty, quantity);
+    setGameState("loading");
 
     console.log(`Starting new game...`);
     setGameState("playing");
@@ -219,7 +236,8 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     } else if (incorrectQuestions.length > 0) {
       const currentRetryQuestion = incorrectQuestions[currentIndex];
 
-      const wasCorrect = submitted === currentRetryQuestion.question.correctAnswer;
+      const wasCorrect =
+        submitted === currentRetryQuestion.question.correctAnswer;
 
       // update DB archive status
       const archiveOption: RetryQuestionResponse = {
@@ -244,8 +262,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const loadNextQuestion = () => {
+    setGameState("loading");
     const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
+    setGameState("playing");
   };
 
   const endGame = () => {
