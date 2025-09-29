@@ -17,6 +17,9 @@ const NavBar = () => {
           <li className="text-xl">
             <NavLink to="/retry">Retry</NavLink>
           </li>
+          <li className="text-xl">
+            <NavLink to="/retry">Retry</NavLink>
+          </li>
         </ul>
       </div>
     </div>

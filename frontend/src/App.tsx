@@ -5,11 +5,13 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
+
 import GameOverPage from "./pages/GameOverPage";
 // import ReviewPage from "./pages/ReviewPage";
 
 // import NavBar from "./components/NavBar";
 // import UserSession from "./components/UserSession";
+
 import RetryPage from "./pages/RetryPage";
 
 function App() {

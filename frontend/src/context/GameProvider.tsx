@@ -31,9 +31,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
   // const [gameHistory] = useState<GameHistory>([]);
-  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>(
-    []
-  );
+  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
 
   const initToken = async (): Promise<string | null> => {
@@ -111,10 +109,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const getIncorrectQuestions = async (
-    difficulty: Difficulty,
-    quantity: number
-  ) => {
+  const getIncorrectQuestions = async (difficulty: Difficulty, quantity: number) => {
     try {
       setLoading(true);
       setError(null);
@@ -132,7 +127,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       console.log("Loading...");
       return;
     }
-
     if (gameState === "idle") {
       console.log(`Game idle. Ready to start a new game.`);
       return;
@@ -235,8 +229,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     } else if (incorrectQuestions.length > 0) {
       const currentRetryQuestion = incorrectQuestions[currentIndex];
 
-      const wasCorrect =
-        submitted === currentRetryQuestion.question.correctAnswer;
+      const wasCorrect = submitted === currentRetryQuestion.question.correctAnswer;
 
       // update DB archive status
       const archiveOption: RetryQuestionResponse = {

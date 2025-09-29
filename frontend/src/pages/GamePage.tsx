@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
@@ -26,6 +27,17 @@ const GamePage = () => {
 
   const isRetryMode = incorrectQuestions.length > 0;
 
+  const activeQuestion = isRetryMode
+    ? incorrectQuestions[currentIndex]?.question
+    : questions[currentIndex];
+
+  const handleTimeout = () => {
+    if (gameState !== "playing") return;
+    submitAnswer(null);
+    loadNextQuestion();
+  };
+
+  const isRetryMode = incorrectQuestions.length > 0;
   const activeQuestion = isRetryMode
     ? incorrectQuestions[currentIndex]?.question
     : questions[currentIndex];
