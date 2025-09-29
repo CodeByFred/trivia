@@ -3,7 +3,7 @@ import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
 import { shuffle } from "../utils/utils";
 
-import TriviaQuestion from "../containers/TriviaQuestion";
+import TriviaQuestion from "../components/TriviaQuestion";
 import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
@@ -21,10 +21,11 @@ const GamePage = () => {
   } = useGameContext();
 
   const [timeLeft, setTimeLeft] = useState(15);
-  const currentQuestion = questions[currentIndex] || null;
+  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
   const navigate = useNavigate();
 
   const isRetryMode = incorrectQuestions.length > 0;
+
   const activeQuestion = isRetryMode
     ? incorrectQuestions[currentIndex]?.question
     : questions[currentIndex];
@@ -55,26 +56,25 @@ const GamePage = () => {
   }, [gameState, currentIndex]);
 
   useEffect(() => {
-    if (gameState === "finished" && questions.length > 0) {
+    if (gameState === "finished") {
       navigate("/gameover");
     }
-  }, [gameState, questions.length, navigate]);
+  }, [gameState, navigate]);
 
   //todo: move shuffle logic to GameProvider?
-  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!currentQuestion) return;
+    if (!activeQuestion) return;
 
     const orderedAnswers = [
-      currentQuestion?.correctAnswer,
-      currentQuestion?.incorrectAnswers[0],
-      currentQuestion?.incorrectAnswers[1],
-      currentQuestion?.incorrectAnswers[2],
+      activeQuestion?.correctAnswer,
+      activeQuestion?.incorrectAnswers[0],
+      activeQuestion?.incorrectAnswers[1],
+      activeQuestion?.incorrectAnswers[2],
     ].filter((a): a is string => typeof a === "string");
 
     setShuffledAnswers(shuffle(orderedAnswers));
-  }, [currentQuestion]);
+  }, [activeQuestion]);
 
   return (
     <>
@@ -98,10 +98,13 @@ const GamePage = () => {
         </div>
       )}
 
-      {gameState === "playing" && (currentQuestion || activeQuestion) && (
+      {gameState === "playing" && activeQuestion && (
         <div className="game-container flex flex-col items-center">
           <GameStatBar timeLeft={timeLeft} score={score} />
-          <TriviaQuestion currentIndex={currentIndex} />
+          <TriviaQuestion
+            question={activeQuestion}
+            currentIndex={currentIndex}
+          />
           <TriviaForm answers={shuffledAnswers} />
         </div>
       )}

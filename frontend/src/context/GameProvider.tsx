@@ -178,6 +178,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     console.log(`Resetting game...`);
     setSavedAnswers([]);
     setQuestions([]);
+    setIncorrectQuestions([]);
     setCurrentIndex(0);
     setScore(0);
     setGameState("idle");
