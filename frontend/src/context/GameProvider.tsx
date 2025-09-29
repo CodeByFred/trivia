@@ -128,13 +128,13 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    if (gameState === "idle") {
-      console.log(`Game idle. Ready to start a new game.`);
+    if (loading) {
+      console.log("Loading...");
       return;
     }
 
-    if (gameState === "loading") {
-      console.log(`Game loading. Please wait...`);
+    if (gameState === "idle") {
+      console.log(`Game idle. Ready to start a new game.`);
       return;
     }
 
@@ -172,7 +172,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         saveGame();
       }
     }
-  }, [gameState, savedAnswers]);
+  }, [gameState, savedAnswers, loading]);
 
   const resetGame = () => {
     console.log(`Resetting game...`);
@@ -184,13 +184,12 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const startGame = () => {
-    if (gameState === "finished") {
+    if (gameState !== "idle") {
       resetGame();
     }
 
     console.log(`Loading new questions...`);
     getQuestions(difficulty, categoryID);
-    setGameState("loading");
 
     console.log(`Starting new game...`);
     setGameState("playing");
@@ -198,13 +197,12 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const retryGame = () => {
-    if (gameState === "finished") {
+    if (gameState !== "idle") {
       resetGame();
     }
 
     console.log(`Loading new questions...`);
     getIncorrectQuestions(difficulty, quantity);
-    setGameState("loading");
 
     console.log(`Starting new game...`);
     setGameState("playing");
@@ -262,7 +260,6 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   };
 
   const loadNextQuestion = () => {
-    setGameState("loading");
     const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
     setGameState("playing");

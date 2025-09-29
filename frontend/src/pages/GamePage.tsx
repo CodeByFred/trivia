@@ -6,6 +6,7 @@ import { shuffle } from "../utils/utils";
 import TriviaQuestion from "../containers/TriviaQuestion";
 import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
+import Button from "../components/Button";
 
 const GamePage = () => {
   const {
@@ -16,6 +17,7 @@ const GamePage = () => {
     loadNextQuestion,
     submitAnswer,
     score,
+    loading,
   } = useGameContext();
 
   const [timeLeft, setTimeLeft] = useState(15);
@@ -76,19 +78,29 @@ const GamePage = () => {
 
   return (
     <>
-      {questions.length != 0 && gameState === "playing" && (
-        <GameStatBar timeLeft={timeLeft} score={score} />
+      {gameState === "idle" && (
+        <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
+          <h2>Oops!</h2>
+          <p>
+            No questions loaded yet. <br />
+            Please start a new game on Home Page.
+          </p>
+          <Button className="btn-primary m-8" onClick={() => navigate("/")}>
+            New Game
+          </Button>
+        </div>
       )}
 
-      {questions.length == 0 && gameState !== "finished" && (
-        <p>
-          No questions loaded yet. <br />
-          Please start a new game on Home Page.
-        </p>
+      {loading === true && (
+        <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
+          <p>Loading...</p>
+          {/* <div className="loader" /> */}
+        </div>
       )}
 
       {gameState === "playing" && (currentQuestion || activeQuestion) && (
         <div className="game-container flex flex-col items-center">
+          <GameStatBar timeLeft={timeLeft} score={score} />
           <TriviaQuestion currentIndex={currentIndex} />
           <TriviaForm answers={shuffledAnswers} />
         </div>
@@ -98,16 +110,3 @@ const GamePage = () => {
 };
 
 export default GamePage;
-
-// <div className="flex flex-col items-center justify-center text-center px-4 h-full">
-//   {gameState !== "finished" && !activeQuestion && (
-//     <p>
-//       No questions loaded yet. <br />
-//       Please start a new game on Home Page.
-//     </p>
-//   )}
-// </div>
-
-// {gameState === "playing" && activeQuestion && (
-//   <TriviaQuestion question={activeQuestion} index={currentIndex} />
-// )}
