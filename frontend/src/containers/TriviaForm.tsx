@@ -39,6 +39,7 @@ const TriviaForm = ({ answers }: FormProps) => {
         <p>Something went wrong: Couldn't find answers</p>
       )}
       <Button
+        disabled={!selected}
         className="btn btn-primary btn-xl btn-wide col-span-2 mx-auto"
         type="submit"
       >
