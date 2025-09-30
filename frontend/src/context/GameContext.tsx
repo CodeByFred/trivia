@@ -31,7 +31,7 @@ export type GameContextType = {
   startGame: () => void;
   retryGame: () => void;
   endGame: () => void;
-  submitAnswer: (submitted: string | null) => void;
+  submitAnswer: (submitted: string | null, question: Question | RetryQuestion) => void;
   loadNextQuestion: () => void;
   saveGame: () => void;
 };

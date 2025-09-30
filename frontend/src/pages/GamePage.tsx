@@ -14,7 +14,6 @@ const GamePage = () => {
     incorrectQuestions,
     currentIndex,
     gameState,
-    loadNextQuestion,
     submitAnswer,
     score,
     loading,
@@ -25,34 +24,39 @@ const GamePage = () => {
   const navigate = useNavigate();
 
   const isRetryMode = incorrectQuestions.length > 0;
+
   const activeQuestion = isRetryMode
     ? incorrectQuestions[currentIndex]?.question
     : questions[currentIndex];
 
-  const handleTimeout = () => {
-    if (gameState !== "playing") return;
-    submitAnswer(null);
-    loadNextQuestion();
-  };
-
   useEffect(() => {
-    if (gameState !== "playing") return;
+    if (gameState !== "playing" || !activeQuestion) return;
 
     setTimeLeft(15);
+
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          // wait til next tick so render isn't disrupted
-          setTimeout(() => handleTimeout(), 0);
+
+          setTimeout(() => {
+            console.log("Timer expired, submitting null for:", activeQuestion);
+
+            submitAnswer(
+              null,
+              isRetryMode ? incorrectQuestions[currentIndex] : activeQuestion
+            );
+          }, 0);
+
           return 0;
         }
+
         return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameState, currentIndex]);
+  }, [gameState, currentIndex, activeQuestion]);
 
   useEffect(() => {
     if (gameState === "finished") {
@@ -101,7 +105,7 @@ const GamePage = () => {
         <div className="game-container flex flex-col items-center">
           <GameStatBar timeLeft={timeLeft} score={score} />
           <TriviaQuestion question={activeQuestion} currentIndex={currentIndex} />
-          <TriviaForm answers={shuffledAnswers} />
+          <TriviaForm answers={shuffledAnswers} activeQuestion={activeQuestion} />
         </div>
       )}
     </>
