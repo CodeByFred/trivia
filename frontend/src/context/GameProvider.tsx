@@ -207,8 +207,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const submitAnswer = (submitted: string | null, question: Question | RetryQuestion) => {
     if (!question) return;
 
-    if ("correctAnswer" in question) {
-      const wasCorrect = submitted === question.correctAnswer;
+    if (questions.length > 0) {
+      const standardQ = question as Question;
+
+      const wasCorrect = submitted === standardQ.correctAnswer;
 
       const answer: Answer = {
         questionIndex: currentIndex,
@@ -218,7 +220,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
       setSavedAnswers((prev) => [...prev, answer]);
 
-      if (wasCorrect) incrementScore();
+      if (wasCorrect) incrementScore(standardQ.difficulty);
 
       if (currentIndex + 1 >= questions.length) {
         endGame();
@@ -227,9 +229,11 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       }
 
       // RETRY MODE
-    } else {
+    } else if (incorrectQuestions.length > 0) {
+      console.log(question);
       const retryQ = question as RetryQuestion;
-      const wasCorrect = submitted === question.question.correctAnswer;
+
+      const wasCorrect = submitted === retryQ.question.correctAnswer;
 
       // update DB archive status
       const archiveOption: RetryQuestionResponse = {
@@ -238,6 +242,8 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       };
 
       updateRetryGameAnswer(archiveOption);
+
+      if (wasCorrect) incrementScore(retryQ.question.difficulty);
 
       // Move on to next or finish
       if (currentIndex + 1 >= incorrectQuestions.length) {
@@ -248,9 +254,27 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const incrementScore = () => {
-    // add points to the scoreboard
-    setScore((prev) => prev + 1);
+  const incrementScore = (difficulty: Difficulty) => {
+    let points = 0;
+
+    switch (difficulty) {
+      case "easy":
+        points = 10;
+        break;
+
+      case "medium":
+        points = 20;
+        break;
+
+      case "hard":
+        points = 30;
+        break;
+
+      default:
+        break;
+    }
+
+    setScore((prev) => prev + points);
   };
 
   const loadNextQuestion = () => {
