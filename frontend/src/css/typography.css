@@ -29,7 +29,8 @@ h6 {
 
 label,
 select,
-option {
+option,
+fieldset {
   font-family: "Unbounded", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
