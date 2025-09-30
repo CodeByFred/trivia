@@ -1,8 +1,10 @@
+import { typography } from "../styles/typography";
+
 const Timer = ({ timeLeft }: { timeLeft: number }) => {
   return (
     <span className="flex flex-row items-center gap-1 w-full">
       <div>
-        <p>{timeLeft}</p>
+        <p className={typography.body}>{timeLeft}</p>
       </div>
 
       <div className="timer-bar w-full h-2 bg-stone-900 rounded-full overflow-hidden">
