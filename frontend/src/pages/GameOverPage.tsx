@@ -14,7 +14,14 @@ const GameOverPage = () => {
         <h1 className={typography.h1}>Game Over</h1>
       </span>
       <h3 className={typography.h3}>Final score</h3>
-      <p className={typography.body}>{score}</p>
+      <div className="flex flex-row mt-4">
+        <img
+          src="../../assets/icons/coin.svg"
+          alt="coin"
+          className="h-full w-full"
+        />
+        <h3 className={typography.h3}>{score}</h3>
+      </div>
       <div className="flex flex-wrap justify-center space-y-4 m-8">
         <Button onClick={() => navigate("/")} className="btn-primary">
           New Game
