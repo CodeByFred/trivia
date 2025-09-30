@@ -85,7 +85,7 @@ const GamePage = () => {
   }, [actualQuestion]);
 
   return (
-    <div className="content-overlay  flex flex-col gap-4 p-8 w-fit items-center justify-center">
+    <>
       {gameState === "idle" && (
         <div className="content-overlay flex flex-col items-center justify-center text-center px-4 h-full gap-8">
           <h2>Oops!</h2>
@@ -119,7 +119,7 @@ const GamePage = () => {
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 
