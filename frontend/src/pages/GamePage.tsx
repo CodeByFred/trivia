@@ -7,6 +7,7 @@ import TriviaQuestion from "../components/TriviaQuestion";
 import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
+import type { Question, RetryQuestion } from "../types/types";
 
 const GamePage = () => {
   const {
@@ -21,16 +22,23 @@ const GamePage = () => {
 
   const [timeLeft, setTimeLeft] = useState(15);
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
+
   const navigate = useNavigate();
 
   const isRetryMode = incorrectQuestions.length > 0;
 
-  const activeQuestion = isRetryMode
-    ? incorrectQuestions[currentIndex]?.question
-    : questions[currentIndex];
+  const retryQ: RetryQuestion | undefined = isRetryMode
+    ? incorrectQuestions[currentIndex]
+    : undefined;
+
+  const normalQ: Question | undefined = !isRetryMode
+    ? questions[currentIndex]
+    : undefined;
+
+  const actualQuestion: Question | undefined = isRetryMode ? retryQ?.question : normalQ;
 
   useEffect(() => {
-    if (gameState !== "playing" || !activeQuestion) return;
+    if (loading || gameState !== "playing" || !actualQuestion) return;
 
     setTimeLeft(15);
 
@@ -40,12 +48,9 @@ const GamePage = () => {
           clearInterval(interval);
 
           setTimeout(() => {
-            console.log("Timer expired, submitting null for:", activeQuestion);
+            console.log("Timer expired, submitting null for:");
 
-            submitAnswer(
-              null,
-              isRetryMode ? incorrectQuestions[currentIndex] : activeQuestion
-            );
+            submitAnswer(null, retryQ ?? normalQ!);
           }, 0);
 
           return 0;
@@ -56,7 +61,7 @@ const GamePage = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameState, currentIndex, activeQuestion]);
+  }, [gameState, currentIndex, normalQ, loading, retryQ]);
 
   useEffect(() => {
     if (gameState === "finished") {
@@ -65,17 +70,17 @@ const GamePage = () => {
   }, [gameState, navigate]);
 
   useEffect(() => {
-    if (!activeQuestion) return;
+    if (!actualQuestion) return;
 
     const orderedAnswers = [
-      activeQuestion?.correctAnswer,
-      activeQuestion?.incorrectAnswers[0],
-      activeQuestion?.incorrectAnswers[1],
-      activeQuestion?.incorrectAnswers[2],
+      actualQuestion?.correctAnswer,
+      actualQuestion?.incorrectAnswers[0],
+      actualQuestion?.incorrectAnswers[1],
+      actualQuestion?.incorrectAnswers[2],
     ].filter((a): a is string => typeof a === "string");
 
     setShuffledAnswers(shuffle(orderedAnswers));
-  }, [activeQuestion]);
+  }, [actualQuestion]);
 
   return (
     <>
@@ -99,11 +104,14 @@ const GamePage = () => {
         </div>
       )}
 
-      {gameState === "playing" && activeQuestion && (
+      {gameState === "playing" && actualQuestion && (
         <div className="game-container flex flex-col items-center">
           <GameStatBar timeLeft={timeLeft} score={score} />
-          <TriviaQuestion question={activeQuestion} currentIndex={currentIndex} />
-          <TriviaForm answers={shuffledAnswers} activeQuestion={activeQuestion} />
+          <TriviaQuestion question={actualQuestion} currentIndex={currentIndex} />
+          <TriviaForm
+            answers={shuffledAnswers}
+            activeQuestion={isRetryMode ? retryQ! : normalQ!}
+          />
         </div>
       )}
     </>

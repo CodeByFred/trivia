@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useGameContext } from "../context/useGameContext";
 import Button from "../components/Button";
 import GameAnswers from "../components/GameAnswers";
-import type { Question } from "../types/types";
+import type { Question, RetryQuestion } from "../types/types";
 
 const TriviaForm = ({
   answers,
   activeQuestion,
 }: {
   answers: string[];
-  activeQuestion: Question;
+  activeQuestion: Question | RetryQuestion;
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const { submitAnswer } = useGameContext();
@@ -20,6 +20,7 @@ const TriviaForm = ({
       onSubmit={(e) => {
         e.preventDefault();
         submitAnswer(selected, activeQuestion);
+        setSelected(null);
       }}
     >
       {answers ? (
