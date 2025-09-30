@@ -26,10 +26,6 @@ const RetryPage = () => {
 
       <h1 className="text-5xl">Retry Incorrect Questions</h1>
 
-      <div className="justify-center items-center flex flex-col space-y-2">
-        <RetryOverview />
-      </div>
-
       <div>
         <Selector
           label="Difficulty"
@@ -65,6 +61,21 @@ const RetryPage = () => {
         </Button>
         <Button onClick={() => navigate("/")}>Go Back</Button>
       </div>
+
+      {showModal && (
+        <Modal>
+          <div className="justify-center items-center flex flex-col space-y-2">
+            <RetryOverview />
+          </div>
+        </Modal>
+      )}
+
+      <Button
+        className="w-fit absolute top-0 right-0"
+        onClick={() => setShowModal(!showModal)}
+      >
+        ?
+      </Button>
     </>
   );
 };
