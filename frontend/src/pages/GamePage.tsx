@@ -121,14 +121,12 @@ const GamePage = () => {
 
       {gameState === "playing" && actualQuestion && (
         <div className="game-container flex flex-col items-center h-full w-full">
-          <div className="flex flex-row justify-center w-full h-fit gap-4">
-            <Tag>{actualQuestion.category}</Tag>
-            <GameStatBar timeLeft={timeLeft} score={score} />
-            <Tag>{`${actualQuestion.difficulty} : ${points} points`}</Tag>
-          </div>
+          <GameStatBar timeLeft={timeLeft} score={score} />
+
           <TriviaQuestion
             question={actualQuestion}
             currentIndex={currentIndex}
+            points={points}
           />
           <TriviaForm
             answers={shuffledAnswers}
