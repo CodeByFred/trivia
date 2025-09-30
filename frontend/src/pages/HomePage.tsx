@@ -59,8 +59,12 @@ const HomePage = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full h-full items-center justify-center ">
-        <Button onClick={handleStart}>Start Game</Button>
-        <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
+        <Button onClick={handleStart} className="btn-primary">
+          Start Game
+        </Button>
+        <Button onClick={() => navigate("/retry")} className="btn-secondary">
+          Retry Mode
+        </Button>
       </div>
     </>
   );

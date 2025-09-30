@@ -24,11 +24,19 @@ const TriviaForm = ({
       }}
     >
       {answers ? (
-        <GameAnswers answers={answers} selected={selected} setSelected={setSelected} />
+        <GameAnswers
+          answers={answers}
+          selected={selected}
+          setSelected={setSelected}
+        />
       ) : (
         <p>Something went wrong: Couldn't find answers</p>
       )}
-      <Button disabled={!selected} className="btn-xl col-span-2 mx-auto" type="submit">
+      <Button
+        disabled={!selected}
+        className="btn-primary btn-xl col-span-2 mx-auto"
+        type="submit"
+      >
         Submit
       </Button>
     </form>

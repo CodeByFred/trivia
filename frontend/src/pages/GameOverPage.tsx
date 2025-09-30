@@ -15,11 +15,10 @@ const GameOverPage = () => {
       <h2 className="text-2xl m-4">Final score</h2>
       <p>{score}</p>
       <div className="flex flex-wrap justify-center space-y-4 m-8">
-        <Button onClick={() => navigate("/")}>New Game</Button>
-        <Button
-          onClick={() => navigate("/retry")}
-          className="btn btn-secondary btn-lg btn-wide"
-        >
+        <Button onClick={() => navigate("/")} className="btn-primary">
+          New Game
+        </Button>
+        <Button onClick={() => navigate("/retry")} className="btn-secondary">
           Retry Mode
         </Button>
       </div>

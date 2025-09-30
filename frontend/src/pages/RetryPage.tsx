@@ -60,10 +60,16 @@ const RetryPage = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full h-full items-center justify-center">
-        <Button disabled={quantity === 0} onClick={handleStart}>
+        <Button
+          disabled={quantity === 0}
+          onClick={handleStart}
+          className="btn-primary"
+        >
           Start Game
         </Button>
-        <Button onClick={() => navigate("/")}>Go Back</Button>
+        <Button onClick={() => navigate("/")} className="btn-secondary">
+          Go Back
+        </Button>
       </div>
     </>
   );
