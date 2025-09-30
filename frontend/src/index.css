@@ -1,6 +1,10 @@
-@import "tailwindcss";
-@plugin "daisyui";
+/* NOTE: use this file for foundational styles, used on EVERY page */
 
+/* SECTION Framework imports */
+@import "tailwindcss"; /* tailwindcss@4.1.12 */
+@plugin "daisyui"; /* 🌼 daisyUI 5.0.54 */
+
+/* SECTION CSS variables / Design tokens */
 #root {
   width: 100vw;
   min-width: 300px;
@@ -12,7 +16,7 @@
   align-content: center;
 
   :root {
-    /* Brand colors */
+    /* NOTE Brand colors */
     --primary: 94 23 235; /*#BD00ff*/
     --secondary: 189 0 255; /*#5E17EB*/
     --accent: 255 216 21; /*#FFD815*/
@@ -28,9 +32,10 @@
   }
 }
 
-/* IMPORTED GOOGLE API FONTS */
+/* SECTION: Utility classes used everywhere */
+/* IMPORTED GOOGLE API FONTS.  Imported via html <head> */
 
-/* Buttons: Tilt Warp */
+/* Button font: Tilt Warp */
 
 .tilt-warp-button {
   font-family: "Tilt Warp", sans-serif;
@@ -40,7 +45,7 @@
   font-variation-settings: "XROT" 0, "YROT" 0;
 }
 
-/* Heading (h1): Tilt Neon */
+/* Heading (h1) font: Tilt Neon */
 
 .tilt-neon-heading {
   font-family: "Tilt Neon", sans-serif;
@@ -50,7 +55,7 @@
   font-variation-settings: "XROT" 0, "YROT" 0;
 }
 
-/* Subheading (h2)/Labels:  Unbounded */
+/* Subheading (h2) font / Labels font:  Unbounded */
 
 .unbounded-subheading {
   font-family: "Unbounded", sans-serif;
@@ -66,7 +71,7 @@
   font-style: normal;
 }
 
-/* Body text: Sniglet */
+/* Body font: Sniglet */
 
 .sniglet-body-regular {
   font-family: "Sniglet", system-ui;
@@ -77,5 +82,53 @@
 .sniglet-body-extrabold {
   font-family: "Sniglet", system-ui;
   font-weight: 800;
+  font-style: normal;
+}
+
+/* SECTION: Typography - affects ALL h1s, h2s, etc */
+
+button {
+  font-family: "Tilt Warp", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "XROT" 0, "YROT" 0;
+}
+
+h1 {
+  font-family: "Tilt Neon", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "XROT" 0, "YROT" 0;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+label,
+select,
+option {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+p,
+li,
+span,
+input,
+textarea {
+  font-family: "Sniglet", system-ui;
+  font-weight: 400;
   font-style: normal;
 }
