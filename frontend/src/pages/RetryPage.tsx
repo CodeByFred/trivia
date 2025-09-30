@@ -55,7 +55,7 @@ const RetryPage = () => {
         onClick={handleStart}
         className="btn btn-primary btn-lg btn-wide"
       >
-        New Game
+        Start Game
       </Button>
 
       <Button
