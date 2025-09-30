@@ -1,14 +1,21 @@
 /* NOTE: use this file for foundational styles, used on EVERY page */
 
-/* framework imports */
+/* SECTION Framework imports */
 
-@import "tailwindcss"; /* tailwindcss@4.1.12 */
-@plugin "daisyui"; /* 🌼 daisyUI 5.0.54 */
+/* tailwindcss@4.1.12 */
+@import "tailwindcss";
 
-/* module imports */
+/* 🌼 daisyUI 5.0.54 */
+@plugin "daisyui" {
+  themes: dark --default;
+}
+
+/* SECTION: Module imports */
 @import "./css/typography.css";
 @import "./css/colors.css";
 @import "./css/components.css";
+
+/* SECTION: global styling */
 
 * {
   box-sizing: border-box;
