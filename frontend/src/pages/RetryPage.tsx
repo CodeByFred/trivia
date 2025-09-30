@@ -57,6 +57,13 @@ const RetryPage = () => {
       >
         New Game
       </Button>
+
+      <Button
+        onClick={() => navigate("/")}
+        className="btn btn-secondary btn-lg btn-wide"
+      >
+        Go Back
+      </Button>
     </div>
   );
 };

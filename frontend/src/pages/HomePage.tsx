@@ -58,6 +58,12 @@ const HomePage = () => {
       <Button onClick={handleStart} className="btn btn-primary btn-lg btn-wide">
         New Game
       </Button>
+      <Button
+        onClick={() => navigate("/retry")}
+        className="btn btn-secondary btn-lg btn-wide"
+      >
+        Retry Mode
+      </Button>
     </section>
   );
 };
