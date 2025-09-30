@@ -1,8 +1,9 @@
 /* NOTE: use this file for foundational styles, used on EVERY page */
 
-/* SECTION Framework imports */
+/* SECTION Imports */
 @import "tailwindcss"; /* tailwindcss@4.1.12 */
 @plugin "daisyui"; /* 🌼 daisyUI 5.0.54 */
+@import "./typography.css"; /* font imports + styles */
 
 /* SECTION CSS variables / Design tokens */
 #root {
@@ -25,110 +26,4 @@
     --fg: 17 24 39;
     --radius: 0.75rem;
   }
-
-  .dark {
-    --bg: 17 24 39;
-    --fg: 241 245 249;
-  }
-}
-
-/* SECTION: Utility classes used everywhere */
-/* IMPORTED GOOGLE API FONTS.  Imported via html <head> */
-
-/* Button font: Tilt Warp */
-
-.tilt-warp-button {
-  font-family: "Tilt Warp", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "XROT" 0, "YROT" 0;
-}
-
-/* Heading (h1) font: Tilt Neon */
-
-.tilt-neon-heading {
-  font-family: "Tilt Neon", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "XROT" 0, "YROT" 0;
-}
-
-/* Subheading (h2) font / Labels font:  Unbounded */
-
-.unbounded-subheading {
-  font-family: "Unbounded", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.unbounded-label {
-  font-family: "Unbounded", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Body font: Sniglet */
-
-.sniglet-body-regular {
-  font-family: "Sniglet", system-ui;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.sniglet-body-extrabold {
-  font-family: "Sniglet", system-ui;
-  font-weight: 800;
-  font-style: normal;
-}
-
-/* SECTION: Typography - affects ALL h1s, h2s, etc */
-
-button {
-  font-family: "Tilt Warp", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "XROT" 0, "YROT" 0;
-}
-
-h1 {
-  font-family: "Tilt Neon", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "XROT" 0, "YROT" 0;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Unbounded", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-
-label,
-select,
-option {
-  font-family: "Unbounded", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-
-p,
-li,
-span,
-input,
-textarea {
-  font-family: "Sniglet", system-ui;
-  font-weight: 400;
-  font-style: normal;
 }
