@@ -7,6 +7,7 @@ import Selector from "../components/Selector";
 import Logo from "../components/Logo";
 import Modal from "../components/Modal";
 import { useState } from "react";
+import { typography } from "../styles/typography";
 
 const RetryPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,9 +25,13 @@ const RetryPage = () => {
     <>
       <Logo />
 
-      <h1 className="text-5xl">Retry Incorrect Questions</h1>
+      <h1 className={typography.h1}>Retry Incorrect Questions</h1>
 
-      <div>
+      <div className="justify-center items-center flex flex-col space-y-2">
+        <RetryOverview />
+      </div>
+
+      <div className="w-full">
         <Selector
           label="Difficulty"
           value={difficulty}
@@ -56,10 +61,16 @@ const RetryPage = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full h-full items-center justify-center">
-        <Button disabled={quantity === 0} onClick={handleStart}>
+        <Button
+          disabled={quantity === 0}
+          onClick={handleStart}
+          className="btn-primary"
+        >
           Start Game
         </Button>
-        <Button onClick={() => navigate("/")}>Go Back</Button>
+        <Button onClick={() => navigate("/")} className="btn-secondary">
+          Go Back
+        </Button>
       </div>
 
       {showModal && (

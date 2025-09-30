@@ -10,7 +10,7 @@ const Selector = ({ label, children, value, onChange }: SelectorProps) => {
     <span className="min-w-[300px] w-full rounded-2xl flex flex-row flex-wrap items-center justify-center p-2 gap-4">
       <label className="label ">{label}</label>
       <select
-        className="select select-primary rounded-2xl  select-xl shadow-none border-0 min-[300px]:w-full max-w-[565px] "
+        className="select select-primary  select-xl shadow-none border-0 min-[300px]:w-full max-w-[565px] text-center rounded-2xl "
         value={value}
         onChange={onChange}
       >

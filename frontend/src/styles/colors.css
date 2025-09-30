@@ -46,7 +46,6 @@ option {
 }
 
 button {
-  background-color: var(--color-primary);
   color: white;
   border-color: var(--color-border);
 }

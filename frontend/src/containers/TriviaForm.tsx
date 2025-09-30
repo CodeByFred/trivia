@@ -3,6 +3,7 @@ import { useGameContext } from "../context/useGameContext";
 import Button from "../components/Button";
 import GameAnswers from "../components/GameAnswers";
 import type { Question, RetryQuestion } from "../types/types";
+import { typography } from "../styles/typography";
 
 const TriviaForm = ({
   answers,
@@ -16,7 +17,7 @@ const TriviaForm = ({
 
   return (
     <form
-      className="flex flex-col gap-8 w-full max-w-4xl px-8"
+      className="flex flex-col justify-center items-center gap-8 w-full h-100 max-w-4xl px-8"
       onSubmit={(e) => {
         e.preventDefault();
         submitAnswer(selected, activeQuestion);
@@ -24,11 +25,17 @@ const TriviaForm = ({
       }}
     >
       {answers ? (
-        <GameAnswers answers={answers} selected={selected} setSelected={setSelected} />
+        <GameAnswers
+          answers={answers}
+          selected={selected}
+          setSelected={setSelected}
+        />
       ) : (
-        <p>Something went wrong: Couldn't find answers</p>
+        <p className={typography.body}>
+          Something went wrong: Couldn't find answers
+        </p>
       )}
-      <Button disabled={!selected} className="btn-xl col-span-2 mx-auto" type="submit">
+      <Button disabled={!selected} className="btn btn-primary " type="submit">
         Submit
       </Button>
     </form>

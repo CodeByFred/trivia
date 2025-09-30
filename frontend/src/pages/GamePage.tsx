@@ -8,6 +8,8 @@ import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
 import type { Question, RetryQuestion } from "../types/types";
+import { typography } from "../styles/typography";
+import Tag from "../components/Tag";
 
 const GamePage = () => {
   const {
@@ -22,6 +24,7 @@ const GamePage = () => {
 
   const [timeLeft, setTimeLeft] = useState(15);
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
+  const [points, setPoints] = useState(10);
 
   const navigate = useNavigate();
 
@@ -74,6 +77,16 @@ const GamePage = () => {
   useEffect(() => {
     if (!actualQuestion) return;
 
+    if (actualQuestion.difficulty === "easy") {
+      setPoints(10);
+    }
+    if (actualQuestion.difficulty === "medium") {
+      setPoints(20);
+    }
+    if (actualQuestion.difficulty === "hard") {
+      setPoints(30);
+    }
+
     const orderedAnswers = [
       actualQuestion?.correctAnswer,
       actualQuestion?.incorrectAnswers[0],
@@ -85,11 +98,11 @@ const GamePage = () => {
   }, [actualQuestion]);
 
   return (
-    <div className="content-overlay  flex flex-col gap-4 p-8 w-fit items-center justify-center">
+    <>
       {gameState === "idle" && (
-        <div className="content-overlay flex flex-col items-center justify-center text-center px-4 h-full gap-8">
-          <h2>Oops!</h2>
-          <p>
+        <div className="content-overlay flex flex-col items-center justify-center text-center p-4 h-full gap-8">
+          <h2 className={typography.h2}>Oops!</h2>
+          <p className={typography.body}>
             No questions loaded yet. <br />
             Please start a new game on Home Page.
           </p>
@@ -101,17 +114,19 @@ const GamePage = () => {
 
       {loading === true && (
         <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
-          <p>Loading...</p>
+          <h2 className={typography.h3}>Loading...</h2>
           {/* <div className="loader" /> */}
         </div>
       )}
 
       {gameState === "playing" && actualQuestion && (
-        <div className="game-container flex flex-col items-center">
+        <div className="game-container flex flex-col items-center h-full w-full">
           <GameStatBar timeLeft={timeLeft} score={score} />
+
           <TriviaQuestion
             question={actualQuestion}
             currentIndex={currentIndex}
+            points={points}
           />
           <TriviaForm
             answers={shuffledAnswers}
@@ -119,7 +134,7 @@ const GamePage = () => {
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import Selector from "../components/Selector";
 import Card from "../components/Card";
+import { typography } from "../styles/typography";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -29,10 +30,12 @@ const HomePage = () => {
     <>
       <Logo />
 
-      <h1 className="text-5xl">Start New Game</h1>
-      <h2>Test your knowledge with our trivia questions!</h2>
+      <h1 className={typography.h1}>Start New Game</h1>
+      <h3 className={typography.h3}>
+        Test your knowledge with our trivia questions!
+      </h3>
 
-      <div>
+      <div className="w-full">
         <Selector
           label="Difficulty"
           value={difficulty}
@@ -59,8 +62,12 @@ const HomePage = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full h-full items-center justify-center ">
-        <Button onClick={handleStart}>Start Game</Button>
-        <Button onClick={() => navigate("/retry")}>Retry Mode</Button>
+        <Button onClick={handleStart} className="btn-primary">
+          Start Game
+        </Button>
+        <Button onClick={() => navigate("/retry")} className="btn-secondary">
+          Retry Mode
+        </Button>
       </div>
     </>
   );
