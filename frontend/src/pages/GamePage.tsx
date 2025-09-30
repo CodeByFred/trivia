@@ -64,8 +64,6 @@ const GamePage = () => {
     }
   }, [gameState, navigate]);
 
-  //todo: move shuffle logic to GameProvider?
-
   useEffect(() => {
     if (!activeQuestion) return;
 

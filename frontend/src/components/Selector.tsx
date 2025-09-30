@@ -7,7 +7,7 @@ type SelectorProps = {
 
 const Selector = ({ label, children, value, onChange }: SelectorProps) => {
   return (
-    <label className="select select-xl  w-full select-primary rounded-2xl focus:ring-0 ">
+    <label className="select select-xl min-w-[565px] w-full select-primary rounded-2xl  focus:ring-0 ">
       <span className="label">{label}</span>
       <select
         className="select select-xl shadow-none border-0 "
