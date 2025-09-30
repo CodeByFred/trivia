@@ -30,27 +30,51 @@
 
 /* IMPORTED GOOGLE API FONTS */
 
-.galindo-regular {
-  font-family: "Galindo", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
+/* Buttons: Tilt Warp */
 
-.kumbh-sans-regular {
-  font-family: "Kumbh Sans", sans-serif;
+.tilt-warp-button {
+  font-family: "Tilt Warp", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings: "YOPQ" 300;
+  font-variation-settings: "XROT" 0, "YROT" 0;
 }
 
-.sniglet-regular {
+/* Heading (h1): Tilt Neon */
+
+.tilt-neon-heading {
+  font-family: "Tilt Neon", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "XROT" 0, "YROT" 0;
+}
+
+/* Subheading (h2)/Labels:  Unbounded */
+
+.unbounded-subheading {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.unbounded-label {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Body text: Sniglet */
+
+.sniglet-body-regular {
   font-family: "Sniglet", system-ui;
   font-weight: 400;
   font-style: normal;
 }
 
-.sniglet-extrabold {
+.sniglet-body-extrabold {
   font-family: "Sniglet", system-ui;
   font-weight: 800;
   font-style: normal;
