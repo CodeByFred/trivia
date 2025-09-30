@@ -7,6 +7,7 @@ import Selector from "../components/Selector";
 import Logo from "../components/Logo";
 import Modal from "../components/Modal";
 import { useState } from "react";
+import { typography } from "../styles/typography";
 
 const RetryPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +25,7 @@ const RetryPage = () => {
     <>
       <Logo />
 
-      <h1 className="text-5xl">Retry Incorrect Questions</h1>
+      <h1 className={typography.h1}>Retry Incorrect Questions</h1>
 
       <div className="justify-center items-center flex flex-col space-y-2">
         <RetryOverview />

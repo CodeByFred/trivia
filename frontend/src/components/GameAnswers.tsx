@@ -8,7 +8,7 @@ type GameAnswersProps = {
 
 const GameAnswers = ({ answers, selected, setSelected }: GameAnswersProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-full">
       {answers.map((answer: string, i: number) => (
         <label key={i} className="cursor-pointer">
           <input

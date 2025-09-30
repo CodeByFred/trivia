@@ -1,3 +1,5 @@
+import { typography } from "../styles/typography";
+
 const Score = ({ score }: { score: number }) => {
   return (
     <span className="flex flex-row items-center gap-2">
@@ -7,7 +9,7 @@ const Score = ({ score }: { score: number }) => {
         alt="Score Icon"
       />
 
-      <p>{score}</p>
+      <p className={typography.body}>{score}</p>
     </span>
   );
 };

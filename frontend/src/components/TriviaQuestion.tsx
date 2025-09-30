@@ -1,3 +1,4 @@
+import { typography } from "../styles/typography";
 import type { Question } from "../types/types";
 
 interface TriviaQuestionProps {
@@ -7,10 +8,10 @@ interface TriviaQuestionProps {
 
 const TriviaQuestion = ({ question, currentIndex }: TriviaQuestionProps) => {
   return (
-    <div className="trivia-question flex flex-col items-center gap-8 m-8">
+    <div className="trivia-question flex flex-col text-wrap items-center gap-8 m-8 w-8/10">
       {/* questionInfo */}
-      <h3 className="text-xl p-2">{`Question ${currentIndex + 1}`}</h3>
-      <h2 className="text-4xl p-8">{question?.question}</h2>
+      <h2 className={typography.h2}>{`Question ${currentIndex + 1}`}</h2>
+      <h3 className={typography.h3}>{question?.question}</h3>
     </div>
   );
 };

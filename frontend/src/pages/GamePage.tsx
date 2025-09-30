@@ -8,6 +8,7 @@ import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
 import type { Question, RetryQuestion } from "../types/types";
+import { typography } from "../styles/typography";
 
 const GamePage = () => {
   const {
@@ -88,8 +89,8 @@ const GamePage = () => {
     <>
       {gameState === "idle" && (
         <div className="content-overlay flex flex-col items-center justify-center text-center px-4 h-full gap-8">
-          <h2>Oops!</h2>
-          <p>
+          <h2 className={typography.h2}>Oops!</h2>
+          <p className={typography.body}>
             No questions loaded yet. <br />
             Please start a new game on Home Page.
           </p>
@@ -101,13 +102,13 @@ const GamePage = () => {
 
       {loading === true && (
         <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
-          <p>Loading...</p>
+          <h2 className={typography.h3}>Loading...</h2>
           {/* <div className="loader" /> */}
         </div>
       )}
 
       {gameState === "playing" && actualQuestion && (
-        <div className="game-container flex flex-col items-center">
+        <div className="game-container flex flex-col items-center h-full w-full">
           <GameStatBar timeLeft={timeLeft} score={score} />
           <TriviaQuestion
             question={actualQuestion}
