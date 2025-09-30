@@ -204,10 +204,11 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     setScore(0);
   };
 
-  const submitAnswer = (submitted: string | null) => {
-    // NORMAL MODE
-    if (incorrectQuestions.length === 0) {
-      const wasCorrect = submitted === questions[currentIndex].correctAnswer;
+  const submitAnswer = (submitted: string | null, question: Question | RetryQuestion) => {
+    if (!question) return;
+
+    if ("correctAnswer" in question) {
+      const wasCorrect = submitted === question.correctAnswer;
 
       const answer: Answer = {
         questionIndex: currentIndex,
@@ -226,14 +227,13 @@ const GameProvider = ({ children }: PropsWithChildren) => {
       }
 
       // RETRY MODE
-    } else if (incorrectQuestions.length > 0) {
-      const currentRetryQuestion = incorrectQuestions[currentIndex];
-
-      const wasCorrect = submitted === currentRetryQuestion.question.correctAnswer;
+    } else {
+      const retryQ = question as RetryQuestion;
+      const wasCorrect = submitted === question.question.correctAnswer;
 
       // update DB archive status
       const archiveOption: RetryQuestionResponse = {
-        id: currentRetryQuestion.id,
+        id: retryQ.id,
         archived: wasCorrect,
       };
 
