@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={"btn btn-lg btn-primary btn-wide " + className}
+      className={"btn btn-lg  btn-wide rounded-2xl m-2 " + className}
       {...rest}
     >
       {children}

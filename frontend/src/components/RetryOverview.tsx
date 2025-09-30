@@ -9,15 +9,15 @@ const RetryOverview = () => {
   }, []);
 
   return (
-    <div className="p-4 justify-center items-center flex flex-col space-y-2">
+    <>
       <h2>Number of Questions Available to Retry</h2>
-      <h2>(Select Up To 10)</h2>
-      <ul className="space-x-6 flex justify-center">
-        <li className="bg-green-500">Easy: {counts.easy}</li>
-        <li className="bg-orange-500">Medium: {counts.medium}</li>
-        <li className="bg-red-500">Hard: {counts.hard}</li>
+      <ul className="space-x-6 flex justify-center p-2">
+        <li className="bg-green-500 rounded px-2">Easy: {counts.easy}</li>
+        <li className="bg-orange-500 rounded px-2">Medium: {counts.medium}</li>
+        <li className="bg-red-500 rounded px-2">Hard: {counts.hard}</li>
       </ul>
-    </div>
+      <p>(Select Up To 10)</p>
+    </>
   );
 };
 

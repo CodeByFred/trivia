@@ -21,17 +21,16 @@
 
   /* Other style overrides */
   --radius: 0.75rem;
+}
 
+/* Fixed gradient background */
+html {
   background: linear-gradient(
     133deg,
     var(--color-primary) 4.43%,
     var(--color-secondary) 74.66%
   );
-}
-
-.content-overlay {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background-attachment: fixed;
 }
 
 select,
@@ -53,7 +52,9 @@ button {
 }
 
 button:hover {
-  background-color: var(--color-secondary);
+  /* move down 3px and darken color */
+  transform: translateY(-3px);
+  transition: all 0.2s ease-in-out;
 }
 
 button:disabled {

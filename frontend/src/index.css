@@ -6,6 +6,35 @@
 @plugin "daisyui"; /* 🌼 daisyUI 5.0.54 */
 
 /* module imports */
-@import "./css/typography.css"; /* font imports + styles */
-@import "./css/colors.css"; /* color variables */
-@import "./css/layout.css"; /* layout styles */
+@import "./css/typography.css";
+@import "./css/colors.css";
+@import "./css/components.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  /* full screen layout */
+
+  height: 100%;
+  width: 100%;
+  margin: 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.082) rgba(255, 255, 255, 0);
+}
