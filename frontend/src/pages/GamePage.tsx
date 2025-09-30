@@ -8,6 +8,7 @@ import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
 import type { Question, RetryQuestion } from "../types/types";
+import PopUp from "../components/PopUp";
 
 const GamePage = () => {
   const {
@@ -42,7 +43,7 @@ const GamePage = () => {
   useEffect(() => {
     if (loading || gameState !== "playing" || !actualQuestion) return;
 
-    setTimeLeft(15);
+    setTimeLeft(1500);
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
@@ -119,6 +120,8 @@ const GamePage = () => {
           />
         </div>
       )}
+
+      <PopUp correct={true} />
     </>
   );
 };
