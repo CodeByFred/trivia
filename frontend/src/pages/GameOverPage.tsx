@@ -9,7 +9,7 @@ const GameOverPage = () => {
   const { score } = useGameContext();
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className=" flex flex-col items-center h-full w-full justify-center">
       <span className="flex justify-center m-8">
         <h1 className={typography.h1}>Game Over</h1>
       </span>

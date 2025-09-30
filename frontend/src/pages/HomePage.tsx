@@ -26,15 +26,14 @@ const HomePage = () => {
   };
 
   return (
-    <>
+    <div className=" flex flex-col items-center h-fit w-full justify-center gap-8 p-8">
       <Logo />
-
       <h1 className={typography.h1}>Start New Game</h1>
       <h3 className={typography.h3}>
         Test your knowledge with our trivia questions!
       </h3>
 
-      <div className="w-full">
+      <div>
         <Selector
           label="Difficulty"
           value={difficulty}
@@ -60,7 +59,7 @@ const HomePage = () => {
         </Selector>
       </div>
 
-      <div className="flex flex-col sm:flex-row w-full h-full items-center justify-center ">
+      <div className="flex flex-col sm:flex-row  items-center justify-center ">
         <Button onClick={handleStart} className="btn-primary">
           Start Game
         </Button>
@@ -68,7 +67,7 @@ const HomePage = () => {
           Retry Mode
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 

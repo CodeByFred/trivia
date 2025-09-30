@@ -12,7 +12,6 @@
 
 /* SECTION: Module imports */
 @import "./styles/typography.css";
-@import "./styles/typography.js";
 @import "./styles/colors.css";
 @import "./styles/components.css";
 

@@ -9,17 +9,9 @@ import GameOverPage from "./pages/GameOverPage";
 import RetryPage from "./pages/RetryPage";
 
 function App() {
-  const textStyles = {
-    h1: "text-3xl md:text-5xl font-bold",
-    h2: "text-2xl md:text-4xl font-semibold",
-    h3: "text-xl md:text-2xl font-medium",
-    body: "text-base md:text-lg",
-    small: "text-sm md:text-base",
-  };
-
   return (
-    <div className="flex flex-col items-center justify-self-center justify-center text-center p-4 h-full w-full  overflow-y-auto overflow-x-hidden custom-scrollbar ">
-      <div className="flex flex-col  gap-8 py-8 w-full h-fit items-center justify-around justify-self-center">
+    <div className="flex flex-col items-center  text-center p-2 pt-4 h-full w-full  overflow-y-auto overflow-x-hidden custom-scrollbar ">
+      <div className="flex flex-col  gap-8 py-4 w-full h-full items-center justify-center">
         <BrowserRouter>
           <GameProvider>
             {/* <NavBar /> */}

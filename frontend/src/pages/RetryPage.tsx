@@ -22,7 +22,7 @@ const RetryPage = () => {
   };
 
   return (
-    <>
+    <div className=" flex flex-col items-center h-fit w-full justify-center gap-8 p-8">
       <Logo />
 
       <h1 className={typography.h1}>Retry Incorrect Questions</h1>
@@ -72,7 +72,7 @@ const RetryPage = () => {
           Go Back
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 export default RetryPage;
