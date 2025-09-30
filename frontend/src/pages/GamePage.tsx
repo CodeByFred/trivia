@@ -8,9 +8,7 @@ import TriviaForm from "../containers/TriviaForm";
 import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
 import type { Question, RetryQuestion } from "../types/types";
-import PopUp from "../components/PopUp";
 import { typography } from "../styles/typography";
-import Tag from "../components/Tag";
 
 const GamePage = () => {
   const {
@@ -130,13 +128,12 @@ const GamePage = () => {
             points={points}
           />
           <TriviaForm
+            correctAnswer={actualQuestion.correctAnswer}
             answers={shuffledAnswers}
             activeQuestion={isRetryMode ? retryQ! : normalQ!}
           />
         </div>
       )}
-
-      <PopUp correct={true} />
     </>
   );
 };

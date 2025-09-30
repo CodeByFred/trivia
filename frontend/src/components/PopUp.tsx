@@ -1,9 +1,9 @@
-const PopUp = ({ correct }: { correct: boolean }) => {
+const PopUp = ({ isCorrect }: { isCorrect: boolean }) => {
   return (
     <div className="absolute flex justify-center align-middle">
       <img
         src={
-          correct
+          isCorrect
             ? "../../assets/icons/tick-icon.svg"
             : "../../assets/icons/wrong-icon.svg"
         }

@@ -31,7 +31,9 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
   // const [gameHistory] = useState<GameHistory>([]);
-  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>([]);
+  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>(
+    []
+  );
   const [quantity, setQuantity] = useState<number>(0);
 
   const initToken = async (): Promise<string | null> => {
@@ -100,7 +102,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(2, difficulty, id, activeToken!);
+      const data = await triviaQuery(5, difficulty, id, activeToken!); //!NOTE change first param here to modify num of questions fetched
       setQuestions(data);
     } catch (error) {
       console.log(error, categoryID, difficulty);
@@ -109,7 +111,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const getIncorrectQuestions = async (difficulty: Difficulty, quantity: number) => {
+  const getIncorrectQuestions = async (
+    difficulty: Difficulty,
+    quantity: number
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -204,7 +209,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     setScore(0);
   };
 
-  const submitAnswer = (submitted: string | null, question: Question | RetryQuestion) => {
+  const submitAnswer = (
+    submitted: string | null,
+    question: Question | RetryQuestion
+  ) => {
     if (!question) return;
 
     if (questions.length > 0) {

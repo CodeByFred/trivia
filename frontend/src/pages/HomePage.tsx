@@ -8,7 +8,6 @@ import { useGameContext } from "../context/useGameContext";
 import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import Selector from "../components/Selector";
-import Card from "../components/Card";
 import { typography } from "../styles/typography";
 
 const HomePage = () => {
