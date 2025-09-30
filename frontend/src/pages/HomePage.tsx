@@ -25,7 +25,7 @@ const HomePage = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4 w-max h-full text-center px-4">
+    <section className="flex flex-col items-center justify-center gap-4 w-full h-full text-center px-4">
       <Logo />
 
       <h1 className="text-5xl">Start New Game</h1>

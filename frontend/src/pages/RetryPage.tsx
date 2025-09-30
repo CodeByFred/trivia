@@ -17,7 +17,7 @@ const RetryPage = () => {
   };
 
   return (
-    <div className="items-center justify-center flex flex-col gap-4 px-4 h-full">
+    <div className="items-center justify-center flex flex-col gap-4 px-4 h-full  w-full">
       <Logo />
       <h1 className="text-5xl">Retry Incorrect Questions</h1>
 
