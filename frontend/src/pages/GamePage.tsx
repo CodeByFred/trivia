@@ -44,7 +44,7 @@ const GamePage = () => {
   useEffect(() => {
     if (loading || gameState !== "playing" || !actualQuestion) return;
 
-    setTimeLeft(1500);
+    setTimeLeft(15);
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
@@ -122,16 +122,18 @@ const GamePage = () => {
         <div className="game-container flex flex-col items-center h-full w-full">
           <GameStatBar timeLeft={timeLeft} score={score} />
 
-          <TriviaQuestion
-            question={actualQuestion}
-            currentIndex={currentIndex}
-            points={points}
-          />
-          <TriviaForm
-            correctAnswer={actualQuestion.correctAnswer}
-            answers={shuffledAnswers}
-            activeQuestion={isRetryMode ? retryQ! : normalQ!}
-          />
+          <div className=" flex flex-col items-center h-full w-full justify-center">
+            <TriviaQuestion
+              question={actualQuestion}
+              currentIndex={currentIndex}
+              points={points}
+            />
+            <TriviaForm
+              correctAnswer={actualQuestion.correctAnswer}
+              answers={shuffledAnswers}
+              activeQuestion={isRetryMode ? retryQ! : normalQ!}
+            />
+          </div>
         </div>
       )}
     </>

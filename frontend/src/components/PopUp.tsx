@@ -1,6 +1,6 @@
 const PopUp = ({ isCorrect }: { isCorrect: boolean }) => {
   return (
-    <div className="absolute flex justify-center align-middle">
+    <div className="absolute flex justify-center items-center justify-self-center align-middle h-full w-full">
       <img
         src={
           isCorrect
