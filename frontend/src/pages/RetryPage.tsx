@@ -30,7 +30,7 @@ const RetryPage = () => {
         <RetryOverview />
       </div>
 
-      <div>
+      <div className="w-full">
         <Selector
           label="Difficulty"
           value={difficulty}

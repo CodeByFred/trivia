@@ -32,7 +32,7 @@ const HomePage = () => {
       <h1 className="text-5xl">Start New Game</h1>
       <h2>Test your knowledge with our trivia questions!</h2>
 
-      <div>
+      <div className="w-full">
         <Selector
           label="Difficulty"
           value={difficulty}

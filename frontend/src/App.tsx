@@ -10,7 +10,7 @@ import RetryPage from "./pages/RetryPage";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-self-center justify-center text-center p-8 h-full w-full  overflow-y-auto overflow-x-hidden custom-scrollbar ">
+    <div className="flex flex-col items-center justify-self-center justify-center text-center p-4 h-full w-full  overflow-y-auto overflow-x-hidden custom-scrollbar ">
       <div className="flex flex-col  gap-8 py-8 w-full h-fit items-center justify-around justify-self-center">
         <BrowserRouter>
           <GameProvider>
