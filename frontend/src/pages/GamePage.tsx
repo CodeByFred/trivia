@@ -33,6 +33,7 @@ const GamePage = () => {
   const navigate = useNavigate();
 
   const isRetryMode = incorrectQuestions.length > 0;
+  const timeLimit = 10; //timer limit in seconds
 
   const retryQ: RetryQuestion | undefined = isRetryMode
     ? incorrectQuestions[currentIndex]
@@ -50,7 +51,7 @@ const GamePage = () => {
     //TIMER LOGIC
     if (loading || gameState !== "playing" || !actualQuestion) return;
 
-    setTimeLeft(1500); //timer limit in seconds
+    setTimeLeft(timeLimit);
 
     const interval = setInterval(() => {
       //timer countdown
@@ -63,7 +64,7 @@ const GamePage = () => {
             // When timer runs out = submits a null gameAnswer
             console.log("Timer expired, submitting null for:");
             submitAnswer(null, retryQ ?? normalQ!);
-          }, 0);
+          }, 500);
 
           return 0;
         }
@@ -113,7 +114,11 @@ const GamePage = () => {
 
       {gameState === "playing" && actualQuestion && (
         <div className="game-container flex flex-col items-center h-full w-full">
-          <GameStatBar timeLeft={timeLeft} score={score} />
+          <GameStatBar
+            timeLeft={timeLeft}
+            timeLimit={timeLimit}
+            score={score}
+          />
 
           <div className=" flex flex-col items-center h-full w-full justify-center">
             <TriviaQuestion
