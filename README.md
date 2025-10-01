@@ -14,9 +14,9 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
   - [x] Correct answer for each question
   - [x] If a question was failed or not
         ~~- [ ] One of the API endpoints should allow filtering questions by failed~~
-- [ ] On the frontend, the user should be able to view questions that they answered wrong
-- [ ] They should be able to attempt those questions again
-- [ ] If they answer the question correctly, it should get archived in the database
+- [x] On the frontend, the user should be able to ~~view~~ fetch/retry questions that they answered wrong
+- [x] They should be able to attempt those questions again
+- [x] If they answer the question correctly, it should get archived in the database (note: does not update the original game data, only "archived" gets updated on retry games)
 
 ## Technologies
 
@@ -89,9 +89,10 @@ From the ERD diagram above:
 - [nology project brief](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api)
 - [Group Trello Board](https://trello.com/b/14XGoYKh/trivia-full-stack-project-fred-carrie)
 - [Figma Board](https://www.figma.com/board/p0I0y8Sr4brnA6b1FiPCDy/trivia?node-id=0-1&t=a3gPBNrj4if6PYC4-1)
+- [Figma - visual interactive prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
 
 <!-- ## Contact
 
 This was a joint project between two developers, you can contact them here: -->
 
-- add linked accounts here
+<!-- - add linked accounts here -->

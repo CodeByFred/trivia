@@ -23,7 +23,7 @@ const TriviaForm = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsLoadingNext(false);
-    }, 1500); // 2 second delay
+    }, 1500); // 1.5 second delay
     return () => clearTimeout(timeout);
   }, [isLoadingNext]);
 

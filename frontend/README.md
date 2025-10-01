@@ -19,13 +19,13 @@
 
 ## MVP
 
-- [x] Create an interface that allows a user to choose the level of difficulty and start a new game (Fred)
-- [x] When the game starts, display a question card with 4 possible answers (Carrie)
+- [x] Create an interface that allows a user to choose the level of difficulty and start a new game
+- [x] When the game starts, display a question card with 4 possible answers
 - [x] ~~If the user answers the question correctly,~~ Show a next question when user submits answer
 - [x] ~~If the answer is incorrect, end the game~~ If last question is answered, end the game
-- [x] Add a "Review Answers" button at the end of the game that shows the user all the questions, their answers, and the correct answers
-- [x] Display the score (number of questions answered correctly) at the end of each game
-- [x] Add a "Play Again" button under the score, that lets you reattempt the game's incorrect questions
+- [x]~~ Add a "Review Answers" button at the end of the game that shows the user all the questions, their answers, and the correct answers~~ only fetched questions with wasCorrect=false from backend database instead
+- [x] Display the score ~~(number of questions answered correctly)~~ (points system bsed on difficulty eg. easy=10, med=20, hard=30) at the end of each game
+- [x] Add a ~~"Play Again"~~ "Retry Mode" button under the score, that lets you reattempt the game's incorrect questions
 
 ## Bonus
 
