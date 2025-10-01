@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGameContext } from "../context/useGameContext";
 import Button from "../components/Button";
 import GameAnswers from "../components/GameAnswers";
@@ -16,29 +16,40 @@ const TriviaForm = ({
   activeQuestion: Question | RetryQuestion;
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
-  const [isLoadingNext, setIsLoadingNext] = useState<boolean>(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   const { submitAnswer } = useGameContext();
 
+  // Cleanup timeout on unmount
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoadingNext(false);
-    }, 1500); // 1.5 second delay
-    return () => clearTimeout(timeout);
-  }, [isLoadingNext]);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(selected === correctAnswer);
+    setIsCorrect(selected === correctAnswer);
+    setIsVisible(true);
+    timeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+      submitAnswer(selected, activeQuestion);
+      setSelected(null);
+    }, 500); // 1 second delay to show popup icon
+  };
 
   return (
     <>
       <form
         className="flex flex-col justify-center items-center gap-4 w-full h-100 max-w-4xl p-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitAnswer(selected, activeQuestion);
-          setSelected(null);
-          setIsCorrect(selected === correctAnswer);
-          setIsLoadingNext(true);
-          console.log(selected === correctAnswer);
-        }}
+        onSubmit={handleSubmit}
       >
         {answers ? (
           <GameAnswers
@@ -56,7 +67,7 @@ const TriviaForm = ({
         </Button>
       </form>
 
-      {isLoadingNext && <PopUp isCorrect={isCorrect} />}
+      {isVisible && <PopUp isCorrect={isCorrect} />}
     </>
   );
 };
