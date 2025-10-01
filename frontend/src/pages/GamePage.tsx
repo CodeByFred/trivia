@@ -9,6 +9,7 @@ import GameStatBar from "../components/GameStatBar";
 import Button from "../components/Button";
 import type { Question, RetryQuestion } from "../types/types";
 import { typography } from "../styles/typography";
+import Logo from "../components/Logo";
 
 const GamePage = () => {
   const {
@@ -113,8 +114,8 @@ const GamePage = () => {
 
       {loading === true && (
         <div className="flex flex-col items-center justify-center text-center px-4 h-full gap-8">
+          <Logo />
           <h2 className={typography.h3}>Loading...</h2>
-          {/* <div className="loader" /> */}
         </div>
       )}
 
