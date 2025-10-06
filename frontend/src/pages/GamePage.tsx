@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useGameContext } from "../context/useGameContext";
 import { useEffect, useState } from "react";
-import { shuffle } from "../utils/utils";
+import {
+  calculatePointsFromDifficulty,
+  orderAnswersIntoArray,
+  shuffleAnswers,
+} from "../utils/utils";
 
 import TriviaQuestion from "../components/TriviaQuestion";
 import TriviaForm from "../containers/TriviaForm";
@@ -24,11 +28,12 @@ const GamePage = () => {
 
   const [timeLeft, setTimeLeft] = useState(15);
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
-  const [points, setPoints] = useState(10);
+  const [points, setPoints] = useState(0);
 
   const navigate = useNavigate();
 
   const isRetryMode = incorrectQuestions.length > 0;
+  const timeLimit = 10; //timer limit in seconds
 
   const retryQ: RetryQuestion | undefined = isRetryMode
     ? incorrectQuestions[currentIndex]
@@ -43,20 +48,23 @@ const GamePage = () => {
     : normalQ;
 
   useEffect(() => {
+    //TIMER LOGIC
     if (loading || gameState !== "playing" || !actualQuestion) return;
 
-    setTimeLeft(15);
+    setTimeLeft(timeLimit);
 
     const interval = setInterval(() => {
+      //timer countdown
+
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
 
           setTimeout(() => {
+            // When timer runs out = submits a null gameAnswer
             console.log("Timer expired, submitting null for:");
-
             submitAnswer(null, retryQ ?? normalQ!);
-          }, 0);
+          }, 500);
 
           return 0;
         }
@@ -69,32 +77,17 @@ const GamePage = () => {
   }, [gameState, currentIndex, normalQ, loading, retryQ]);
 
   useEffect(() => {
+    // NAV to GAME OVER when done
     if (gameState === "finished") {
       navigate("/gameover");
     }
   }, [gameState, navigate]);
 
   useEffect(() => {
+    // Calculate points and shuffle answer order
     if (!actualQuestion) return;
-
-    if (actualQuestion.difficulty === "easy") {
-      setPoints(10);
-    }
-    if (actualQuestion.difficulty === "medium") {
-      setPoints(20);
-    }
-    if (actualQuestion.difficulty === "hard") {
-      setPoints(30);
-    }
-
-    const orderedAnswers = [
-      actualQuestion?.correctAnswer,
-      actualQuestion?.incorrectAnswers[0],
-      actualQuestion?.incorrectAnswers[1],
-      actualQuestion?.incorrectAnswers[2],
-    ].filter((a): a is string => typeof a === "string");
-
-    setShuffledAnswers(shuffle(orderedAnswers));
+    setPoints(calculatePointsFromDifficulty(actualQuestion));
+    setShuffledAnswers(shuffleAnswers(orderAnswersIntoArray(actualQuestion)));
   }, [actualQuestion]);
 
   return (
@@ -121,7 +114,11 @@ const GamePage = () => {
 
       {gameState === "playing" && actualQuestion && (
         <div className="game-container flex flex-col items-center h-full w-full">
-          <GameStatBar timeLeft={timeLeft} score={score} />
+          <GameStatBar
+            timeLeft={timeLeft}
+            timeLimit={timeLimit}
+            score={score}
+          />
 
           <div className=" flex flex-col items-center h-full w-full justify-center">
             <TriviaQuestion

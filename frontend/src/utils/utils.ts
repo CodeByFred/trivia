@@ -1,4 +1,6 @@
-export function shuffle(array: string[]) {
+import type { Question } from "../types/types";
+
+export function shuffleAnswers(array: string[]) {
   let currentIndex = array.length;
   let randomIndex;
 
@@ -15,4 +17,21 @@ export function shuffle(array: string[]) {
   }
 
   return array;
+}
+
+export function orderAnswersIntoArray(q: Question) {
+  return [q.correctAnswer, ...(q.incorrectAnswers ?? [])].filter(
+    (a): a is string => typeof a === "string"
+  );
+}
+
+export function calculatePointsFromDifficulty(actualQuestion: Question) {
+  if (actualQuestion.difficulty === "easy") {
+    return 10;
+  } else if (actualQuestion.difficulty === "medium") {
+    return 20;
+  } else if (actualQuestion.difficulty === "hard") {
+    return 30;
+  }
+  return 0;
 }
