@@ -2,40 +2,32 @@
 
 > Put a summary of the changes made whenever you make a big commit here if you want to keep track of the project's history.
 
-## Week 1 - Setup + Front-end
+## Week 4/5
 
 Tickets:
-Fred - Game start UI + category/difficulty selection form
-Carrie - Trivia question display UI + answer submission form
+Fred - Backend database/API integration, retry game and timer logic
+Carrie - Frontend retry mode, points system, UI polish/CSS + design system/prototyping
 
 Changes:
 
-- Initial project setup
-- Set up frontend with React and Vite
-- Fetch trivia questions from the Open Trivia API
-- Set up pages and routing for home page and trivia question page
-- Set up new game button to fetch new set of questions form Open Trivia API
-- Added basic trivia rendering and multiple choice answer dropdown form
+- ReviewPage is deleted (now Retry Page)
+- Improved game flow and fixed timer bug with race conditions in GamePage
+- Database configuration for gameAnswers and security updates
 
-## Week 2
+New Game mechanics
 
-Tickets:
-Fred - UI Styling + API session tokens, backend entities/skeleton
-Carrie - UI Styling + front-end game progress data storage
+- Implemented retry mode for incorrect questions, with Retry Page
+- Added points system based on difficulty (easy=10, med=20, hard=30)
+- Implemented feedback system for answer submission in game flow
+  - tick or cross icon pops up on screen for 1.5 seconds for right vs wrong answers (plans to implement ding/buzzer sounds later)
 
-Changes:
+UX/UI
 
-- Light styling for alignment/layout
-- Refactor TriviaQuestion/TriviaForm with answer selection/shuffling
-- Add types for answered questions and game result DTOs
-- Tailwind installed and basic config
-- Add session token to question queries (OpenTriviaAPI)
-
-PR #1: Fetching from OpenTriviaAPI (closed)
-
-- Implement API calls to fetch trivia questions
-- Handle loading and error states in the UI
-- Fixed issue with expired session tokens
+- Submit button disabled before selection
+- UserSession and NavBar hidden (not needed for production, just dev/testing)
+- Created interactive prototype in Figma for general user feedback on visuals/readability
+- Revamped UI design system w. brand colors and typography
+- Improved responsive layout for mobile screens
 
 ## Week 3
 
@@ -59,3 +51,37 @@ Changes:
 PR #2: Game UI/Flow
 Mainly front-end features including UI game flow and styling improvements, user session management, and game state encapsulation with GameContext.
 
+## Week 2
+
+Tickets:
+Fred - UI Styling + API session tokens, backend entities/skeleton
+Carrie - UI Styling + front-end game progress data storage
+
+Changes:
+
+- Light styling for alignment/layout
+- Refactor TriviaQuestion/TriviaForm with answer selection/shuffling
+- Add types for answered questions and game result DTOs
+- Tailwind installed and basic config
+- Add session token to question queries (OpenTriviaAPI)
+
+PR #1: Fetching from OpenTriviaAPI (closed)
+
+- Implement API calls to fetch trivia questions
+- Handle loading and error states in the UI
+- Fixed issue with expired session tokens
+
+## Week 1 - Setup + Front-end
+
+Tickets:
+Fred - Game start UI + category/difficulty selection form
+Carrie - Trivia question display UI + answer submission form
+
+Changes:
+
+- Initial project setup
+- Set up frontend with React and Vite
+- Fetch trivia questions from the Open Trivia API
+- Set up pages and routing for home page and trivia question page
+- Set up new game button to fetch new set of questions form Open Trivia API
+- Added basic trivia rendering and multiple choice answer dropdown form

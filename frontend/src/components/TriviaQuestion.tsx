@@ -1,38 +1,27 @@
+import { typography } from "../styles/typography";
 import type { Question } from "../types/types";
-import TriviaForm from "../containers/TriviaForm";
-import { shuffle } from "../utils/utils";
+import Tag from "./Tag";
 
 interface TriviaQuestionProps {
   question: Question;
-  index: number;
-  totalQuestions: number;
-  onNext: () => void;
+  currentIndex: number;
+  points: number;
 }
 
 const TriviaQuestion = ({
   question,
-  index,
-  totalQuestions,
+  currentIndex,
+  points,
 }: TriviaQuestionProps) => {
-  //gather answers to display
-  const orderedAnswers = [
-    question?.correctAnswer,
-    question?.incorrectAnswers[0],
-    question?.incorrectAnswers[1],
-    question?.incorrectAnswers[2],
-  ].filter((a): a is string => typeof a === "string");
-
   return (
-    <>
-      <h3>{`Question ${index + 1 || ""}/${totalQuestions || ""}`}</h3>
-      <p>{question?.question}</p>
-      {question && (
-        <TriviaForm
-          answers={shuffle(orderedAnswers)}
-          correctAnswer={question.correctAnswer}
-        />
-      )}
-    </>
+    <div className="trivia-question flex flex-col text-wrap items-center gap-6 m-4 w-8/10">
+      <h2 className={typography.h2}>{`Question ${currentIndex + 1}`}</h2>
+      <h3 className={typography.h3}>{question?.question}</h3>
+      <div className="flex flex-row flex-wrap items-center justify-center w-full h-fit gap-2">
+        <Tag>{question.category}</Tag>
+        <Tag>{`${question.difficulty} ${points} points`}</Tag>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,8 @@
 package io.nology.trivia.game.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import io.nology.trivia.question.Question;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,15 +13,21 @@ public class GameAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
-
-    private Long questionId;
-
     private String submittedAnswer;
 
-    private boolean correct;
+    private boolean wasCorrect;
+
+    private boolean archived = false;
+
+    @ManyToOne // Each GameAnswer belongs to one Game.
+    @JoinColumn(name = "game_id")
+    @JsonBackReference
+    private Game game;
+
+    @ManyToOne // Each GameAnswer links to exactly one Question.????
+    @JoinColumn(name = "question_id")
+    @JsonBackReference
+    private Question question;
 
     public GameAnswer() {
     }
@@ -27,8 +36,16 @@ public class GameAnswer {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public boolean isWasCorrect() {
+        return wasCorrect;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     public Game getGame() {
@@ -39,14 +56,6 @@ public class GameAnswer {
         this.game = game;
     }
 
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
     public String getSubmittedAnswer() {
         return submittedAnswer;
     }
@@ -55,11 +64,21 @@ public class GameAnswer {
         this.submittedAnswer = submittedAnswer;
     }
 
-    public boolean isCorrect() {
-        return correct;
+    public boolean wasCorrect() {
+        return wasCorrect;
     }
 
-    public void setCorrect(boolean wasCorrect) {
-        this.correct = wasCorrect;
+    public void setWasCorrect(boolean wasCorrect) {
+        this.wasCorrect = wasCorrect;
     }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+
+
 }

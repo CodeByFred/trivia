@@ -1,17 +1,22 @@
-import { useState } from "react";
-import type {
-  Answer,
-  Difficulty,
-  GameResult,
-  GameState,
-  GameHistory,
-  Question,
-  TriviaCategoryID,
+import { useEffect, useState } from "react";
+import {
+  type Answer,
+  type Difficulty,
+  type GameState,
+  type Question,
+  type RetryQuestion,
+  type RetryQuestionResponse,
+  type TriviaCategoryID,
 } from "../types/types";
 import { GameContext } from "./GameContext";
 import type { PropsWithChildren } from "react";
 import { getNewToken } from "../services/sessionToken";
 import { triviaQuery } from "../services/triviaHttp";
+import {
+  postGameData,
+  requestRetryQuestions,
+  updateRetryGameAnswer,
+} from "../services/gameApi";
 
 const GameProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false);
@@ -25,26 +30,55 @@ const GameProvider = ({ children }: PropsWithChildren) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedAnswers, setSavedAnswers] = useState<Answer[]>([]);
   const [score, setScore] = useState(0);
-  const [gameHistory, setGameHistory] = useState<GameHistory>([]);
+  // const [gameHistory] = useState<GameHistory>([]);
+  const [incorrectQuestions, setIncorrectQuestions] = useState<RetryQuestion[]>(
+    []
+  );
+  const [quantity, setQuantity] = useState<number>(0);
 
-  const initToken = async (): Promise<string> => {
-    // token
-    const token = await getNewToken();
-    setToken(token);
-    console.log(`Token key: ${token}`);
+  const initToken = async (): Promise<string | null> => {
+    try {
+      // token
+      const token = await getNewToken();
+      setToken(token);
+      console.log(`Token key: ${token}`);
 
-    // expiry
-    const expiry = Date.now() + 1000 * 60 * 60;
-    setTokenExpiry(expiry);
+      // expiry
+      const expiry = Date.now() + 1000 * 60 * 60 * 6;
+      setTokenExpiry(expiry);
 
-    // Log expiry date/time
-    // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
-    const expiryDate = new Date(expiry).toLocaleDateString();
-    const expiryTime = new Date(expiry).toLocaleTimeString();
-    console.log(`Expiry: ${expiryDate} at ${expiryTime} (${expiry})`);
+      localStorage.setItem("triviaToken", token);
+      localStorage.setItem("triviaTokenExpiry", expiry.toString());
 
-    return token;
+      // Log expiry date/time
+      // NOTE: maybe we can store these in context too to display? ie. send to <UserSession /> ?
+      const expiryDate = new Date(expiry).toLocaleDateString();
+      const expiryTime = new Date(expiry).toLocaleTimeString();
+      console.log(`Expiry: ${expiryDate} at ${expiryTime} (${expiry})`);
+
+      return token;
+    } catch (e) {
+      console.log(`Failed to retrieve token: ${e}`);
+      setError("Could not get a new session token, try refreshing the page");
+      return null;
+    }
   };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("triviaToken");
+    const storedExpiry = localStorage.getItem("triviaTokenExpiry");
+
+    if (storedToken && storedExpiry) {
+      if (Date.now() < Number(storedExpiry)) {
+        setToken(storedToken);
+        setTokenExpiry(Number(storedExpiry));
+      } else {
+        initToken();
+      }
+    } else {
+      initToken();
+    }
+  }, []);
 
   const updateDifficulty = (d: Difficulty) => {
     setDifficulty(d);
@@ -52,6 +86,10 @@ const GameProvider = ({ children }: PropsWithChildren) => {
 
   const updateCategoryID = (id: number) => {
     setCategoryID(id);
+  };
+
+  const updateQuantity = (quantity: number) => {
+    setQuantity(quantity);
   };
 
   const getQuestions = async (difficulty: Difficulty, id: TriviaCategoryID) => {
@@ -64,7 +102,7 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await triviaQuery(10, difficulty, id, token!);
+      const data = await triviaQuery(5, difficulty, id, activeToken!); //!NOTE change first param here to modify num of questions fetched
       setQuestions(data);
     } catch (error) {
       console.log(error, categoryID, difficulty);
@@ -73,104 +111,208 @@ const GameProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const startGame = () => {
-    getQuestions(difficulty, categoryID);
+  const getIncorrectQuestions = async (
+    difficulty: Difficulty,
+    quantity: number
+  ) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await requestRetryQuestions(difficulty, quantity);
+      setIncorrectQuestions(data);
+    } catch (error) {
+      console.log(error, difficulty, quantity);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (loading) {
+      console.log("Loading...");
+      return;
+    }
+    if (gameState === "idle") {
+      console.log(`Game idle. Ready to start a new game.`);
+      return;
+    }
+
+    if (gameState === "playing") {
+      console.log(`Game in progress. Question number: ${currentIndex + 1}`);
+      return;
+    }
+
+    if (gameState === "finished") {
+      const isRetryMode = incorrectQuestions.length > 0;
+
+      if (isRetryMode) {
+        console.log(`Retry session complete.`);
+      } else {
+        console.log(`Game finished. Final score: ${score}/${questions.length}`);
+
+        console.log(
+          `Game questions:\n${questions
+            .map((q, i) => `Q${i + 1}: ${q.question}`)
+            .join("\n")}`
+        );
+
+        console.log(
+          `Your answers:\n${savedAnswers
+            .map(
+              (a) =>
+                `Q${a.questionIndex + 1}: ${a.submittedAnswer} (${
+                  a.wasCorrect ? "correct" : "incorrect"
+                })`
+            )
+            .join("\n")}`
+        );
+
+        // only call in normal mode
+        saveGame();
+      }
+    }
+  }, [gameState, savedAnswers, loading]);
+
+  const resetGame = () => {
+    console.log(`Resetting game...`);
+    setSavedAnswers([]);
+    setQuestions([]);
+    setIncorrectQuestions([]);
     setCurrentIndex(0);
+    setScore(0);
+    setGameState("idle");
+  };
+
+  const startGame = () => {
+    if (gameState !== "idle") {
+      resetGame();
+    }
+
+    console.log(`Loading new questions...`);
+    getQuestions(difficulty, categoryID);
+
+    console.log(`Starting new game...`);
     setGameState("playing");
     setScore(0);
-    console.log(`New Game Started!`);
   };
 
-  const scoreAnswer = (submitted: string | null) => {
-    //check empty submission
-    if (!submitted) {
-      alert("Please select an answer before submitting.");
-      throw new Error("No answer submitted");
+  const retryGame = () => {
+    if (gameState !== "idle") {
+      resetGame();
     }
-    //build answer format
-    const answer: Answer = {
-      questionIndex: currentIndex,
-      submitted: submitted,
-      wasCorrect: false,
-    };
-    // check if answer was correct
-    if (answer.submitted === questions[currentIndex].correctAnswer) {
-      console.info(`"${answer.submitted}" is correct`);
-      setScore((prev) => prev + 1);
-      answer.wasCorrect = true;
-    } else {
-      console.info(
-        `"${answer.submitted}" is incorrect. The correct answer was "${questions[currentIndex].correctAnswer}".`
-      );
-      answer.wasCorrect = false;
-    }
-    console.log(`Current score: ${score}`);
-    return answer; // returns to TriviaForm
+
+    console.log(`Loading new questions...`);
+    getIncorrectQuestions(difficulty, quantity);
+
+    console.log(`Starting new game...`);
+    setGameState("playing");
+    setScore(0);
   };
 
-  const saveAnswer = (answer: Answer | null) => {
-    if (!answer) {
-      throw new Error(`Submitted answer could not be found.`);
+  const submitAnswer = (
+    submitted: string | null,
+    question: Question | RetryQuestion
+  ) => {
+    if (!question) return;
+
+    if (questions.length > 0) {
+      const standardQ = question as Question;
+
+      const wasCorrect = submitted === standardQ.correctAnswer;
+
+      const answer: Answer = {
+        questionIndex: currentIndex,
+        submittedAnswer: submitted,
+        wasCorrect: wasCorrect,
+      };
+
+      setSavedAnswers((prev) => [...prev, answer]);
+
+      if (wasCorrect) incrementScore(standardQ.difficulty);
+
+      if (currentIndex + 1 >= questions.length) {
+        endGame();
+      } else {
+        loadNextQuestion();
+      }
+
+      // RETRY MODE
+    } else if (incorrectQuestions.length > 0) {
+      console.log(question);
+      const retryQ = question as RetryQuestion;
+
+      const wasCorrect = submitted === retryQ.question.correctAnswer;
+
+      // update DB archive status
+      const archiveOption: RetryQuestionResponse = {
+        id: retryQ.id,
+        archived: wasCorrect,
+      };
+
+      updateRetryGameAnswer(archiveOption);
+
+      if (wasCorrect) incrementScore(retryQ.question.difficulty);
+
+      // Move on to next or finish
+      if (currentIndex + 1 >= incorrectQuestions.length) {
+        endGame();
+      } else {
+        loadNextQuestion();
+      }
     }
-    setSavedAnswers((prev) => [...prev, answer]);
+  };
+
+  const incrementScore = (difficulty: Difficulty) => {
+    let points = 0;
+
+    switch (difficulty) {
+      case "easy":
+        points = 10;
+        break;
+
+      case "medium":
+        points = 20;
+        break;
+
+      case "hard":
+        points = 30;
+        break;
+
+      default:
+        break;
+    }
+
+    setScore((prev) => prev + points);
   };
 
   const loadNextQuestion = () => {
-    setCurrentIndex((prev) => prev + 1);
-    // end game if all questions have been answered
-    if (!loading && currentIndex + 1 >= questions.length) {
-      console.log("End of quiz! There are no more questions :)");
-
-      endGame();
-      return;
-    }
-    console.log(
-      `Loading next question: ${currentIndex + 1} of ${questions.length}`
-    );
-    if (!questions[currentIndex]) {
-      throw new Error(`Question at index ${currentIndex} not found`);
-    }
+    const nextIndex = currentIndex + 1;
+    setCurrentIndex(nextIndex);
+    setGameState("playing");
   };
 
   const endGame = () => {
-    console.log("");
-    console.log(`Game Over!`);
     setGameState("finished");
-
-    console.log(
-      `Your answers:\n${savedAnswers
-        .map(
-          (a) =>
-            `Q${a.questionIndex + 1}: ${a.submitted} (${
-              a.wasCorrect ? "correct" : "incorrect"
-            })`
-        )
-        .join("\n")}`
-    );
-    console.log(`Final score: ${score}/${questions.length}`);
-    saveGame();
   };
 
-  const saveGame = () => {
-    console.log("Saving game to history... ");
-    const newGameResult: GameResult = {
-      score,
-      datePlayed: new Date().toISOString(),
-      questions,
-      answers: savedAnswers,
+  const saveGame = async () => {
+    console.log("Saving game to DB... ");
+
+    const finalGameDto = {
+      //Game Entity
+      savedScore: score,
+
+      //GameAnswer Entity
+      savedAnswers: savedAnswers,
+
+      //Questions Entity
+      savedQuestions: questions,
     };
-    setGameHistory((prev) => [...prev, newGameResult]);
-    console.log("Game saved! You can review your answers in the Review page.");
-  };
 
-  const resetGame = () => {
-    console.log("Resetting game... ");
-    setScore(0);
-    setCurrentIndex(0);
-    setSavedAnswers([]);
-    console.log(`Score Reset! Resetting game state to 'playing'`);
-    setGameState("playing");
-    console.log(`Game state Reset!`);
+    console.log("finalGameDto: ");
+    console.log(finalGameDto);
+
+    postGameData(finalGameDto);
   };
 
   return (
@@ -186,17 +328,19 @@ const GameProvider = ({ children }: PropsWithChildren) => {
         questions,
         currentIndex,
         score,
+        quantity,
         updateDifficulty,
         updateCategoryID,
         startGame,
-        scoreAnswer,
-        saveAnswer,
+        retryGame,
+        submitAnswer,
         loadNextQuestion,
         endGame,
-        resetGame,
         saveGame,
         savedAnswers,
-        gameHistory,
+        // gameHistory,
+        updateQuantity,
+        incorrectQuestions,
       }}
     >
       {children}

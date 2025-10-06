@@ -1,0 +1,62 @@
+/* SECTION COLORS */
+
+:root {
+  /* NOTE: overrides DaisyUI defaults */
+  /* https://daisyui.com/docs/themes/#theme-configuration */
+
+  /* Custom Brand colors */
+  --color-primary: rgba(94, 23, 235, 1); /*#BD00ff*/
+  --color-secondary: rgba(189, 0, 255, 1); /*#5E17EB*/
+  --color-accent: rgba(255, 216, 21, 1); /*#FFD815*/
+  --color-neutral: rgba(9, 62, 140, 1); /*#FFFFFF*/
+
+  /* Foreground content colors */
+  --color-primary-content: rgba(255, 255, 255, 0.25); /*#FFFFFF*/
+  --color-secondary-content: rgba(255, 255, 255, 0.25); /*#FFFFFF*/
+  --color-accent-content: rgba(17, 24, 39, 0.25); /*#111827*/
+  --color-neutral-content: rgb(255, 255, 255, 0.25); /*#111827*/
+
+  /* Custom Neutral colors */
+  --color-border: rgba(255, 255, 255, 0.43); /*#D1D5DB*/
+
+  /* Other style overrides */
+  --radius: 0.75rem;
+}
+
+/* Fixed gradient background */
+html {
+  background: linear-gradient(
+    133deg,
+    var(--color-primary) 4.43%,
+    var(--color-secondary) 74.66%
+  );
+  background-attachment: fixed;
+}
+
+select,
+input,
+textarea {
+  background-color: var(--color-neutral-content);
+  border-color: var(--color-border);
+}
+
+option {
+  background-color: var(--color-neutral-content);
+  color: var(--color-neutral);
+}
+
+button {
+  color: white;
+  border-color: var(--color-border);
+}
+
+button:hover {
+  /* move down 3px and darken color */
+  transform: translateY(-3px);
+  transition: all 0.2s ease-in-out;
+}
+
+button:disabled {
+  background-color: var(--color-border);
+  cursor: not-allowed;
+}

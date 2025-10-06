@@ -2,20 +2,27 @@ import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
-    <nav className="flex items-center justify-between p-4 bg-gray-100">
-      <p className="font-bold text-lg">Trivia Game</p>
-      <ul className="flex items-center gap-4">
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/game">Game</NavLink>
-        </li>
-        <li>
-          <NavLink to="/review">Review</NavLink>
-        </li>
-      </ul>
-    </nav>
+    <div className="navbar bg-primary text-primary-content">
+      <div className="flex-1">
+        <h1 className="text-xl font-bold">Trivia Game</h1>
+      </div>
+      <div className="flex-none">
+        <ul className="menu menu-horizontal px-1">
+          <li className="text-xl">
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li className="text-xl">
+            <NavLink to="/game">Game</NavLink>
+          </li>
+          <li className="text-xl">
+            <NavLink to="/retry">Retry</NavLink>
+          </li>
+          <li className="text-xl">
+            <NavLink to="/retry">Retry</NavLink>
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };
 
