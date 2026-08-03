@@ -25,6 +25,25 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
 - Hibernate
 - JPA
 
+## Quick Start
+
+### Backend (Spring Boot)
+
+```bash
+./mvnw clean install
+./mvnw spring-boot:run -DskipTests
+# API available at: http://localhost:8080
+```
+
+### Frontend (React)
+
+```bash
+cd frontend
+npm install
+npm run dev
+# App available at: http://localhost:5173
+```
+
 ## Features (+ Data Flow)
 
 ### Save Games: Saving a Game on Completion

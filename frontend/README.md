@@ -11,6 +11,16 @@
 - Questions will be fetched from [Open Trivia Database API](https://opentdb.com/).
 - User progress will be tracked using the [Trivia Quiz Progress API](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api).
 
+## Setup
+
+### Frontend (React)
+
+```bash
+npm install
+npm run dev
+# App available at: http://localhost:5173
+```
+
 ## Links
 
 - [nology project brief](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api "‌")
