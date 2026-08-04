@@ -15,11 +15,7 @@ const GameOverPage = () => {
       </span>
       <h3 className={typography.h3}>Final score</h3>
       <div className="flex flex-row mt-4">
-        <img
-          src="../../assets/icons/coin.svg"
-          alt="coin"
-          className="h-full w-full"
-        />
+        <img src="../../icons/coin.svg" alt="coin" className="h-full w-full" />
         <h3 className={typography.h3}>{score}</h3>
       </div>
       <div className="flex flex-wrap justify-center space-y-4 m-8">
