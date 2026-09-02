@@ -14,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://120.0.0.1:5173",
                         "https://mytriviagame.lol",
                         "https://www.mytriviagame.lol",
-                    )
+                        "https://demo-frontend-bral.onrender.com")
                 .allowedMethods("GET", "POST", "PUT", "PATCH")
                 .allowedHeaders("*");
     }
