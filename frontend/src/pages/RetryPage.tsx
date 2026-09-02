@@ -5,12 +5,12 @@ import Button from "../components/Button";
 import RetryOverview from "../components/RetryOverview";
 import Selector from "../components/Selector";
 import Logo from "../components/Logo";
-import Modal from "../components/Modal";
-import { useState } from "react";
+// import Modal from "../components/Modal";
+// import { useState } from "react";
 import { typography } from "../styles/typography";
 
 const RetryPage = () => {
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
   const { difficulty, updateDifficulty, retryGame, quantity, updateQuantity } =

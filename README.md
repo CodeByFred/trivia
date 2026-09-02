@@ -9,8 +9,8 @@ This repository contains a full-stack trivia application:
 
 Project locations:
 
-- Backend: `/home/runner/work/trivia/trivia`
-- Frontend: `/home/runner/work/trivia/trivia/frontend`
+- Backend: root folder
+- Frontend: `frontend` folder
 
 Quick start docs:
 
@@ -53,7 +53,7 @@ See full frontend setup in [`/home/runner/work/trivia/trivia/frontend/README.md`
 
 ### Run backend API
 
-From `/home/runner/work/trivia/trivia`:
+From root:
 
 ```bash
 sh ./mvnw spring-boot:run
@@ -63,7 +63,7 @@ The backend serves at `http://localhost:8080`.
 
 ### Run frontend app
 
-From `/home/runner/work/trivia/trivia/frontend`:
+From `frontend`:
 
 ```bash
 npm install
@@ -76,14 +76,14 @@ The frontend dev server runs at `http://localhost:5173`.
 
 ### Backend
 
-From `/home/runner/work/trivia/trivia`:
+From root:
 
     ./mvnw clean package
     ./mvnw test
 
 ### Frontend
 
-From `/home/runner/work/trivia/trivia/frontend`:
+From `frontend/`:
 
 ```bash
 npm run build

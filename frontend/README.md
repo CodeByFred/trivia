@@ -8,7 +8,7 @@ React + TypeScript client for the Trivia app.
 - Sends completed game and retry updates to the backend API.
 - Depends on the backend running at `http://localhost:8080`.
 
-Repository entrypoint: [`/home/runner/work/trivia/trivia/README.md`](../README.md)
+Repository entrypoint: [`../README.md`](../README.md)
 
 ## Setup
 
@@ -17,7 +17,7 @@ Requirements:
 - Node.js
 - npm
 
-From `/home/runner/work/trivia/trivia/frontend`:
+From `frontend`:
 
 ```bash
 npm install
@@ -25,7 +25,7 @@ npm install
 
 ## Run
 
-From `/home/runner/work/trivia/trivia/frontend`:
+From `frontend`:
 
 ```bash
 npm run dev
@@ -35,7 +35,7 @@ Default dev URL: `http://localhost:5173`
 
 ## Build/Test/Lint
 
-From `/home/runner/work/trivia/trivia/frontend`:
+From `frontend`:
 
 ```bash
 npm run build
@@ -46,7 +46,7 @@ There are currently no frontend test scripts defined in `package.json`.
 
 ## API/Architecture
 
-- Backend base URL is configured in `/home/runner/work/trivia/trivia/frontend/src/services/urls.ts`:
+- Backend base URL is configured in `frontend/src/services/urls.ts`:
   - `API = "http://localhost:8080"`
 - Quiz question source:
   - OpenTDB (`https://opentdb.com/api.php`)
