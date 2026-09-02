@@ -1,117 +1,151 @@
-# Trivia Quiz Progress API
+# Trivia
 
-## Introduction
+## Overview
 
-This project is an extension of the [Trivia UI](https://github.com/nology-tech/aus-post-course-guide/blob/main/projects/trivia/README.md "‌") Your task is to create an API that will allow users to keep track of the quiz games they played.
+This repository contains a full-stack trivia application:
 
-## MVP
+- **Backend**: Java 21 + Spring Boot API for saving game sessions and retry data.
+- **Frontend**: React + TypeScript app for playing trivia and retrying previously incorrect answers.
 
-- [x] When the user completes a quiz, it gets submitted to the API that keeps track of all game details:
-  - [x] Score
-  - [x] Date played
-  - [x] Questions answered
-  - [x] Submitted answer for each question
-  - [x] Correct answer for each question
-  - [x] If a question was failed or not
-        ~~- [ ] One of the API endpoints should allow filtering questions by failed~~
-- [x] On the frontend, the user should be able to ~~view~~ fetch/retry questions that they answered wrong
-- [x] They should be able to attempt those questions again
-- [x] If they answer the question correctly, it should get archived in the database (note: does not update the original game data, only "archived" gets updated on retry games)
+Project locations:
 
-## Technologies
+- Backend: root folder
+- Frontend: `frontend` folder
 
-- Java
-- Spring Boot
-- Hibernate
-- JPA
+Quick start docs:
 
-## Quick Start
+- Backend + full project entrypoint: this README
+- Frontend details: [`/home/runner/work/trivia/trivia/frontend/README.md`](frontend/README.md)
 
-### Backend (Spring Boot)
+## Setup
 
-```bash
-./mvnw clean install
-./mvnw spring-boot:run -DskipTests
-# API available at: http://localhost:8080
+### Backend requirements
+
+- Java 21
+- Maven (or use the included Maven wrapper `./mvnw`)
+- MySQL running locally
+
+### Backend configuration
+
+Main config file: `/home/runner/work/trivia/trivia/src/main/resources/application.properties`
+
+It expects:
+
+- `spring.datasource.url` (default points to `jdbc:mysql://localhost:3306/trivia`)
+- `spring.datasource.username` (default `root`)
+- `spring.datasource.password`
+
+The project imports optional local overrides from `application-secrets.properties`:
+
+```properties
+spring.config.import=optional:file:application-secrets.properties
 ```
 
-### Frontend (React)
+You can keep credentials in that local file (not committed) or provide environment-backed values.
+
+### Frontend requirements
+
+- Node.js + npm
+
+See full frontend setup in [`/home/runner/work/trivia/trivia/frontend/README.md`](frontend/README.md).
+
+## Run
+
+### Run backend API
+
+From root:
 
 ```bash
-cd frontend
+sh ./mvnw spring-boot:run
+```
+
+The backend serves at `http://localhost:8080`.
+
+### Run frontend app
+
+From `frontend`:
+
+```bash
 npm install
 npm run dev
-# App available at: http://localhost:5173
 ```
 
-## Features (+ Data Flow)
+The frontend dev server runs at `http://localhost:5173`.
 
-### Save Games: Saving a Game on Completion
+## Build/Test/Lint
 
-- When a user finishes a quiz, it's info (score, questions, answers) gets saved in a database in backend.
+### Backend
 
-Data flow: Frontend (GameResult) -> Backend (DB)
+From root:
 
-> In other words:
-> GameResultDto → (1) saveGame → (2) saveQuestions → (3) saveAnswers
+    ./mvnw clean package
+    ./mvnw test
 
-### Retry Questions: Creating a new Game from previous game questions
+### Frontend
 
-Data flow: Backend (questions) -> Frontend (GameResult) -> Backend (DB)
+From `frontend/`:
 
-- When user wants to reattempt incorrectly answer questions from their past games, we have to fetch these from our DB and send to frontend when creating a new game.
+```bash
+npm run build
+npm run lint
+```
 
-- Query params can be use for custom filtering eg. no. of q, type/category etc.
+## API/Architecture
 
-## Spring Architecture
+### High-level architecture
 
-### Game Service
+- Frontend fetches quiz content from OpenTDB and sends game outcomes to the backend API.
+- Backend persists games, questions, and game answers in MySQL.
+- Retry mode fetches previously incorrect, non-archived answers and can archive corrected retries.
 
-GameService handles BOTH saving Game and Game Answers (via cascading).
+### Backend API overview
 
-![Game Service Data Flow Diagram](assets/gameService.png)
+Base URL: `http://localhost:8080`
 
-The gameService needs to (in order!):
+- `POST /games`  
+  Save a completed game payload.
+- `GET /games`  
+  List saved games.
+- `POST /questions`  
+  Save a list of questions.
+- `GET /questions`  
+  List questions.
+- `GET /game-answers`  
+  Fetch retry candidates with query params:
+  - `archived` (required, boolean)
+  - `wasCorrect` (required, boolean)
+  - `quantity` (required, int)
+  - `difficulty` (optional, string)
+- `PATCH /game-answers/{id}`  
+  Update retry answer archive state.
+- `GET /game-answers/retry-counts`  
+  Get available retry counts by difficulty.
 
-1. Save the Game record first (because GameAnswer needs its FK).
-2. Ensure Questions exist (so GameAnswer can reference them).
-3. Save each GameAnswer linked to both Game + Question.
+### CORS/local development note
 
-### Question Service
+Backend CORS currently allows `http://localhost:5173`, which matches the frontend dev server.
 
-Questions are handled by a separate QuestionService.
-
-## Database Design
-
-Our Database requirements were:
-
-1. A Game holds a list of GameAnswers.
-2. A GameAnswer references both a Game and a Question.
-3. A Question can be linked to multiple GameAnswers.
+### Data model
 
 ![Trivia ERD](assets/trivia-erd.png)
 
-From the ERD diagram above:
+- One `Game` has many `GameAnswer` records.
+- Each `GameAnswer` links to one `Game` and one `Question`.
+- One `Question` can appear in many `GameAnswer` records.
 
-> games ↔ game_answers: One-to-Many
+## Troubleshooting
 
-- One Game has many GameAnswers.
-- Each GameAnswer belongs to one Game.
+- **Backend fails to start**: check MySQL is running and the DB credentials are valid.
+- **Frontend cannot load/save retry data**: ensure backend is running on `http://localhost:8080`.
+- **CORS errors in browser**: verify frontend is served from `http://localhost:5173`.
 
-> questions ↔ game_answers: One-to-Many
+## Project history
 
-- One Question can appear in many GameAnswers.
-- Each GameAnswer links to exactly one Question.
+This project started as a coursework MVP (trivia play + score + retry mode with backend persistence). Legacy MVP checklist content was removed from this README to keep it focused on current usage and maintenance.
 
-## Project Links
+## References
 
 - [nology project brief](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api)
 - [Group Trello Board](https://trello.com/b/14XGoYKh/trivia-full-stack-project-fred-carrie)
 - [Figma Board](https://www.figma.com/board/p0I0y8Sr4brnA6b1FiPCDy/trivia?node-id=0-1&t=a3gPBNrj4if6PYC4-1)
-- [Figma - visual interactive prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
-
-<!-- ## Contact
-
-This was a joint project between two developers, you can contact them here: -->
-
-<!-- - add linked accounts here -->
+- [Figma prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
