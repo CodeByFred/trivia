@@ -2,6 +2,32 @@
 
 > Put a summary of the changes made whenever you make a big commit here if you want to keep track of the project's history.
 
+---
+
+## 02/09/2026
+
+Changed backend to PostgreSQL:
+
+- Replaced MySQL driver in `pom.xml:52`
+- Updated datasource, dialect, and container binding in `application.properties:3`
+- Updated SQL helper for PostgreSQL in `trivia_db_queries.sql:3`
+
+Deployment env vars:
+
+```
+SPRING_DATASOURCE_URL=jdbc:postgresql://HOST:5432/DB_NAME
+SPRING_DATASOURCE_USERNAME=USER
+SPRING_DATASOURCE_PASSWORD=PASSWORD
+```
+
+- `ddl-auto=update` creates/updates tables. It does not migrate existing MySQL data.
+
+Validation: ./mvnw -q -DskipTests package passed. Full tests require running PostgreSQL.
+
+---
+
+2025
+
 ## Week 4/5
 
 Tickets:
