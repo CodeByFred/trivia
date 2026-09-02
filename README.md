@@ -15,7 +15,7 @@ Project locations:
 Quick start docs:
 
 - Backend + full project entrypoint: this README
-- Frontend details: [`/home/runner/work/trivia/trivia/frontend/README.md`](frontend/README.md)
+- Frontend details: [`frontend/README.md`](frontend/README.md)
 
 ## Setup
 
@@ -27,7 +27,7 @@ Quick start docs:
 
 ### Backend configuration
 
-Main config file: `/home/runner/work/trivia/trivia/src/main/resources/application.properties`
+Main config file: `src/main/resources/application.properties`
 
 It expects:
 
@@ -47,7 +47,7 @@ You can keep credentials in that local file (not committed) or provide environme
 
 - Node.js + npm
 
-See full frontend setup in [`/home/runner/work/trivia/trivia/frontend/README.md`](frontend/README.md).
+See full frontend setup in [`frontend/README.md`](frontend/README.md).
 
 ## Run
 
