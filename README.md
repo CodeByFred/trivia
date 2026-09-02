@@ -78,10 +78,8 @@ The frontend dev server runs at `http://localhost:5173`.
 
 From `/home/runner/work/trivia/trivia`:
 
-```bash
-sh ./mvnw clean package
-sh ./mvnw test
-```
+    ./mvnw clean package
+    ./mvnw test
 
 ### Frontend
 
