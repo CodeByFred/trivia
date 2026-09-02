@@ -1,5 +1,7 @@
 # Trivia
 
+See Live Demo: https://mytriviagame.lol
+
 ## Overview
 
 This repository contains a full-stack trivia application:
