@@ -16,7 +16,7 @@ databases:
     user: demo_user
 
 services:
-  # Spring Boot
+  # Spring boot
   - type: web
     name: demo-api
     runtime: docker
@@ -24,10 +24,18 @@ services:
     dockerContext: ./
     plan: free
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: demo-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: demo-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: demo-db
+          property: database
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: demo-db
