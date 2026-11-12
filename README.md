@@ -1,22 +1,56 @@
-# Trivia Quiz Progress API
+# Trivia Quiz Progress API + UI
 
 ## Introduction
 
-This project is an extension of the [Trivia UI](https://github.com/nology-tech/aus-post-course-guide/blob/main/projects/trivia/README.md "‌") Your task is to create an API that will allow users to keep track of the quiz games they played.
+Created a React UI and Spring Boot API that will allow users to keep track of the quiz games they played. The project was built to practise full-stack development and to learn how a React frontend, a Spring Boot API and a database fit together; key lessons were saving related records in the right order (Game, then Questions, then GameAnswers) and configuring CORS and API URLs across environments. Questions come from [Open Trivia Database API](https://opentdb.com/); game progress is saved to this backend.
 
-## MVP
+## Features
 
-- [x] When the user completes a quiz, it gets submitted to the API that keeps track of all game details:
-  - [x] Score
-  - [x] Date played
-  - [x] Questions answered
-  - [x] Submitted answer for each question
-  - [x] Correct answer for each question
-  - [x] If a question was failed or not
-        ~~- [ ] One of the API endpoints should allow filtering questions by failed~~
-- [x] On the frontend, the user should be able to ~~view~~ fetch/retry questions that they answered wrong
-- [x] They should be able to attempt those questions again
-- [x] If they answer the question correctly, it should get archived in the database (note: does not update the original game data, only "archived" gets updated on retry games)
+### UI
+
+- Pick difficulty and category, start game
+- Question card, 4 answers, countdown timer
+- Timeout → answer null, next question
+- Last question → end game
+- Score by difficulty: easy 10, medium 20, hard 30
+- Retry button → replay wrong questions
+
+### API
+
+- Save game on finish: score, date, questions, submitted answer, correct answer, wasCorrect
+- Fetch wrong questions (filter via query params)
+- Retry correct → mark archived (original game data untouched)
+
+### User Flow
+
+```mermaid
+flowchart TD
+  A[Pick difficulty + category] --> B[Fetch Qs from OpenTDB]
+  B --> C[Show Q + 4 ans + timer]
+  C -->|submit| D{Last Q?}
+  C -->|timeout| E[ans = null]
+  E --> D
+  D -->|no| C
+  D -->|yes| F[Show score]
+  F --> G[POST game to API]
+  G --> H[(DB: Game, Question, GameAnswer)]
+  F --> I[Retry Mode]
+  I --> J[GET wrong Qs from API]
+  J --> K[Replay wrong Qs]
+  K -->|correct| L[Archive Q in DB]
+  K -->|wrong| M[Stay unarchived]
+```
+
+### Data Flow
+
+**Save game:** Frontend (GameResult) -> Backend (DB)
+
+> GameResultDto → (1) saveGame → (2) saveQuestions → (3) saveAnswers
+
+**Retry questions:** Backend (questions) -> Frontend (GameResult) -> Backend (DB)
+
+- Fetch wrong Qs from past games, send to frontend as new game.
+- Query params for custom filtering, eg. no. of Qs, type/category.
 
 ## Technologies
 
@@ -24,6 +58,7 @@ This project is an extension of the [Trivia UI](https://github.com/nology-tech/a
 - Spring Boot
 - Hibernate
 - JPA
+- React + TypeScript (frontend)
 
 ## Quick Start
 
@@ -43,43 +78,6 @@ npm install
 npm run dev
 # App available at: http://localhost:5173
 ```
-
-## Features (+ Data Flow)
-
-### Save Games: Saving a Game on Completion
-
-- When a user finishes a quiz, it's info (score, questions, answers) gets saved in a database in backend.
-
-Data flow: Frontend (GameResult) -> Backend (DB)
-
-> In other words:
-> GameResultDto → (1) saveGame → (2) saveQuestions → (3) saveAnswers
-
-### Retry Questions: Creating a new Game from previous game questions
-
-Data flow: Backend (questions) -> Frontend (GameResult) -> Backend (DB)
-
-- When user wants to reattempt incorrectly answer questions from their past games, we have to fetch these from our DB and send to frontend when creating a new game.
-
-- Query params can be use for custom filtering eg. no. of q, type/category etc.
-
-## Spring Architecture
-
-### Game Service
-
-GameService handles BOTH saving Game and Game Answers (via cascading).
-
-![Game Service Data Flow Diagram](assets/gameService.png)
-
-The gameService needs to (in order!):
-
-1. Save the Game record first (because GameAnswer needs its FK).
-2. Ensure Questions exist (so GameAnswer can reference them).
-3. Save each GameAnswer linked to both Game + Question.
-
-### Question Service
-
-Questions are handled by a separate QuestionService.
 
 ## Database Design
 
@@ -102,6 +100,27 @@ From the ERD diagram above:
 
 - One Question can appear in many GameAnswers.
 - Each GameAnswer links to exactly one Question.
+
+## Spring Architecture
+
+### Game Service
+
+GameService handles BOTH saving Game and Game Answers (via cascading).
+
+![Game Service Data Flow Diagram](assets/gameService.png)
+
+The gameService needs to (in order!):
+
+1. Save the Game record first (because GameAnswer needs its FK).
+2. Ensure Questions exist (so GameAnswer can reference them).
+3. Save each GameAnswer linked to both Game + Question.
+
+### Question Service
+
+Questions are handled by a separate QuestionService.
+
+- `saveAll`: map QuestionDto → Question entity, save list. Three incorrect answers → three fields.
+- Callers: GameService (save questions before answers), QuestionController (save + list endpoints).
 
 ## Project Links
 
