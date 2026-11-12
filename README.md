@@ -65,18 +65,18 @@ flowchart TD
 ### Backend (Spring Boot)
 
 ```bash
-./mvnw clean install
-./mvnw spring-boot:run -DskipTests
-# API available at: http://localhost:8080
+sh ./mvnw spring-boot:run
 ```
 
-### Frontend (React)
+The backend serves at `http://localhost:8080`.
+
+### Run frontend app
+
+From `frontend`:
 
 ```bash
-cd frontend
 npm install
 npm run dev
-# App available at: http://localhost:5173
 ```
 
 ## Database Design
@@ -89,14 +89,17 @@ Our Database requirements were:
 
 ![Trivia ERD](assets/trivia-erd.png)
 
-From the ERD diagram above:
+- One `Game` has many `GameAnswer` records.
+- Each `GameAnswer` links to one `Game` and one `Question`.
+- One `Question` can appear in many `GameAnswer` records.
 
-> games ↔ game_answers: One-to-Many
+## Troubleshooting
 
-- One Game has many GameAnswers.
-- Each GameAnswer belongs to one Game.
+- **Backend fails to start**: check MySQL is running and the DB credentials are valid.
+- **Frontend cannot load/save retry data**: ensure backend is running on `http://localhost:8080`.
+- **CORS errors in browser**: verify frontend is served from `http://localhost:5173`.
 
-> questions ↔ game_answers: One-to-Many
+## Project history
 
 - One Question can appear in many GameAnswers.
 - Each GameAnswer links to exactly one Question.
@@ -122,15 +125,9 @@ Questions are handled by a separate QuestionService.
 - `saveAll`: map QuestionDto → Question entity, save list. Three incorrect answers → three fields.
 - Callers: GameService (save questions before answers), QuestionController (save + list endpoints).
 
-## Project Links
+## References
 
 - [nology project brief](https://github.com/nology-tech/aus-post-course-guide/tree/main/projects/trivia-api)
 - [Group Trello Board](https://trello.com/b/14XGoYKh/trivia-full-stack-project-fred-carrie)
 - [Figma Board](https://www.figma.com/board/p0I0y8Sr4brnA6b1FiPCDy/trivia?node-id=0-1&t=a3gPBNrj4if6PYC4-1)
-- [Figma - visual interactive prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
-
-<!-- ## Contact
-
-This was a joint project between two developers, you can contact them here: -->
-
-<!-- - add linked accounts here -->
+- [Figma prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
