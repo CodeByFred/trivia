@@ -1,8 +1,12 @@
 # Trivia Quiz Progress API + UI
 
+See [Live Demo](https://mytriviagame.lol) | See original [Figma prototype](https://www.figma.com/proto/zPos2p8aVm7ntacLZgqYGO/trivia-mockups?page-id=0%3A1&node-id=55-1145&viewport=-762%2C-28%2C0.13&t=5Jyom8thV8RuHazm-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=55%3A1145&show-proto-sidebar=1)
+
 ## Introduction
 
 Created a React UI and Spring Boot API that will allow users to keep track of the quiz games they played. The project was built to practise full-stack development and to learn how a React frontend, a Spring Boot API and a database fit together; key lessons were saving related records in the right order (Game, then Questions, then GameAnswers) and configuring CORS and API URLs across environments. Questions come from [Open Trivia Database API](https://opentdb.com/); game progress is saved to this backend.
+
+![mocks](frontend/designs/mocks/user-flow.svg)
 
 ## Features
 
@@ -105,6 +109,8 @@ Our Database requirements were:
 - Each GameAnswer links to exactly one Question.
 
 ## Spring Architecture
+
+![springboot diagram](assets/Spring.png)
 
 ### Game Service
 
